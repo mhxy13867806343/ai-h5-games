@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>忍者拆炸弹_忍者拆炸弹html5游戏-4399h5游戏</title>
+  <link rel="stylesheet" href="ninja-bomb.css" />
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <div class="topbar">
+    <div class="logo">4399小游戏</div>
+    <div class="nav-links">
+      <a href="#">首页</a>
+      <a href="#">动作</a>
+      <a href="#">体育</a>
+      <a href="#">益智</a>
+      <a href="#">射击</a>
+      <a href="#">冒险</a>
+      <a href="#">棋牌</a>
+      <a href="#">策略</a>
+      <a href="#">休闲</a>
+      <a href="#">女生</a>
+      <a href="#">装扮</a>
+      <a href="#">儿童</a>
+      <a href="#">闯关</a>
+      <a href="#">双人</a>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="搜索小游戏" />
+      <button>搜索</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- 面包屑 -->
+    <div class="crumbs">
+      <a href="#">4399小游戏</a>
+      <span class="sep">></span>
+      <a href="#">敏捷小游戏</a>
+      <span class="sep">></span>
+      <a href="#">H5游戏</a>
+      <span class="sep">></span>
+      <span class="current">忍者拆炸弹</span>
+    </div>
+
+    <!-- 游戏区 -->
+    <div class="game-section">
+      <div class="game-frame">
+        <button class="fullscreen-btn" id="btn-fullscreen">全屏</button>
+        <iframe id="game-iframe" src="index.html" allowfullscreen></iframe>
+      </div>
+
+      <!-- 右侧信息 -->
+      <div class="info-panel">
+        <h1>忍者拆炸弹</h1>
+        <div class="meta">
+          <span>分类：敏捷小游戏</span>
+          <span>大小：18.51M</span>
+        </div>
+        <div class="tags">
+          <span class="tag">H5游戏</span>
+          <span class="tag">闯关</span>
+          <span class="tag">物理</span>
+          <span class="tag">忍者</span>
+        </div>
+        <div class="desc">
+          游戏中，你是一名精英忍者！你现在收到了一项任务，需要将危险的炸弹统统拆除即可过关，现在就让我们一起来挑战一下吧！
+        </div>
+        <div class="actions">
+          <button class="btn" id="btn-replay">重新开始</button>
+          <button class="btn secondary" id="btn-like">收藏</button>
+          <button class="btn secondary" id="btn-share">分享</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 玩法说明 -->
+    <div class="help-section">
+      <h2>游戏玩法</h2>
+      <p><strong>操作指南：</strong></p>
+      <p>· 鼠标操作</p>
+      <p>· 移动</p>
+      <p><strong>如何开始：</strong>游戏加载完毕即可开始游戏</p>
+      <p><strong>游戏目标：</strong>合理操作，顺利闯关！</p>
+      <p style="margin-top:10px;color:#999;">此游戏适合设备：iPad / 安卓 / 电脑浏览器</p>
+    </div>
+
+    <!-- 提示信息 -->
+    <div class="help-section">
+      <h2>温馨提示</h2>
+      <p>此游戏文件较大 (18.51MB)，加载时请耐心等待...</p>
+      <p>本游戏为 HTML5 游戏，无需安装任何插件，打开即可玩。</p>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <p>本地复刻版本 · 仅供学习交流使用</p>
+    <p style="margin-top:6px;">
+      原版来源：
+      <a href="https://www.4399.com/flash/258699.htm" target="_blank">4399 忍者拆炸弹</a>
+    </p>
+  </div>
+
+  <script>
+    // 重新开始
+    document.getElementById('btn-replay').addEventListener('click', function() {
+      var iframe = document.getElementById('game-iframe');
+      iframe.src = iframe.src;
+    });
+
+    // 全屏
+    document.getElementById('btn-fullscreen').addEventListener('click', function() {
+      var iframe = document.getElementById('game-iframe');
+      if (iframe.requestFullscreen) iframe.requestFullscreen();
+    });
+
+    // 收藏 / 分享（占位）
+    document.getElementById('btn-like').addEventListener('click', function() {
+      alert('已加入收藏（示例）');
+    });
+    document.getElementById('btn-share').addEventListener('click', function() {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        alert('链接已复制');
+      } else {
+        alert(window.location.href);
+      }
+    });
+  </script>
+</body>
+</html>

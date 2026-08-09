@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=395,initial-scale=1" />
+<title>斗地主经典版 - 复刻版</title>
+<link rel="stylesheet" href="./doudizhu.css" />
+</head>
+<body>
+<div id="stage">
+  <div id="frame">
+    <canvas id="game" width="395" height="700"></canvas>
+    <div id="ui">
+      <div class="topbar">
+        <div class="badge">底分 <span id="base-score">1</span></div>
+        <div class="badge">倍数 <span id="multi">1</span></div>
+        <div class="badge">底牌 <span id="cui-cards">3</span></div>
+        <button id="btn-mute" class="topbtn">♪</button>
+        <button id="btn-menu" class="topbtn">≡</button>
+      </div>
+    </div>
+    <div id="overlay" class="hidden">
+      <div id="menu" class="panel">
+        <div class="title">斗地主<span class="accent">经典版</span></div>
+        <div class="subtitle">Classic Dou Dizhu</div>
+        <button id="btn-start" class="big-btn">开始游戏</button>
+        <button id="btn-help" class="ghost-btn">玩法说明</button>
+        <div class="footer">© 复刻版 · 仅供学习</div>
+      </div>
+      <div id="help" class="panel hidden">
+        <div class="title small">玩法说明</div>
+        <ul class="help-list">
+          <li>👥 <b>3 人</b>对战：1 地主 vs 2 农民</li>
+          <li>🎴 一副 <b>54 张</b>牌（含大小王）</li>
+          <li>💰 <b>叫牌</b>阶段：1/2/3 分或 不叫</li>
+          <li>🃏 叫到 3 分者当地主，拿 <b>3 张底牌</b></li>
+          <li>▶️ 地主<b>先出牌</b>，按牌型压制</li>
+          <li>💣 炸弹 / 王炸可压普通牌型</li>
+          <li>🏆 先出完手牌的一方获胜</li>
+        </ul>
+        <button id="btn-help-back" class="ghost-btn">返回</button>
+      </div>
+      <div id="game-over" class="panel hidden">
+        <div id="over-title" class="title small">游戏结束</div>
+        <div id="over-result" class="big-score">胜利！</div>
+        <div id="over-score" class="subtitle">+3 分</div>
+        <button id="btn-retry" class="big-btn">再来一局</button>
+        <button id="btn-back-menu" class="ghost-btn">返回菜单</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="./doudizhu.js"></script>
+</body>
+</html>

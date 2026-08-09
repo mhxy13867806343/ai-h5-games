@@ -1,0 +1,17 @@
+# 临时构建产物 / 编译缓存
+.DS_Store
+*.log
+
+# 压缩包
+*.zip
+*.tar.gz
+
+# Python 缓存
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp

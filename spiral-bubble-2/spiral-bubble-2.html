@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=750,initial-scale=1" />
+<title>螺旋泡泡柱2 - 复刻版</title>
+<link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+<div id="stage">
+  <div id="frame">
+    <canvas id="game" width="750" height="563"></canvas>
+    <div id="ui" class="hidden">
+      <div id="hud">
+        <div class="hud-block">
+          <div class="hud-label">关卡</div>
+          <div class="hud-value" id="hud-level">1</div>
+        </div>
+        <div class="hud-block">
+          <div class="hud-label">分数</div>
+          <div class="hud-value" id="hud-score">0</div>
+        </div>
+        <div class="hud-block">
+          <div class="hud-label">目标</div>
+          <div class="hud-value" id="hud-target">1500</div>
+        </div>
+        <div class="hud-block right">
+          <button id="btn-pause" class="hud-btn">⏸</button>
+          <button id="btn-restart" class="hud-btn">↻</button>
+          <button id="btn-mute" class="hud-btn">♪</button>
+        </div>
+      </div>
+    </div>
+    <div id="overlay">
+      <div id="menu" class="panel">
+        <div class="title">螺旋泡泡柱<span class="accent">2</span></div>
+        <div class="subtitle">Spiral Bubble Tower 2</div>
+        <button id="btn-start" class="big-btn">开始游戏</button>
+        <button id="btn-help" class="ghost-btn">玩法说明</button>
+        <div class="footer">© 复刻版 · 仅供学习</div>
+      </div>
+      <div id="help" class="panel hidden">
+        <div class="title small">玩法说明</div>
+        <ul class="help-list">
+          <li>🖱 移动鼠标瞄准，<b>点击</b>发射泡泡</li>
+          <li>🎯 把<b>3 个或以上同色</b>泡泡连在一起即可消除</li>
+          <li>🧹 消除时若带动孤立泡泡，会一起掉落</li>
+          <li>📈 达到<b>目标分数</b>即可进入下一关</li>
+          <li>⚠ 泡泡堆积到警戒线即失败</li>
+        </ul>
+        <button id="btn-help-back" class="ghost-btn">返回</button>
+      </div>
+      <div id="pause" class="panel hidden">
+        <div class="title small">已暂停</div>
+        <button id="btn-resume" class="big-btn">继续游戏</button>
+        <button id="btn-quit" class="ghost-btn">返回菜单</button>
+      </div>
+      <div id="level-clear" class="panel hidden">
+        <div class="title small">过关！</div>
+        <div class="big-score" id="clear-score">0</div>
+        <div class="subtitle">下一关即将开始…</div>
+      </div>
+      <div id="game-over" class="panel hidden">
+        <div class="title small fail">挑战失败</div>
+        <div class="big-score" id="final-score">0</div>
+        <button id="btn-retry" class="big-btn">再试一次</button>
+        <button id="btn-back-menu" class="ghost-btn">返回菜单</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="./spiral-bubble-2.js"></script>
+</body>
+</html>

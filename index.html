@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>traeWork-game · 1:1 复刻 4399 小游戏</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+    }
+    h1 {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffb300 0%, #ff6f00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .sub {
+      color: #aab;
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      color: #fff;
+      display: block;
+    }
+    .card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 179, 0, 0.4);
+      transform: translateY(-3px);
+    }
+    .card .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: rgba(255, 179, 0, 0.15);
+      color: #ffb300;
+      margin-bottom: 14px;
+    }
+    .card h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: #aab;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .card .meta {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      color: #678;
+    }
+    .card .meta span {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .card .play {
+      margin-top: 14px;
+      display: inline-block;
+      color: #ffb300;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      color: #678;
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>traeWork-game</h1>
+    <div class="sub">1:1 复刻 4399 上的 3 款 H5 小游戏 · 纯前端 · 浏览器开箱即玩</div>
+
+    <div class="grid">
+      <a class="card" href="spiral-bubble-2/index.html">
+        <span class="tag">Canvas 2D</span>
+        <h2>螺旋泡泡柱 2</h2>
+        <p>六边形蜂巢网格 + 3D 透视渲染的消除泡泡。鼠标拖动发射器瞄准，3 个或以上同色泡泡相连即消除。</p>
+        <div class="meta">
+          <span>敏捷</span><span>消除</span><span>4399 复刻</span>
+        </div>
+        <div class="play">开始游戏 →</div>
+      </a>
+
+      <a class="card" href="doudizhu/index.html">
+        <span class="tag">Canvas 2D</span>
+        <h2>斗地主经典版</h2>
+        <p>三人斗地主，含完整牌型解析（单张、对子、顺子、炸弹等）、叫分、抢地主、AI 对手。</p>
+        <div class="meta">
+          <span>棋牌</span><span>对战</span><span>4399 复刻</span>
+        </div>
+        <div class="play">开始游戏 →</div>
+      </a>
+
+      <a class="card" href="ninja-bomb/index.html">
+        <span class="tag">Godot 4 Web</span>
+        <h2>忍者拆炸弹</h2>
+        <p>物理引擎驱动的 2D 横版闯关。挥绳摆荡、精准跳跃、拆除每一个炸弹，闯过层层关卡。</p>
+        <div class="meta">
+          <span>闯关</span><span>物理</span><span>4399 复刻</span>
+        </div>
+        <div class="play">开始游戏 →</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      本地复刻版本 · 仅供学习交流使用 · 灵感与素材源自 4399.com
+    </div>
+  </div>
+</body>
+</html>

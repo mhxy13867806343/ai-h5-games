@@ -1,0 +1,281 @@
+/* 忍者拆炸弹 - 4399 风格游戏页面样式 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background: #f4f4f4;
+  color: #333;
+  font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+a { color: #555; text-decoration: none; }
+a:hover { color: #f60; }
+
+/* ====== 顶部 4399 风格导航 ====== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 56px;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.topbar .logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #f60;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.topbar .nav-links {
+  display: flex;
+  gap: 14px;
+  font-size: 14px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.topbar .nav-links a {
+  white-space: nowrap;
+  color: #555;
+}
+
+.topbar .search-box {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.topbar .search-box input {
+  width: 200px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+.topbar .search-box input::placeholder { color: #aaa; }
+
+.topbar .search-box button {
+  height: 28px;
+  padding: 0 16px;
+  background: #f60;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+.topbar .search-box button:hover { background: #ff7d2a; }
+
+/* ====== 主内容 ====== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 20px 30px;
+}
+
+/* 面包屑 */
+.crumbs {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 14px;
+}
+
+.crumbs a { color: #888; }
+.crumbs a:hover { color: #f60; }
+.crumbs .sep { margin: 0 6px; color: #ccc; }
+.crumbs .current { color: #f60; font-weight: bold; }
+
+/* ====== 游戏区域 ====== */
+.game-section {
+  display: grid;
+  grid-template-columns: 760px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .game-section { grid-template-columns: 1fr; }
+}
+
+/* 游戏框 */
+.game-frame {
+  background: #000;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  width: 760px;
+  height: 570px;
+  max-width: 100%;
+  aspect-ratio: 4/3;
+}
+
+.game-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ====== 右侧信息栏 ====== */
+.info-panel {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.info-panel h1 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.info-panel .meta {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.info-panel .meta span { margin-right: 12px; }
+
+.info-panel .desc {
+  color: #555;
+  margin: 10px 0 12px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.info-panel .actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.btn {
+  background: #f60;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+}
+
+.btn:hover { background: #ff7d2a; }
+
+.btn.secondary {
+  background: #fff;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.btn.secondary:hover { background: #f6f6f6; color: #f60; }
+
+.info-panel .tags {
+  margin-top: 12px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.info-panel .tag {
+  background: #f4f4f4;
+  color: #666;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+}
+
+.info-panel .tag:hover { background: #fff0e6; color: #f60; border-color: #f60; }
+
+/* ====== 下方说明 / 玩法 ====== */
+.help-section {
+  margin-top: 18px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 18px 20px;
+}
+
+.help-section h2 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  border-left: 3px solid #f60;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+.help-section p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.9;
+  margin: 4px 0;
+}
+
+.help-section strong { color: #333; margin-right: 8px; }
+
+/* ====== 全屏按钮 ====== */
+.fullscreen-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.fullscreen-btn:hover { background: rgba(0, 0, 0, 0.8); }
+
+/* ====== 底部 ====== */
+.footer {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  padding: 20px;
+  margin-top: 30px;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.footer a { color: #888; }
+.footer a:hover { color: #f60; }
