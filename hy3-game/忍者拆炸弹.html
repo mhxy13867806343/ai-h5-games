@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>忍者拆炸弹</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { width:100%; height:100%; overflow:hidden; background:#0b0f1a; font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
+  #wrap { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+  canvas { background:#10182b; box-shadow:0 0 60px rgba(0,0,0,.6); display:block; touch-action:none; }
+  .overlay {
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:#fff; text-align:center; background:rgba(8,12,24,.82); backdrop-filter:blur(3px); z-index:10;
+  }
+  .overlay.hidden { display:none; }
+  .title { font-size:48px; font-weight:800; letter-spacing:4px;
+    background:linear-gradient(90deg,#ff5e62,#ffd452); -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 4px 18px rgba(255,94,98,.35); margin-bottom:10px; }
+  .sub { font-size:16px; color:#9fb0d0; margin-bottom:26px; line-height:1.7; max-width:520px; }
+  .btn {
+    cursor:pointer; border:none; border-radius:40px; padding:14px 44px; font-size:20px; font-weight:700; color:#1a1020;
+    background:linear-gradient(90deg,#ffd452,#ff9a3c); box-shadow:0 8px 24px rgba(255,154,60,.4); transition:transform .12s;
+  }
+  .btn:hover { transform:translateY(-2px) scale(1.03); }
+  .btn:active { transform:translateY(1px) scale(.98); }
+  .stat { font-size:20px; margin:6px 0; color:#ffd452; }
+  .small { font-size:13px; color:#7f8db0; margin-top:20px; }
+  .hud { position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
+    padding:14px 20px; color:#fff; font-size:16px; font-weight:700; pointer-events:none; z-index:5; text-shadow:0 2px 6px rgba(0,0,0,.6); }
+  .hud .pill { background:rgba(0,0,0,.35); padding:6px 14px; border-radius:20px; margin-left:8px; }
+  #mute { position:absolute; top:14px; right:20px; z-index:6; cursor:pointer; background:rgba(0,0,0,.35);
+    color:#fff; border:none; border-radius:20px; padding:6px 14px; font-size:15px; font-weight:700; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="900" height="600"></canvas>
+  <div class="hud" id="hud" style="display:none">
+    <div><span class="pill">关卡 <b id="hLevel">1</b></span><span class="pill">分数 <b id="hScore">0</b></span></div>
+    <div><span class="pill">剩余炸弹 <b id="hBombs">0</b></span><span class="pill">生命 <b id="hLives">♥♥♥</b></span></div>
+  </div>
+  <button id="mute" style="display:none">🔊 音效</button>
+
+  <div class="overlay" id="startScreen">
+    <div class="title">忍者拆炸弹</div>
+    <div class="sub">你是精英忍者，奉命拆除所有炸弹！<br>
+      移动鼠标 / 手指 操控忍者移动，靠近炸弹即可拆除。<br>
+      引线烧完前必须拆掉，否则爆炸扣 1 条命。<br>
+      清空全部炸弹进入下一关，关卡越高越刺激！</div>
+    <button class="btn" id="startBtn">开始任务</button>
+    <div class="small">提示：带惯性物理移动，提前预判炸弹轨迹</div>
+  </div>
+
+  <div class="overlay hidden" id="levelScreen">
+    <div class="title" id="levelTitle">第 1 关 完成</div>
+    <div class="stat" id="levelScore">本关得分：0</div>
+    <button class="btn" id="nextBtn">下一关</button>
+  </div>
+
+  <div class="overlay hidden" id="overScreen">
+    <div class="title" style="background:linear-gradient(90deg,#ff5e62,#ff2d55);-webkit-background-clip:text;background-clip:text;color:transparent;">任务失败</div>
+    <div class="stat" id="overScore">最终得分：0</div>
+    <div class="stat" id="overLevel">到达关卡：1</div>
+    <button class="btn" id="retryBtn">重新挑战</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const cv = document.getElementById('game');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+
+  // ---------- responsive scaling ----------
+  function fit(){
+    const pad = 16;
+    const sw = (window.innerWidth - pad) / W;
+    const sh = (window.innerHeight - pad) / H;
+    const s = Math.min(sw, sh);
+    cv.style.width = (W*s)+'px';
+    cv.style.height = (H*s)+'px';
+  }
+  window.addEventListener('resize', fit); fit();
+
+  // ---------- audio ----------
+  let actx = null, muted = false;
+  function AC(){ if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return actx; }
+  function beep(freq, dur, type, vol){
+    if(muted) return; const a = AC(); if(!a) return;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type||'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime((vol||0.2), a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + (dur||0.15));
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + (dur||0.15));
+  }
+  function sfxDefuseTick(){ beep(880, 0.05, 'square', 0.06); }
+  function sfxDefuse(){ beep(523,0.12,'sine',0.18); setTimeout(()=>beep(784,0.18,'sine',0.2),90); setTimeout(()=>beep(1046,0.22,'sine',0.2),190); }
+  function sfxBoom(){
+    if(muted) return; const a=AC(); if(!a) return;
+    const o=a.createOscillator(), g=a.createGain();
+    o.type='sawtooth'; o.frequency.setValueAtTime(160,a.currentTime);
+    o.frequency.exponentialRampToValueAtTime(40,a.currentTime+0.5);
+    g.gain.setValueAtTime(0.5,a.currentTime); g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.6);
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+0.6);
+  }
+  function sfxLevel(){ beep(660,0.12,'triangle',0.2); setTimeout(()=>beep(880,0.18,'triangle',0.2),120); }
+
+  const muteBtn = document.getElementById('mute');
+  muteBtn.addEventListener('click', ()=>{ muted=!muted; muteBtn.textContent = muted?'🔇 静音':'🔊 音效'; });
+
+  // ---------- game state ----------
+  const G = {
+    state:'title', level:1, score:0, lives:3,
+    ninja:{x:W/2, y:H/2, vx:0, vy:0, r:16, facing:1},
+    bombs:[], particles:[], explosions:[],
+    mouse:{x:W/2, y:H/2}, shake:0, lastT:0, levelScore:0,
+    spawnTimer:0
+  };
+
+  // ---------- helpers ----------
+  function rand(a,b){ return a + Math.random()*(b-a); }
+  function dist(ax,ay,bx,by){ return Math.hypot(ax-bx, ay-by); }
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+
+  // ---------- level setup ----------
+  function makeBomb(level){
+    const edge = Math.random();
+    let x,y,vx=0,vy=0;
+    const m = 60;
+    if(edge<0.5){ x = rand(m, W-m); y = rand(m, H-m); }
+    else { x = rand(m, W-m); y = rand(m, H-m); }
+    const drift = Math.min(0.9, 0.15 + level*0.06);
+    const ang = rand(0, Math.PI*2);
+    vx = Math.cos(ang)*drift; vy = Math.sin(ang)*drift;
+    const fuse = Math.max(2.6, 7.5 - level*0.35) + rand(-0.6,0.6);
+    return { x,y,vx,vy, r:18, fuse, t:fuse, defuse:0, resolved:false, defused:false, bob:rand(0,6.28) };
+  }
+
+  function startLevel(level){
+    G.level = level;
+    G.bombs = [];
+    G.particles = [];
+    G.explosions = [];
+    const count = 3 + Math.floor(level*0.8);
+    for(let i=0;i<count;i++) G.bombs.push(makeBomb(level));
+    G.levelScore = 0;
+    G.state = 'playing';
+    document.getElementById('hud').style.display='flex';
+    document.getElementById('mute').style.display='block';
+    updateHUD();
+  }
+
+  function updateHUD(){
+    document.getElementById('hLevel').textContent = G.level;
+    document.getElementById('hScore').textContent = G.score;
+    const remaining = G.bombs.filter(b=>!b.resolved).length;
+    document.getElementById('hBombs').textContent = remaining;
+    document.getElementById('hLives').textContent = '♥'.repeat(G.lives) + '♡'.repeat(Math.max(0,3-G.lives));
+  }
+
+  // ---------- input ----------
+  function toCanvas(e){
+    const r = cv.getBoundingClientRect();
+    const cx = (e.touches? e.touches[0].clientX : e.clientX) - r.left;
+    const cy = (e.touches? e.touches[0].clientY : e.clientY) - r.top;
+    return { x: cx * (W/r.width), y: cy * (H/r.height) };
+  }
+  function onMove(e){ const p = toCanvas(e); G.mouse.x=p.x; G.mouse.y=p.y; if(e.preventDefault) e.preventDefault(); }
+  cv.addEventListener('mousemove', onMove);
+  cv.addEventListener('touchmove', onMove, {passive:false});
+  cv.addEventListener('touchstart', onMove, {passive:false});
+
+  // ---------- particles / fx ----------
+  function spawnSparks(x,y,color,n){
+    for(let i=0;i<n;i++){
+      const a = rand(0,6.28), sp = rand(40,220);
+      G.particles.push({x,y,vx:Math.cos(a)*sp, vy:Math.sin(a)*sp, life:rand(0.3,0.8), max:0.8, color});
+    }
+  }
+  function spawnExplosion(x,y){
+    G.explosions.push({x,y,r:8,max:90,life:0.5,t:0});
+    G.shake = Math.min(22, G.shake+16);
+    spawnSparks(x,y,'#ff9a3c',26);
+    spawnSparks(x,y,'#ffd452',18);
+  }
+
+  // ---------- update ----------
+  function update(dt){
+    if(G.state!=='playing') return;
+    const n = G.ninja;
+    // physics: accelerate toward mouse, friction
+    const ax = (G.mouse.x - n.x), ay = (G.mouse.y - n.y);
+    const d = Math.hypot(ax,ay)||1;
+    const accel = 2600;
+    n.vx += (ax/d) * accel * dt * Math.min(1, d/40);
+    n.vy += (ay/d) * accel * dt * Math.min(1, d/40);
+    n.vx *= 0.90; n.vy *= 0.90;
+    const sp = Math.hypot(n.vx,n.vy);
+    const maxSp = 460;
+    if(sp>maxSp){ n.vx = n.vx/sp*maxSp; n.vy = n.vy/sp*maxSp; }
+    n.x += n.vx*dt; n.y += n.vy*dt;
+    if(d>4 && Math.abs(n.vx)>20) n.facing = n.vx>0?1:-1;
+    n.x = clamp(n.x, n.r, W-n.r); n.y = clamp(n.y, n.r, H-n.r);
+
+    // bombs
+    let allResolved = true;
+    for(const b of G.bombs){
+      if(b.resolved) continue;
+      allResolved = false;
+      b.bob += dt*3;
+      b.x += b.vx; b.y += b.vy;
+      if(b.x<b.r){ b.x=b.r; b.vx*=-1; } if(b.x>W-b.r){ b.x=W-b.r; b.vx*=-1; }
+      if(b.y<b.r){ b.y=b.r; b.vy*=-1; } if(b.y>H-b.r){ b.y=H-b.r; b.vy*=-1; }
+      // fuse
+      b.t -= dt;
+      // defuse if ninja overlaps
+      const dd = dist(n.x,n.y,b.x,b.y);
+      if(dd < b.r + n.r + 6){
+        b.defuse += dt * 0.85;
+        if(Math.random()<0.25) sfxDefuseTick();
+        spawnSparks(b.x, b.y-b.r, '#7fffd4', 1);
+        if(b.defuse>=1){
+          b.resolved = true; b.defused = true;
+          const gain = 100 + G.level*20;
+          G.score += gain; G.levelScore += gain;
+          spawnSparks(b.x,b.y,'#7fffd4',14);
+          sfxDefuse();
+        }
+      } else {
+        b.defuse = Math.max(0, b.defuse - dt*0.4);
+      }
+      if(b.t<=0){
+        b.resolved = true; b.defused = false;
+        G.lives--;
+        spawnExplosion(b.x,b.y);
+        sfxBoom();
+        updateHUD();
+        if(G.lives<=0){ gameOver(); return; }
+      }
+    }
+
+    // particles
+    for(const p of G.particles){ p.life-=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vy+=140*dt; }
+    G.particles = G.particles.filter(p=>p.life>0);
+    for(const e of G.explosions){ e.t+=dt; e.r = e.max*(e.t/e.life); }
+    G.explosions = G.explosions.filter(e=>e.t<e.life);
+    if(G.shake>0) G.shake = Math.max(0, G.shake - dt*40);
+
+    updateHUD();
+    if(allResolved){ levelClear(); }
+  }
+
+  function levelClear(){
+    G.state='levelclear';
+    sfxLevel();
+    document.getElementById('levelTitle').textContent = '第 '+G.level+' 关 完成';
+    document.getElementById('levelScore').textContent = '本关得分：'+G.levelScore+'　总分：'+G.score;
+    document.getElementById('levelScreen').classList.remove('hidden');
+  }
+  function gameOver(){
+    G.state='over';
+    document.getElementById('overScore').textContent = '最终得分：'+G.score;
+    document.getElementById('overLevel').textContent = '到达关卡：'+G.level;
+    document.getElementById('overScreen').classList.remove('hidden');
+    document.getElementById('hud').style.display='none';
+  }
+
+  // ---------- draw ----------
+  function drawNinja(n){
+    ctx.save();
+    ctx.translate(n.x, n.y);
+    // shadow
+    ctx.save(); ctx.scale(1,0.4); ctx.fillStyle='rgba(0,0,0,.25)';
+    ctx.beginPath(); ctx.arc(0, n.r*2.2, n.r, 0, 6.28); ctx.fill(); ctx.restore();
+    const f = n.facing;
+    ctx.scale(f,1);
+    // body
+    ctx.fillStyle='#2b2f45';
+    ctx.beginPath(); ctx.ellipse(0,4,n.r*0.85,n.r*1.05,0,0,6.28); ctx.fill();
+    // head
+    ctx.fillStyle='#f1c27d';
+    ctx.beginPath(); ctx.arc(0,-n.r*0.6,n.r*0.7,0,6.28); ctx.fill();
+    // headband
+    ctx.fillStyle='#e23b4e';
+    ctx.fillRect(-n.r*0.72,-n.r*0.75,n.r*1.44,4);
+    ctx.fillStyle='#e23b4e';
+    ctx.beginPath(); ctx.moveTo(-n.r*0.7,-n.r*0.7); ctx.lineTo(-n.r*1.25,-n.r*0.5); ctx.lineTo(-n.r*1.2,-n.r*0.85); ctx.closePath(); ctx.fill();
+    // eyes
+    ctx.fillStyle='#1a1a1a';
+    ctx.beginPath(); ctx.arc(n.r*0.18,-n.r*0.6,n.r*0.13,0,6.28); ctx.fill();
+    ctx.beginPath(); ctx.arc(n.r*0.5,-n.r*0.6,n.r*0.13,0,6.28); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawBomb(b){
+    const yo = Math.sin(b.bob)*2;
+    ctx.save();
+    ctx.translate(b.x, b.y+yo);
+    // body
+    const g = ctx.createRadialGradient(-b.r*0.3,-b.r*0.3,2,0,0,b.r);
+    g.addColorStop(0,'#4a4f63'); g.addColorStop(1,'#15171f');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0,0,b.r,0,6.28); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.4)';
+    ctx.beginPath(); ctx.arc(-b.r*0.35,-b.r*0.35,b.r*0.22,0,6.28); ctx.fill();
+    // fuse
+    ctx.strokeStyle='#7a5230'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.moveTo(0,-b.r); ctx.quadraticCurveTo(b.r*0.7,-b.r*1.5,b.r*0.4,-b.r*1.9); ctx.stroke();
+    // spark
+    const fl = 2+Math.sin(b.bob*4)*1.2;
+    ctx.fillStyle='#ffd452'; ctx.beginPath(); ctx.arc(b.r*0.4,-b.r*1.9,fl,0,6.28); ctx.fill();
+    ctx.fillStyle='#ff7a18'; ctx.beginPath(); ctx.arc(b.r*0.4,-b.r*1.9,fl*0.5,0,6.28); ctx.fill();
+    // fuse ring (time)
+    const frac = clamp(b.t/b.fuse,0,1);
+    ctx.lineWidth=4;
+    ctx.strokeStyle='rgba(255,255,255,.15)';
+    ctx.beginPath(); ctx.arc(0,0,b.r+8,0,6.28); ctx.stroke();
+    ctx.strokeStyle = frac>0.4? '#5fd0ff' : (frac>0.2? '#ffd452' : '#ff3b3b');
+    ctx.beginPath(); ctx.arc(0,0,b.r+8,-Math.PI/2, -Math.PI/2 + frac*6.283); ctx.stroke();
+    // defuse progress
+    if(b.defuse>0.02){
+      ctx.lineWidth=5; ctx.strokeStyle='#7fffd4';
+      ctx.beginPath(); ctx.arc(0,0,b.r+14,-Math.PI/2, -Math.PI/2 + b.defuse*6.283); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+    if(G.shake>0){ ctx.translate((Math.random()-0.5)*G.shake, (Math.random()-0.5)*G.shake); }
+    // background grid
+    ctx.fillStyle='#10182b'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,.04)'; ctx.lineWidth=1;
+    for(let x=0;x<W;x+=45){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(let y=0;y<H;y+=45){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    if(G.state==='playing' || G.state==='levelclear' || G.state==='over'){
+      for(const b of G.bombs) if(!b.resolved) drawBomb(b);
+      // explosions under ninja
+      for(const e of G.explosions){
+        const a = 1 - e.t/e.life;
+        const grd = ctx.createRadialGradient(e.x,e.y,2,e.x,e.y,e.r);
+        grd.addColorStop(0,'rgba(255,220,120,'+a+')');
+        grd.addColorStop(0.5,'rgba(255,120,30,'+(a*0.8)+')');
+        grd.addColorStop(1,'rgba(255,60,20,0)');
+        ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(e.x,e.y,e.r,0,6.28); ctx.fill();
+      }
+      for(const p of G.particles){
+        const a = clamp(p.life/p.max,0,1);
+        ctx.globalAlpha=a; ctx.fillStyle=p.color;
+        ctx.beginPath(); ctx.arc(p.x,p.y,3,0,6.28); ctx.fill(); ctx.globalAlpha=1;
+      }
+      if(G.state!=='over') drawNinja(G.ninja);
+    }
+    ctx.restore();
+  }
+
+  // ---------- loop ----------
+  function loop(t){
+    const dt = Math.min(0.05, (t - G.lastT)/1000 || 0);
+    G.lastT = t;
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // ---------- UI buttons ----------
+  document.getElementById('startBtn').addEventListener('click', ()=>{
+    AC(); if(actx && actx.state==='suspended') actx.resume();
+    document.getElementById('startScreen').classList.add('hidden');
+    G.level=1; G.score=0; G.lives=3; G.ninja.x=W/2; G.ninja.y=H/2; G.ninja.vx=0; G.ninja.vy=0;
+    startLevel(1);
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    document.getElementById('levelScreen').classList.add('hidden');
+    startLevel(G.level+1);
+  });
+  document.getElementById('retryBtn').addEventListener('click', ()=>{
+    document.getElementById('overScreen').classList.add('hidden');
+    G.level=1; G.score=0; G.lives=3; G.ninja.x=W/2; G.ninja.y=H/2; G.ninja.vx=0; G.ninja.vy=0;
+    startLevel(1);
+  });
+
+})();
+</script>
+</body>
+</html>

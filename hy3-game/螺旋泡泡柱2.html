@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>螺旋泡泡柱2 · 复刻版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    height: 100%;
+    background: radial-gradient(circle at 50% 18%, #3a2d6b 0%, #211a3d 45%, #14102a 100%);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    color: #fff; overflow: hidden; user-select: none;
+  }
+  #stage {
+    position: relative; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #wrap {
+    position: relative;
+    width: min(100vw, 52vh);
+    aspect-ratio: 480 / 760;
+    box-shadow: 0 20px 60px rgba(0,0,0,.55);
+    border-radius: 22px; overflow: hidden;
+    background: linear-gradient(180deg, #2b2350 0%, #1a1536 100%);
+  }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+  /* HUD */
+  #hud {
+    position: absolute; left: 0; right: 0; top: 0;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 12px 14px; pointer-events: none;
+    font-weight: 700;
+  }
+  .hud-box {
+    background: rgba(0,0,0,.28); border-radius: 12px; padding: 6px 10px;
+    backdrop-filter: blur(4px); text-align: center; line-height: 1.25;
+  }
+  .hud-box .lbl { font-size: 10px; opacity: .72; font-weight: 600; letter-spacing: .5px; }
+  .hud-box .val { font-size: 19px; }
+  #combo.hot .val { color: #ffd34d; text-shadow: 0 0 10px #ffb000; }
+
+  /* buttons */
+  #btns { position: absolute; right: 12px; top: 64px; display: flex; flex-direction: column; gap: 8px; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 11px; border: none; cursor: pointer;
+    background: rgba(255,255,255,.14); color: #fff; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+  }
+  .icon-btn:active { transform: scale(.92); }
+
+  /* overlay */
+  #overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 18px; text-align: center;
+    background: rgba(15,12,34,.82); backdrop-filter: blur(6px); padding: 24px;
+  }
+  #overlay.hidden { display: none; }
+  #overlay h1 { font-size: 30px; letter-spacing: 1px; text-shadow: 0 2px 18px rgba(120,90,255,.6); }
+  #overlay h1 .sub { display: block; font-size: 13px; font-weight: 500; opacity: .8; margin-top: 6px; letter-spacing: .5px; }
+  #overlay p { font-size: 14px; opacity: .9; max-width: 280px; line-height: 1.6; }
+  .big-btn {
+    margin-top: 4px; padding: 13px 38px; font-size: 18px; font-weight: 700; cursor: pointer;
+    border: none; border-radius: 999px; color: #2a1a00;
+    background: linear-gradient(180deg, #ffe27a, #ffb43d);
+    box-shadow: 0 8px 22px rgba(255,160,0,.45);
+  }
+  .big-btn:active { transform: translateY(2px); }
+  .stat-line { font-size: 15px; }
+  .stat-line b { color: #ffd34d; font-size: 22px; }
+  .tag { display:inline-block; font-size:11px; padding:3px 9px; border-radius:999px; background:rgba(255,255,255,.12); margin:2px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wrap">
+    <canvas id="game"></canvas>
+
+    <div id="hud">
+      <div class="hud-box"><div class="lbl">分数 SCORE</div><div class="val" id="score">0</div></div>
+      <div class="hud-box" id="combo"><div class="lbl">连击 COMBO</div><div class="val" id="comboVal">x1</div></div>
+      <div class="hud-box"><div class="lbl">关卡 LEVEL</div><div class="val" id="level">1</div></div>
+    </div>
+    <div id="btns">
+      <button class="icon-btn" id="muteBtn" title="静音">🔊</button>
+      <button class="icon-btn" id="restartBtn" title="重玩">⟳</button>
+    </div>
+
+    <div id="overlay">
+      <h1>螺旋泡泡柱2<span class="sub">SPIRAL BUBBLE PILLAR · 复刻版</span></h1>
+      <p>旋转螺旋柱，从底部发射同色珠子，<b>3 个以上相连即消除</b>。<br>清空全部珠子进入下一关，小心柱子越长越大！</p>
+      <p>
+        <span class="tag">🖱 移动鼠标瞄准</span>
+        <span class="tag">👆 点击 / 空格 发射</span>
+        <span class="tag">🔄 A / D 或拖拽旋转</span>
+      </p>
+      <button class="big-btn" id="startBtn">开始游戏</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const cv = document.getElementById('game');
+  const ctx = cv.getContext('2d');
+  const W = 480, H = 760;
+  cv.width = W; cv.height = H;
+
+  const cx = W / 2, cyTop = H * 0.40;       // 螺旋柱中心
+  const launcher = { x: cx, y: H - 78 };     // 发射台
+
+  // 原创配色（鲜艳糖果色）
+  const COLORS = ['#ff5d6c', '#3ddc97', '#4ea8ff', '#ffd23f', '#b86bff', '#ff924d'];
+
+  const G = {
+    state: 'start',          // start | play | win | over
+    disc: new Map(),         // "r,s" -> {color}
+    rotation: 0, rotVel: 0,
+    score: 0, level: 1, combo: 1, shots: 0,
+    current: 0, next: 0,
+    flying: null,
+    particles: [], falling: [],
+    R0: 36, ringGap: 30, bubbleR: 14,
+    slotsBase: 6, maxRing: 7,
+    shotsPerRing: 9,
+    muted: false,
+    pointer: { x: cx, y: H * 0.3 },
+  };
+
+  // ---------- 工具 ----------
+  const TAU = Math.PI * 2;
+  const key = (r, s) => r + ',' + s;
+  const slots = r => G.slotsBase + r * 2;
+  const randColor = n => Math.floor(Math.random() * n);
+  const curColorsN = () => Math.min(4 + Math.floor((G.level - 1) / 2), COLORS.length);
+
+  function pos(r, s) {
+    const ang = (s / slots(r)) * TAU + G.rotation;
+    const rad = G.R0 + r * G.ringGap;
+    return { x: cx + Math.cos(ang) * rad, y: cyTop + Math.sin(ang) * rad, ang, rad };
+  }
+
+  function neighbors(r, s) {
+    const res = [];
+    const sl = slots(r);
+    res.push([r, (s + 1) % sl]);
+    res.push([r, (s - 1 + sl) % sl]);
+    if (r > 0) {
+      const sl2 = slots(r - 1);
+      const a = Math.floor(s * sl2 / sl) % sl2;
+      const b = Math.floor((s + 0.5) * sl2 / sl) % sl2;
+      res.push([r - 1, a]);
+      if (b !== a) res.push([r - 1, b]);
+    }
+    if (r < G.maxRing) {
+      const sl2 = slots(r + 1);
+      const a = Math.round(s * sl2 / sl) % sl2;
+      res.push([r + 1, a]);
+    }
+    return res;
+  }
+
+  // ---------- 关卡构建 ----------
+  function buildLevel() {
+    G.disc.clear();
+    const rings = Math.min(3 + G.level, G.maxRing);
+    const n = curColorsN();
+    for (let r = 0; r < rings; r++) {
+      const sl = slots(r);
+      for (let s = 0; s < sl; s++) {
+        G.disc.set(key(r, s), { color: randColor(n) });
+      }
+    }
+    G.current = randColor(n);
+    G.next = randColor(n);
+    G.shots = 0;
+    G.flying = null;
+    G.falling.length = 0;
+    G.particles.length = 0;
+  }
+
+  function maxFilledRing() {
+    let m = 0;
+    for (const k of G.disc.keys()) {
+      const r = +k.split(',')[0];
+      if (r > m) m = r;
+    }
+    return m;
+  }
+
+  function growRing() {
+    const newR = maxFilledRing() + 1;
+    if (newR > G.maxRing) { gameOver(); return; }
+    const sl = slots(newR);
+    const n = curColorsN();
+    for (let s = 0; s < sl; s++) {
+      if (!G.disc.has(key(newR, s))) G.disc.set(key(newR, s), { color: randColor(n) });
+    }
+  }
+
+  // ---------- 发射 / 吸附 ----------
+  function aimAngle() {
+    let a = Math.atan2(G.pointer.y - launcher.y, G.pointer.x - launcher.x);
+    if (a > 0) a = (a < Math.PI / 2) ? -0.14 : -Math.PI + 0.14;
+    return Math.max(-Math.PI * 0.92, Math.min(-Math.PI * 0.08, a));
+  }
+
+  function fire() {
+    if (G.state !== 'play' || G.flying) return;
+    const a = aimAngle();
+    const sp = 11;
+    G.flying = { x: launcher.x, y: launcher.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, color: G.current };
+    G.current = G.next;
+    G.next = randColor(curColorsN());
+    sfx('shoot');
+  }
+
+  function updateFlying() {
+    const f = G.flying;
+    if (!f) return;
+    f.x += f.vx; f.y += f.vy;
+    if (f.x < G.bubbleR) { f.x = G.bubbleR; f.vx *= -1; }
+    if (f.x > W - G.bubbleR) { f.x = W - G.bubbleR; f.vx *= -1; }
+
+    let hit = null, hd = 1e9;
+    for (const k of G.disc.keys()) {
+      const [r, s] = k.split(',').map(Number);
+      const p = pos(r, s);
+      const d = Math.hypot(f.x - p.x, f.y - p.y);
+      if (d < G.bubbleR * 2.1 && d < hd) { hd = d; hit = [r, s]; }
+    }
+    if (hit) {
+      const [r, s] = hit;
+      let best = null, bd = 1e9;
+      for (const [nr, ns] of neighbors(r, s)) {
+        if (nr > G.maxRing) continue;
+        if (G.disc.has(key(nr, ns))) continue;
+        const pp = pos(nr, ns);
+        const d = Math.hypot(f.x - pp.x, f.y - pp.y);
+        if (d < bd) { bd = d; best = [nr, ns]; }
+      }
+      if (best) attach(best[0], best[1], f.color);
+      else attachFallback(f.color);
+      G.flying = null;
+      return;
+    }
+    // 飞出顶部未命中 -> 吸附到最近的 ring0 空位
+    if (f.y < cyTop - (G.R0 + G.maxRing * G.ringGap)) {
+      attachFallback(f.color);
+      G.flying = null;
+    }
+  }
+
+  function attachFallback(color) {
+    // 找 ring0 中离发射方向上最近的空位
+    const sl = slots(0);
+    let best = null, bd = 1e9;
+    for (let s = 0; s < sl; s++) {
+      if (G.disc.has(key(0, s))) continue;
+      const p = pos(0, s);
+      const d = Math.hypot(launcher.x - p.x, launcher.y - p.y);
+      if (d < bd) { bd = d; best = [0, s]; }
+    }
+    if (best) attach(best[0], best[1], color);
+    else growRing(); // 没空位则膨胀（可能触发结束）
+  }
+
+  function attach(r, s, color) {
+    G.disc.set(key(r, s), { color });
+    resolve(r, s);
+  }
+
+  // ---------- 消除逻辑 ----------
+  function floodSame(r, s, color) {
+    const out = [], seen = new Set([key(r, s)]), q = [[r, s]];
+    while (q.length) {
+      const [cr, cs] = q.pop();
+      out.push([cr, cs]);
+      for (const [nr, ns] of neighbors(cr, cs)) {
+        const k = key(nr, ns);
+        if (seen.has(k)) continue;
+        const b = G.disc.get(k);
+        if (b && b.color === color) { seen.add(k); q.push([nr, ns]); }
+      }
+    }
+    return out;
+  }
+
+  function resolve(r, s) {
+    const cell = G.disc.get(key(r, s));
+    if (!cell) return;
+    const group = floodSame(r, s, cell.color);
+    if (group.length >= 3) {
+      G.combo = Math.min(G.combo + 1, 9);
+      const gain = group.length * 10 * G.combo;
+      G.score += gain;
+      for (const [gr, gs] of group) {
+        const p = pos(gr, gs);
+        spawnPop(p.x, p.y, COLORS[cell.color]);
+        G.disc.delete(key(gr, gs));
+      }
+      sfx('pop');
+      dropDisconnected();
+      checkWin();
+    } else {
+      G.combo = 1;
+    }
+    G.shots++;
+    if (G.shots % G.shotsPerRing === 0) growRing();
+    syncHUD();
+  }
+
+  function dropDisconnected() {
+    const reach = new Set(), q = [];
+    for (const k of G.disc.keys()) {
+      const r = +k.split(',')[0];
+      if (r === 0) { reach.add(k); q.push(k); }
+    }
+    while (q.length) {
+      const [r, s] = q.pop().split(',').map(Number);
+      for (const [nr, ns] of neighbors(r, s)) {
+        const k2 = key(nr, ns);
+        if (G.disc.has(k2) && !reach.has(k2)) { reach.add(k2); q.push(k2); }
+      }
+    }
+    for (const k of [...G.disc.keys()]) {
+      if (!reach.has(k)) {
+        const [r, s] = k.split(',').map(Number);
+        const p = pos(r, s);
+        G.falling.push({ x: p.x, y: p.y, vy: -1.5 - Math.random() * 1.5, vx: (Math.random() - 0.5) * 2.4, color: COLORS[G.disc.get(k).color] });
+        G.disc.delete(k);
+        G.score += 5;
+      }
+    }
+  }
+
+  function checkWin() {
+    if (G.disc.size === 0) {
+      G.level++;
+      buildLevel();
+      sfx('win');
+      flash('第 ' + G.level + ' 关！');
+    }
+  }
+
+  function gameOver() {
+    G.state = 'over';
+    sfx('over');
+    showOverlay('游戏结束',
+      '<div class="stat-line">最终得分 <b>' + G.score + '</b></div>' +
+      '<div class="stat-line">到达关卡 ' + G.level + '</div>',
+      '再来一局');
+  }
+
+  // ---------- 粒子 / 掉落 ----------
+  function spawnPop(x, y, color) {
+    for (let i = 0; i < 8; i++) {
+      const a = Math.random() * TAU, sp = 1.5 + Math.random() * 3;
+      G.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, color });
+    }
+  }
+  function updateParticles() {
+    for (let i = G.particles.length - 1; i >= 0; i--) {
+      const p = G.particles[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.life -= 0.04;
+      if (p.life <= 0) G.particles.splice(i, 1);
+    }
+    for (let i = G.falling.length - 1; i >= 0; i--) {
+      const f = G.falling[i];
+      f.x += f.vx; f.vy += 0.35; f.y += f.vy;
+      if (f.y > H + 30) G.falling.splice(i, 1);
+    }
+  }
+
+  // ---------- 渲染 ----------
+  let flashMsg = null, flashT = 0;
+  function flash(t) { flashMsg = t; flashT = 1.2; }
+
+  function drawBubble(x, y, color, scale) {
+    scale = scale || 1;
+    const r = G.bubbleR * scale;
+    const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
+    g.addColorStop(0, '#ffffff');
+    g.addColorStop(0.25, color);
+    g.addColorStop(1, shade(color, -0.28));
+    ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fillStyle = g; ctx.fill();
+    ctx.beginPath(); ctx.arc(x - r * 0.32, y - r * 0.34, r * 0.26, 0, TAU);
+    ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fill();
+  }
+
+  function shade(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    let r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    r = Math.max(0, Math.min(255, r + amt * 255));
+    g = Math.max(0, Math.min(255, g + amt * 255));
+    b = Math.max(0, Math.min(255, b + amt * 255));
+    return 'rgb(' + (r | 0) + ',' + (g | 0) + ',' + (b | 0) + ')';
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, W, H);
+
+    // 背景光晕
+    const bg = ctx.createRadialGradient(cx, cyTop, 10, cx, cyTop, 260);
+    bg.addColorStop(0, 'rgba(120,90,220,.30)');
+    bg.addColorStop(1, 'rgba(120,90,220,0)');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+    // 中央柱体（"柱"的暗示）
+    const pillarH = G.R0 + G.maxRing * G.ringGap;
+    const pg = ctx.createLinearGradient(cx - 16, 0, cx + 16, 0);
+    pg.addColorStop(0, 'rgba(255,255,255,.05)');
+    pg.addColorStop(0.5, 'rgba(255,255,255,.14)');
+    pg.addColorStop(1, 'rgba(255,255,255,.05)');
+    ctx.fillStyle = pg;
+    ctx.fillRect(cx - 14, cyTop - pillarH, 28, pillarH * 2);
+
+    // 收集泡泡并按 sin(ang) 排序（背面先画）
+    const list = [];
+    for (const k of G.disc.keys()) {
+      const [r, s] = k.split(',').map(Number);
+      const p = pos(r, s);
+      list.push({ r, s, p, color: COLORS[G.disc.get(k).color] });
+    }
+    list.sort((a, b) => Math.sin(a.p.ang) - Math.sin(b.p.ang));
+    for (const it of list) {
+      const depth = (Math.cos(it.p.ang) + 1) / 2;     // 0=背 1=前
+      const scale = 0.82 + 0.18 * depth;
+      ctx.globalAlpha = 0.55 + 0.45 * depth;
+      drawBubble(it.p.x, it.p.y, it.color, scale);
+    }
+    ctx.globalAlpha = 1;
+
+    // 发射台
+    ctx.beginPath(); ctx.arc(launcher.x, launcher.y, 22, 0, TAU);
+    ctx.fillStyle = 'rgba(255,255,255,.16)'; ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(launcher.x, launcher.y);
+    const a = aimAngle();
+    ctx.lineTo(launcher.x + Math.cos(a) * 34, launcher.y + Math.sin(a) * 34);
+    ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.stroke();
+    drawBubble(launcher.x, launcher.y, COLORS[G.current], 1);
+
+    // 瞄准虚线
+    ctx.setLineDash([4, 8]); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.35)';
+    ctx.beginPath(); ctx.moveTo(launcher.x, launcher.y);
+    ctx.lineTo(launcher.x + Math.cos(a) * 200, launcher.y + Math.sin(a) * 200);
+    ctx.stroke(); ctx.setLineDash([]);
+
+    // 下一个珠子预览
+    ctx.globalAlpha = .9;
+    drawBubble(launcher.x + 54, launcher.y + 4, COLORS[G.next], 0.7);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center'; ctx.fillText('NEXT', launcher.x + 54, launcher.y - 20);
+
+    // 飞行中的珠子
+    if (G.flying) drawBubble(G.flying.x, G.flying.y, COLORS[G.flying.color], 1);
+
+    // 掉落 & 粒子
+    for (const f of G.falling) drawBubble(f.x, f.y, f.color, 1);
+    for (const p of G.particles) {
+      ctx.globalAlpha = p.life;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 3 * p.life + 1, 0, TAU);
+      ctx.fillStyle = p.color; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // 关卡提示
+    if (flashMsg && flashT > 0) {
+      ctx.globalAlpha = Math.min(1, flashT);
+      ctx.fillStyle = '#ffd34d'; ctx.font = 'bold 30px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(flashMsg, cx, cyTop);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ---------- 主循环 ----------
+  let last = performance.now();
+  function loop(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (G.state === 'play') {
+      G.rotation += (0.18 + G.rotVel) * dt;
+      G.rotVel *= 0.9;
+      updateFlying();
+    }
+    updateParticles();
+    if (flashT > 0) flashT -= dt;
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  // ---------- 音效（原创 WebAudio） ----------
+  let actx = null;
+  function sfx(type) {
+    if (G.muted) return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.connect(g); g.connect(actx.destination);
+      const t = actx.currentTime;
+      let f = 440, dur = 0.12, wave = 'sine';
+      if (type === 'shoot') { f = 320; dur = 0.08; wave = 'triangle'; }
+      else if (type === 'pop') { f = 660; dur = 0.14; wave = 'square'; }
+      else if (type === 'win') { f = 880; dur = 0.3; wave = 'sine'; }
+      else if (type === 'over') { f = 160; dur = 0.4; wave = 'sawtooth'; }
+      o.type = wave; o.frequency.setValueAtTime(f, t);
+      if (type === 'pop') o.frequency.exponentialRampToValueAtTime(f * 1.6, t + dur);
+      if (type === 'over') o.frequency.exponentialRampToValueAtTime(80, t + dur);
+      g.gain.setValueAtTime(0.18, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.start(t); o.stop(t + dur);
+    } catch (e) {}
+  }
+
+  // ---------- HUD / Overlay ----------
+  const $ = id => document.getElementById(id);
+  function syncHUD() {
+    $('score').textContent = G.score;
+    $('level').textContent = G.level;
+    $('comboVal').textContent = 'x' + G.combo;
+    $('combo').classList.toggle('hot', G.combo > 1);
+  }
+  function showOverlay(title, html, btn) {
+    $('overlay').classList.remove('hidden');
+    $('overlay').innerHTML =
+      '<h1>' + title + '<span class="sub">SPIRAL BUBBLE PILLAR · 复刻版</span></h1>' +
+      (html || '') +
+      '<button class="big-btn" id="startBtn">' + btn + '</button>';
+    $('startBtn').onclick = startGame;
+  }
+  function startGame() {
+    G.state = 'play'; G.score = 0; G.combo = 1; G.level = 1;
+    G.rotation = 0; G.rotVel = 0;
+    buildLevel(); syncHUD();
+    $('overlay').classList.add('hidden');
+  }
+
+  // ---------- 输入 ----------
+  function canvasPos(e) {
+    const rect = cv.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - rect.left) / rect.width * W, y: (t.clientY - rect.top) / rect.height * H };
+  }
+  let dragging = false, dragStartAng = 0, dragStartRot = 0;
+  function onMove(e) {
+    const p = canvasPos(e);
+    G.pointer = p;
+    if (dragging && G.state === 'play') {
+      const a = Math.atan2(p.y - cyTop, p.x - cx);
+      G.rotVel = (a - dragStartAng) * 6;
+      G.rotation = dragStartRot + (a - dragStartAng);
+    }
+  }
+  function onDown(e) {
+    const p = canvasPos(e);
+    G.pointer = p;
+    if (G.state !== 'play') return;
+    dragging = true;
+    dragStartAng = Math.atan2(p.y - cyTop, p.x - cx);
+    dragStartRot = G.rotation;
+  }
+  function onUp() { dragging = false; if (G.state === 'play') fire(); }
+
+  cv.addEventListener('mousemove', onMove);
+  cv.addEventListener('mousedown', onDown);
+  window.addEventListener('mouseup', onUp);
+  cv.addEventListener('touchstart', e => { e.preventDefault(); onDown(e); }, { passive: false });
+  cv.addEventListener('touchmove', e => { e.preventDefault(); onMove(e); }, { passive: false });
+  cv.addEventListener('touchend', e => { e.preventDefault(); onUp(e); }, { passive: false });
+
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); fire(); }
+    else if (e.code === 'KeyA' || e.code === 'ArrowLeft') G.rotVel -= 1.2;
+    else if (e.code === 'KeyD' || e.code === 'ArrowRight') G.rotVel += 1.2;
+  });
+
+  $('muteBtn').onclick = () => { G.muted = !G.muted; $('muteBtn').textContent = G.muted ? '🔇' : '🔊'; };
+  $('restartBtn').onclick = startGame;
+  $('startBtn').onclick = startGame;
+
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

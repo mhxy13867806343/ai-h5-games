@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>斗地主经典版 · 复刻版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{height:100%;background:radial-gradient(circle at 50% 30%,#1f6b46 0%,#134a30 60%,#0c3320 100%);
+    font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#fff;overflow:hidden;user-select:none;}
+  #stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+  #wrap{position:relative;width:min(100vw,94vh);aspect-ratio:960/640;border-radius:16px;overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,.5);background:linear-gradient(180deg,#1c6440,#0f3f29);}
+  canvas{display:block;width:100%;height:100%;touch-action:none;}
+  #toolbar{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:10px;}
+  .btn{padding:9px 18px;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;color:#3a2400;
+    background:linear-gradient(180deg,#ffe27a,#ffb43d);box-shadow:0 4px 12px rgba(0,0,0,.35);}
+  .btn:active{transform:translateY(1px);}
+  .btn.ghost{background:rgba(255,255,255,.16);color:#fff;}
+  .btn:disabled{opacity:.4;cursor:default;}
+  #overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    background:rgba(7,24,16,.86);backdrop-filter:blur(5px);text-align:center;padding:24px;}
+  #overlay.hidden{display:none;}
+  #overlay h1{font-size:30px;text-shadow:0 2px 16px rgba(0,0,0,.6);}
+  #overlay h1 .sub{display:block;font-size:13px;font-weight:500;opacity:.8;margin-top:6px;}
+  #overlay p{font-size:14px;opacity:.9;line-height:1.7;max-width:420px;}
+  .bidrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  #hint{position:absolute;left:50%;top:8px;transform:translateX(-50%);font-size:13px;
+    background:rgba(0,0,0,.35);padding:5px 12px;border-radius:999px;pointer-events:none;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="wrap">
+    <canvas id="game"></canvas>
+    <div id="hint"></div>
+    <div id="toolbar">
+      <button class="btn ghost" id="hintBtn">提示</button>
+      <button class="btn ghost" id="passBtn">不出</button>
+      <button class="btn" id="playBtn">出牌</button>
+      <button class="btn ghost" id="restartBtn">重新开始</button>
+    </div>
+    <div id="overlay">
+      <h1>斗地主经典版<span class="sub">DOU DIZHU · 复刻版</span></h1>
+      <p>三人扑克对战：一名<b>地主</b>对抗两名<b>农民</b>。叫到地主者获得 3 张底牌先出，先出完手牌的一方获胜。</p>
+      <p style="opacity:.75">鼠标点击选牌 · 出牌/不出 · 支持单、对、三带、顺子、连对、飞机、炸弹、王炸。</p>
+      <button class="btn" id="startBtn">开始游戏</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const cv = document.getElementById('game');
+  const ctx = cv.getContext('2d');
+  const W = 960, H = 640;
+  cv.width = W; cv.height = H;
+
+  // 牌型常量
+  const SUITS = ['♠','♥','♣','♦']; // 0黑桃 1红心 2梅花 3方块
+  const RANK_TXT = {3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',10:'10',11:'J',12:'Q',13:'K',14:'A',15:'2',16:'',17:''};
+  const CW = 58, CH = 82;            // 扑克牌尺寸
+
+  // 游戏状态
+  const G = {
+    state: 'start',           // start | bidding | playing | over
+    players: [[],[],[]],      // 三家的手牌（card对象）
+    bottom: [],               // 3张底牌
+    selected: new Set(),      // 选中的 card.id
+    landlord: -1,             // 地主下标
+    turn: 0,                  // 当前出牌玩家
+    lastPlay: null,           // {player, cards, combo}
+    passCount: 0,
+    bids: [0,0,0],
+    bidOrder: [], bidPtr: 0, highestBid: 0, highestBidder: -1,
+    score: 0, base: 1, bombs: 0,
+    aiTimer: 0,
+    hintCards: null,
+  };
+
+  // ---------- 牌 ---------- 
+  let CARD_ID = 0;
+  function makeDeck() {
+    const d = [];
+    for (let r = 3; r <= 15; r++) for (let s = 0; s < 4; s++) d.push({ id: CARD_ID++, rank: r, suit: s, joker: false });
+    d.push({ id: CARD_ID++, rank: 16, suit: -1, joker: 'small' });
+    d.push({ id: CARD_ID++, rank: 17, suit: -1, joker: 'big' });
+    return d;
+  }
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+  function sortHand(h){ h.sort((a,b)=> a.rank-b.rank || a.suit-b.suit); }
+
+  // ---------- 牌型解析 ----------
+  function isConsecutive(arr){
+    for(let i=1;i<arr.length;i++) if(arr[i]!==arr[i-1]+1) return false;
+    return true;
+  }
+  function parseCombo(cards){
+    if(!cards||cards.length===0) return null;
+    const ranks = cards.map(c=>c.rank).sort((a,b)=>a-b);
+    const counts = {};
+    for(const r of ranks) counts[r]=(counts[r]||0)+1;
+    const entries = Object.entries(counts).map(([r,c])=>[+r,c]).sort((a,b)=>a[0]-b[0]);
+    const n = cards.length;
+    if(n===2 && counts[16] && counts[17]) return {type:'rocket', main:100, len:2};
+    if(n===4 && entries.length===1) return {type:'bomb', main:entries[0][0], len:4};
+    if(n===1) return {type:'single', main:ranks[0], len:1};
+    if(n===2 && entries.length===1) return {type:'pair', main:entries[0][0], len:2};
+    if(n===3 && entries.length===1) return {type:'triple', main:entries[0][0], len:3};
+    if(n===4 && entries.length===2){
+      const t=entries.find(e=>e[1]===3), s=entries.find(e=>e[1]===1);
+      if(t&&s) return {type:'triple1', main:t[0], len:4};
+    }
+    if(n===5 && entries.length===2){
+      const t=entries.find(e=>e[1]===3), p=entries.find(e=>e[1]===2);
+      if(t&&p) return {type:'triple2', main:t[0], len:5};
+    }
+    if(n>=5 && entries.every(e=>e[1]===1) && isConsecutive(entries.map(e=>e[0])) && entries[entries.length-1][0]<=14)
+      return {type:'straight', main:entries[entries.length-1][0], len:n};
+    if(n>=6 && n%2===0 && entries.every(e=>e[1]===2) && isConsecutive(entries.map(e=>e[0])) && entries[entries.length-1][0]<=14)
+      return {type:'pairs', main:entries[entries.length-1][0], len:n/2};
+    // 飞机
+    const tr = entries.filter(e=>e[1]===3).map(e=>e[0]).sort((a,b)=>a-b);
+    if(tr.length>=2 && isConsecutive(tr) && tr[tr.length-1]<=14){
+      const k=tr.length;
+      if(n===3*k) return {type:'airplane', main:tr[k-1], len:k};
+      if(n===4*k){ const lo=entries.filter(e=>e[1]!==3); if(lo.every(e=>e[1]===1)&&lo.reduce((s,e)=>s+e[1],0)===k) return {type:'airplane1', main:tr[k-1], len:k}; }
+      if(n===5*k){ const lo=entries.filter(e=>e[1]!==3); if(lo.every(e=>e[1]===2)&&lo.reduce((s,e)=>s+e[1],0)===2*k) return {type:'airplane2', main:tr[k-1], len:k}; }
+    }
+    if(n===6){
+      const q=entries.find(e=>e[1]===4);
+      if(q && entries.filter(e=>e[1]===1).length===2) return {type:'four2', main:q[0], len:6};
+      if(q && entries.filter(e=>e[1]===2).length===2) return {type:'four22', main:q[0], len:6};
+    }
+    if(n===8){
+      const q=entries.find(e=>e[1]===4);
+      if(q && entries.filter(e=>e[1]===2).length===2 && entries.length===3) return {type:'four22', main:q[0], len:8};
+    }
+    return null;
+  }
+  function beats(a, b){
+    if(!a) return false;
+    if(!b) return true; // 自由出牌
+    if(a.type==='rocket') return true;
+    if(b.type==='rocket') return false;
+    if(a.type==='bomb'){ if(b.type==='bomb') return a.main>b.main; return true; }
+    if(b.type==='bomb') return false;
+    return a.type===b.type && a.len===b.len && a.main>b.main;
+  }
+
+  // ---------- 生成可出的牌型 ----------
+  function groupByRank(hand){ const m={}; for(const c of hand){(m[c.rank]=m[c.rank]||[]).push(c);} return m; }
+  function pick(cards, k){ return cards.slice(0,k); }
+
+  function genMoves(hand){
+    const moves=[];
+    const g = groupByRank(hand);
+    const ranks = Object.keys(g).map(Number).sort((a,b)=>a-b);
+    const has=(r,k)=> g[r] && g[r].length>=k;
+    // 单
+    for(const r of ranks) moves.push(g[r].slice(0,1));
+    // 对
+    for(const r of ranks) if(has(r,2)) moves.push(g[r].slice(0,2));
+    // 三 / 三带一 / 三带二
+    for(const r of ranks) if(has(r,3)){
+      moves.push(g[r].slice(0,3));
+      const single = ranks.find(x=>x!==r && g[x].length>=1);
+      if(single) moves.push([...g[r].slice(0,3), ...g[single].slice(0,1)]);
+      const pair = ranks.find(x=>x!==r && g[x].length>=2);
+      if(pair) moves.push([...g[r].slice(0,3), ...g[pair].slice(0,2)]);
+    }
+    // 炸弹 / 四带二
+    for(const r of ranks) if(has(r,4)){
+      moves.push(g[r].slice(0,4));
+      const s1=ranks.filter(x=>x!==r && g[x].length>=1);
+      if(s1.length>=2) moves.push([...g[r].slice(0,4), ...g[s1[0]].slice(0,1), ...g[s1[1]].slice(0,1)]);
+      const p2=ranks.filter(x=>x!==r && g[x].length>=2);
+      if(p2.length>=2) moves.push([...g[r].slice(0,4), ...g[p2[0]].slice(0,2), ...g[p2[1]].slice(0,2)]);
+    }
+    // 王炸
+    if(g[16]&&g[17]) moves.push([g[16][0],g[17][0]]);
+    // 顺子 (len 5..)  ranks 3..14
+    const sr = ranks.filter(r=>r<=14);
+    for(let i=0;i<sr.length;i++){
+      let j=i; while(j+1<sr.length && sr[j+1]===sr[j]+1) j++;
+      const run=sr.slice(i,j+1);
+      for(let L=5;L<=run.length;L++) for(let s=0;s+L<=run.length;s++){
+        const seq=run.slice(s,s+L); moves.push(seq.map(r=>g[r][0]));
+      }
+    }
+    // 连对 (>=3对) ranks<=14
+    const pr = ranks.filter(r=>r<=14 && has(r,2));
+    for(let i=0;i<pr.length;i++){
+      let j=i; while(j+1<pr.length && pr[j+1]===pr[j]+1) j++;
+      const run=pr.slice(i,j+1);
+      for(let L=3;L<=run.length;L++) for(let s=0;s+L<=run.length;s++){
+        const seq=run.slice(s,s+L); moves.push([].concat(...seq.map(r=>g[r].slice(0,2))));
+      }
+    }
+    // 飞机 (>=2三) ranks<=14 纯/带单
+    const trr = ranks.filter(r=>r<=14 && has(r,3));
+    for(let i=0;i<trr.length;i++){
+      let j=i; while(j+1<trr.length && trr[j+1]===trr[j]+1) j++;
+      const run=trr.slice(i,j+1);
+      for(let L=2;L<=run.length;L++) for(let s=0;s+L<=run.length;s++){
+        const seq=run.slice(s,s+L);
+        const base=[].concat(...seq.map(r=>g[r].slice(0,3)));
+        moves.push(base);
+        const others=ranks.filter(x=>!seq.includes(x));
+        const sgl=others.filter(x=>g[x].length>=1);
+        if(sgl.length>=L) moves.push(base.concat(...sgl.slice(0,L).map(x=>g[x][0])));
+      }
+    }
+    // 过滤无效
+    return moves.filter(m=>parseCombo(m));
+  }
+
+  function genBeats(hand, prev){
+    if(!prev) return genMoves(hand);
+    const all = genMoves(hand);
+    let res = all.filter(m=>{ const c=parseCombo(m); return c && c.type===prev.type && c.len===prev.len && c.main>prev.main; });
+    // 炸弹与王炸
+    const bombs = all.filter(m=>{ const c=parseCombo(m); return c && (c.type==='bomb'||c.type==='rocket'); });
+    return res.concat(bombs);
+  }
+
+  // ---------- AI ----------
+  function aiBid(hand){
+    let s=0;
+    const g=groupByRank(hand);
+    if(g[17]) s+=3; if(g[16]) s+=2;
+    if(g[15]) s+=g[15].length;        // 2
+    for(const r of Object.keys(g)) if(g[r].length===4) s+=3; // 炸弹
+    s += Math.floor(hand.length/10);
+    if(s>=7) return 3; if(s>=5) return 2; if(s>=3) return 1; return 0;
+  }
+  function aiChooseLead(hand){
+    const moves = genMoves(hand).filter(m=>{const c=parseCombo(m);return c.type!=='bomb'&&c.type!=='rocket';});
+    if(moves.length===0) return genMoves(hand)[0]; // 只剩炸弹
+    moves.sort((a,b)=>{ const ca=parseCombo(a),cb=parseCombo(b); return ca.main-cb.main || ca.len-cb.len; });
+    return moves[0];
+  }
+  function aiChooseFollow(hand, prev){
+    const beatsN = genBeats(hand, prev).filter(m=>{const c=parseCombo(m);return c.type!=='bomb'&&c.type!=='rocket';});
+    if(beatsN.length){
+      beatsN.sort((a,b)=>{const ca=parseCombo(a),cb=parseCombo(b);return ca.main-cb.main || ca.len-cb.len;});
+      // 若对手快出完且能炸，则炸
+      return beatsN[0];
+    }
+    // 是否用炸弹：仅当对手剩牌很少
+    const oppMin = Math.min(...[0,1,2].filter(i=>i!==G.landlord && i!==G.turn).map(i=>G.players[i].length));
+    const bombs = genBeats(hand, prev).filter(m=>{const c=parseCombo(m);return c.type==='bomb'||c.type==='rocket';});
+    if(bombs.length && oppMin<=2){
+      bombs.sort((a,b)=>parseCombo(a).main-parseCombo(b).main);
+      return bombs[0];
+    }
+    return null; // 不出
+  }
+
+  // ---------- 流程 ----------
+  function startGame(){
+    G.state='bidding'; G.score=G.score; G.base=1; G.bombs=0;
+    const deck=shuffle(makeDeck());
+    G.players=[[],[],[]];
+    for(let i=0;i<51;i++) G.players[i%3].push(deck[i]);
+    G.bottom=deck.slice(51);
+    for(const h of G.players) sortHand(h);
+    G.selected.clear(); G.lastPlay=null; G.passCount=0;
+    G.landlord=-1; G.bids=[0,0,0]; G.highestBid=0; G.highestBidder=-1;
+    G.bidOrder = shuffle([0,1,2]); G.bidPtr=0;
+    G.aiTimer=0;
+    hideOverlay();
+    setHint('叫地主阶段：请选择叫分');
+    stepBid();
+  }
+
+  function stepBid(){
+    if(G.bidPtr>=3 || G.highestBid===3){
+      finishBid(); return;
+    }
+    const p=G.bidOrder[G.bidPtr];
+    if(p===0){
+      // 人类叫分
+      showBidButtons();
+    } else {
+      setTimeout(()=>{
+        const b=aiBid(G.players[p]);
+        const bid = b>G.highestBid ? b : 0;
+        commitBid(p, bid);
+      }, 650);
+    }
+  }
+  function commitBid(p, bid){
+    G.bids[p]=bid;
+    if(bid>G.highestBid){ G.highestBid=bid; G.highestBidder=p; }
+    G.bidPtr++;
+    hideBidButtons();
+    stepBid();
+  }
+  function finishBid(){
+    if(G.highestBidder===-1){ // 全部不叫，重新发牌
+      startGame(); return;
+    }
+    G.landlord=G.highestBidder; G.base=Math.max(1,G.highestBid);
+    // 底牌给地主
+    for(const c of G.bottom) G.players[G.landlord].push(c);
+    sortHand(G.players[G.landlord]);
+    G.turn=G.landlord; G.lastPlay=null; G.passCount=0;
+    G.state='playing';
+    setHint('地主：玩家'+(G.landlord===0?'你':(G.landlord===1?'右':'左'))+' （底分 '+G.base+'）');
+    scheduleAI();
+  }
+
+  function humanPlay(){
+    if(G.state!=='playing'||G.turn!==0) return;
+    const cards=[...G.selected].map(id=>findCard(0,id));
+    const combo=parseCombo(cards);
+    if(!combo){ setHint('牌型不合法，请重新选择'); return; }
+    if(G.lastPlay && G.lastPlay.player!==0 && !beats(combo, G.lastPlay.combo)){ setHint('打不过上家，换一手或点“不出”'); return; }
+    if(G.lastPlay && G.lastPlay.player===0){ /* 自由出牌，合法即可 */ }
+    doPlay(0, cards, combo);
+  }
+  function humanPass(){
+    if(G.state!=='playing'||G.turn!==0) return;
+    if(!G.lastPlay || G.lastPlay.player===0){ setHint('你是出牌方，必须出牌'); return; }
+    doPass(0);
+  }
+
+  function doPlay(p, cards, combo){
+    const ids=new Set(cards.map(c=>c.id));
+    G.players[p]=G.players[p].filter(c=>!ids.has(c.id));
+    if(combo.type==='bomb'||combo.type==='rocket') G.bombs++;
+    G.lastPlay={player:p, cards:cards.slice(), combo};
+    G.passCount=0; G.selected.clear(); G.hintCards=null;
+    sortHand(G.players[p]);
+    if(G.players[p].length===0){ endGame(p); return; }
+    G.turn=(p+1)%3;
+    setHint('玩家'+(p===0?'你':(p===1?'右':'左'))+' 出牌：'+comboText(combo));
+    scheduleAI();
+  }
+  function doPass(p){
+    G.passCount++;
+    G.lastPlay={player:p, cards:[], combo:null, pass:true};
+    setHint('玩家'+(p===0?'你':(p===1?'右':'左'))+' 不出');
+    if(G.passCount>=2){ // 两家不出，回到出牌方自由出
+      G.lastPlay=null; G.passCount=0;
+    }
+    G.turn=(p+1)%3;
+    scheduleAI();
+  }
+
+  function scheduleAI(){
+    if(G.state!=='playing') return;
+    if(G.turn===0) return; // 等人类
+    G.aiTimer=setTimeout(aiAct, 750);
+  }
+  function aiAct(){
+    if(G.state!=='playing'||G.turn===0) return;
+    const p=G.turn;
+    const hand=G.players[p];
+    let choice;
+    const isLead = !G.lastPlay || G.lastPlay.player===p;
+    if(isLead) choice=aiChooseLead(hand); else choice=aiChooseFollow(hand, G.lastPlay.combo);
+    if(choice){
+      const combo=parseCombo(choice);
+      doPlay(p, choice, combo);
+    } else {
+      doPass(p);
+    }
+  }
+
+  function endGame(winner){
+    G.state='over';
+    const landlordWon = winner===G.landlord;
+    const mult = G.base * Math.pow(2, G.bombs);
+    if(winner===0){ G.score += (G.landlord===0? mult*2 : mult); }
+    else if(G.landlord===0){ G.score -= mult*2; }
+    else { G.score += (G.landlord===0? -mult*2 : mult); }
+    const youWin = (winner===0) || (G.landlord!==0 && winner!==0 && false);
+    showOverlay(landlordWon? '地主获胜' : '农民获胜',
+      '<div class="stat-line">本局你是 <b>'+(G.landlord===0?'地主':'农民')+'</b></div>'+
+      '<div class="stat-line">倍数 '+mult+' （底分'+G.base+' × 炸弹'+G.bombs+'）</div>'+
+      '<div class="stat-line">累计得分 <b>'+G.score+'</b></div>',
+      '再来一局');
+  }
+
+  function findCard(p,id){ return G.players[p].find(c=>c.id===id); }
+  function comboText(c){
+    const names={single:'单',pair:'对',triple:'三',triple1:'三带一',triple2:'三带二',straight:'顺子',pairs:'连对',airplane:'飞机',airplane1:'飞机带单',airplane2:'飞机带对',bomb:'炸弹',rocket:'王炸',four2:'四带二',four22:'四带两对'};
+    return (names[c.type]||c.type);
+  }
+
+  // ---------- 提示 ----------
+  function hint(){
+    if(G.state!=='playing'||G.turn!==0) return;
+    const hand=G.players[0];
+    const isLead=!G.lastPlay||G.lastPlay.player===0;
+    let moves = isLead? genMoves(hand) : genBeats(hand, G.lastPlay.combo);
+    moves = moves.filter(m=>{const c=parseCombo(m);return !c||(c.type!=='bomb'&&c.type!=='rocket');});
+    if(moves.length===0){
+      const bombs=genBeats(hand,G.lastPlay?G.lastPlay.combo:null).filter(m=>{const c=parseCombo(m);return c.type==='bomb'||c.type==='rocket';});
+      if(bombs.length){ moves=bombs; } else { setHint('没有能压过的牌，建议“不出”'); return; }
+    }
+    moves.sort((a,b)=>parseCombo(a).main-parseCombo(b).main);
+    G.hintCards=moves[0];
+    G.selected=new Set(G.hintCards.map(c=>c.id));
+    setHint('提示：选中了一组可出的牌，点“出牌”');
+  }
+
+  // ---------- 渲染 ----------
+  function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function drawCard(x,y,card,faceUp,scale){
+    scale=scale||1; const w=CW*scale,h=CH*scale;
+    ctx.save();
+    if(faceUp){
+      roundRect(x,y,w,h,6); ctx.fillStyle='#fdfdf8'; ctx.fill();
+      ctx.lineWidth=1; ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.stroke();
+      const red = card.suit===1||card.suit===3;
+      ctx.fillStyle = card.joker? '#d23' : (red?'#e23':'#222');
+      ctx.textAlign='left'; ctx.textBaseline='top';
+      if(card.joker){
+        ctx.font='bold '+(15*scale)+'px sans-serif';
+        ctx.fillText(card.joker==='big'?'大':'小',x+5*scale,y+5*scale);
+        ctx.fillText('王',x+5*scale,y+22*scale);
+        ctx.font=(11*scale)+'px sans-serif'; ctx.fillText(card.joker==='big'?'JOKER':'joker',x+5*scale,y+h-16*scale);
+      } else {
+        ctx.font='bold '+(16*scale)+'px sans-serif';
+        ctx.fillText(RANK_TXT[card.rank], x+5*scale, y+4*scale);
+        ctx.font=(20*scale)+'px sans-serif';
+        ctx.fillText(SUITS[card.suit], x+5*scale, y+24*scale);
+      }
+    } else {
+      roundRect(x,y,w,h,6); ctx.fillStyle='#9c2b2b'; ctx.fill();
+      roundRect(x+4*scale,y+4*scale,w-8*scale,h-8*scale,4); ctx.fillStyle='#c23b3b'; ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.35)'; ctx.lineWidth=1; ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function drawCardBackSmall(x,y){
+    ctx.save(); roundRect(x,y,26,36,4); ctx.fillStyle='#9c2b2b'; ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.4)'; ctx.stroke(); ctx.restore();
+  }
+
+  let humanRects=[];
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    // 桌面中心区域
+    const cx=W/2, cy=H/2-20;
+
+    // 底牌展示（叫完地主后，显示在顶部中间）
+    if(G.state!=='start' && G.landlord>=0){
+      for(let i=0;i<3;i++) drawCard(cx-150+i*52, 14, G.bottom[i], true, 0.62);
+    }
+
+    // 左右AI
+    drawSide(1, W-90, 120, '右');   // player1 右
+    drawSide(2, 30, 120, '左');      // player2 左
+
+    // 地主标记
+    if(G.landlord>=0){
+      const lx = G.landlord===1? W-90 : (G.landlord===2? 30 : cx);
+      ctx.fillStyle='#ffd34d'; ctx.font='13px sans-serif'; ctx.textAlign='center';
+      const tag = G.landlord===0? '你（地主）' : (G.landlord===1?'右（地主）':'左（地主）');
+      ctx.fillText('👑 '+tag, G.landlord===1?W-62:(G.landlord===2?62:cx), G.landlord===0? H-150 : 96);
+    }
+
+    // 上家出牌显示在对应方位
+    if(G.lastPlay && G.lastPlay.cards && G.lastPlay.cards.length){
+      const p=G.lastPlay.player;
+      let bx,by;
+      if(p===0){ bx=cx-150; by=H-220; }
+      else if(p===1){ bx=W-260; by=200; }
+      else { bx=120; by=200; }
+      G.lastPlay.cards.forEach((c,i)=> drawCard(bx+i*30, by, c, true, 0.8));
+    } else if(G.lastPlay && G.lastPlay.pass){
+      const p=G.lastPlay.player;
+      ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='15px sans-serif'; ctx.textAlign='center';
+      const tx=p===0?cx:(p===1?W-160:160); const ty=p===0?H-230:(p===1?250:250);
+      ctx.fillText('不出', tx, ty);
+    }
+
+    // 人类手牌
+    humanRects=[];
+    const hand=G.players[0]||[];
+    const n=hand.length;
+    const totalW=Math.min(n*46, W-40);
+    const startX=(W-totalW)/2;
+    const baseY=H-110;
+    for(let i=0;i<n;i++){
+      const c=hand[i];
+      const x=startX+i*46;
+      const sel=G.selected.has(c.id);
+      const y=baseY-(sel?22:0);
+      drawCard(x,y,c,true,1);
+      humanRects.push({x,y,w:CW,h:CH,id:c.id});
+    }
+
+    // HUD
+    ctx.fillStyle='rgba(0,0,0,.3)'; ctx.fillRect(0,0,W,0); // noop
+    ctx.fillStyle='#fff'; ctx.font='bold 16px sans-serif'; ctx.textAlign='left';
+    ctx.fillText('累计得分：'+G.score, 14, H-14);
+    ctx.textAlign='right';
+    ctx.fillText('轮到：'+(G.state==='playing'?(G.turn===0?'你':(G.turn===1?'右':'左')):'—'), W-14, H-14);
+
+    // 当前可选（提示高亮）
+  }
+  function drawSide(p, x, y, label){
+    const hand=G.players[p]||[];
+    ctx.fillStyle='rgba(255,255,255,.85)'; ctx.font='14px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(label+' AI ('+hand.length+'张)', x+13, y-10);
+    for(let i=0;i<Math.min(hand.length,18);i++) drawCardBackSmall(x, y+i*4);
+  }
+
+  // ---------- 输入 ----------
+  function canvasPos(e){
+    const rect=cv.getBoundingClientRect();
+    const t=e.touches?e.touches[0]:e;
+    return {x:(t.clientX-rect.left)/rect.width*W, y:(t.clientY-rect.top)/rect.height*H};
+  }
+  cv.addEventListener('mousedown',e=>{
+    if(G.state!=='playing'||G.turn!==0) return;
+    const p=canvasPos(e);
+    for(let i=humanRects.length-1;i>=0;i--){
+      const r=humanRects[i];
+      if(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h){
+        if(G.selected.has(r.id)) G.selected.delete(r.id); else G.selected.add(r.id);
+        return;
+      }
+    }
+  });
+  cv.addEventListener('touchstart',e=>{
+    if(G.state!=='playing'||G.turn!==0) return;
+    e.preventDefault();
+    const p=canvasPos(e);
+    for(let i=humanRects.length-1;i>=0;i--){
+      const r=humanRects[i];
+      if(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h){
+        if(G.selected.has(r.id)) G.selected.delete(r.id); else G.selected.add(r.id);
+        return;
+      }
+    }
+  },{passive:false});
+
+  // ---------- UI ----------
+  const $=id=>document.getElementById(id);
+  function setHint(t){ $('hint').textContent=t; }
+  function hideOverlay(){ $('overlay').classList.add('hidden'); }
+  function showOverlay(title, html, btn){
+    const o=$('overlay'); o.classList.remove('hidden');
+    o.innerHTML='<h1>'+title+'<span class="sub">DOU DIZHU · 复刻版</span></h1>'+html+'<button class="btn" id="startBtn">'+btn+'</button>';
+    $('startBtn').onclick=startGame;
+  }
+  function showBidButtons(){
+    const o=$('overlay'); o.classList.remove('hidden');
+    const opts=[]; opts.push('<button class="btn ghost" data-b="0">不叫</button>');
+    if(G.highestBid<1) opts.push('<button class="btn" data-b="1">1分</button>');
+    if(G.highestBid<2) opts.push('<button class="btn" data-b="2">2分</button>');
+    if(G.highestBid<3) opts.push('<button class="btn" data-b="3">3分</button>');
+    o.innerHTML='<h1>叫地主<span class="sub">当前最高 '+G.highestBid+' 分</span></h1><div class="bidrow">'+opts.join('')+'</div>';
+    o.querySelectorAll('[data-b]').forEach(b=> b.onclick=()=>commitBid(0, +b.dataset.b));
+  }
+  function hideBidButtons(){ if(G.state!=='bidding') $('overlay').classList.add('hidden'); }
+
+  $('startBtn').onclick=startGame;
+  $('playBtn').onclick=humanPlay;
+  $('passBtn').onclick=humanPass;
+  $('hintBtn').onclick=hint;
+  $('restartBtn').onclick=startGame;
+
+  // ---------- 主循环 ----------
+  function loop(){ render(); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
