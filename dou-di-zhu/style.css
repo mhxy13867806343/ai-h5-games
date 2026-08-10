@@ -6,15 +6,25 @@ body {
     line-height: 1.6;
 }
 .game-header {
-    background-color: #ff6600;
+    background-color: #222;
+    border-bottom: 2px solid #ff6600;
     color: white;
     padding: 10px 20px;
     display: flex;
     align-items: center;
 }
-.logo { font-size: 24px; font-weight: bold; margin-right: 30px; }
-.nav-links a { color: white; text-decoration: none; margin-right: 15px; }
-.nav-links a:hover { text-decoration: underline; }
+.header-left { display: flex; align-items: center; gap: 20px; }
+.logo { font-size: 22px; font-weight: bold; text-decoration: none; color: #ff6600; }
+.nav-buttons { display: flex; gap: 10px; align-items: center; }
+.nav-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px;
+    color: #fff; font-size: 13px; font-weight: bold; text-decoration: none;
+    cursor: pointer; transition: all 0.25s ease; font-family: inherit;
+}
+.nav-btn:hover { background: #ff6600; border-color: #ff6600; color: #fff; transform: translateY(-1px); }
+.nav-btn.back-btn { background: rgba(255, 255, 255, 0.15); }
 .game-container {
     max-width: 940px;
     margin: 20px auto;

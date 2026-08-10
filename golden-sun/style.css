@@ -66,8 +66,21 @@ body {
     background-clip: text;
     letter-spacing: 3px;
     cursor: pointer;
+    text-decoration: none;
     text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
 }
+
+.header-left { display: flex; align-items: center; gap: 20px; }
+.nav-buttons { display: flex; gap: 10px; align-items: center; }
+.nav-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px;
+    color: #fff; font-size: 13px; font-weight: 700; text-decoration: none;
+    cursor: pointer; transition: all 0.25s ease; font-family: inherit;
+}
+.nav-btn:hover { background: var(--primary); border-color: var(--primary); color: #fff; transform: translateY(-1px); }
+.nav-btn.back-btn { background: rgba(255, 255, 255, 0.12); }
 
 .nav-links {
     display: flex;
