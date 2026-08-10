@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>《炸弹人 HACK（中文版）》在线玩 - 红白机（FC / NES）游戏 - 复古游戏中文网</title>
@@ -65,11 +64,7 @@ H BY:晚风轻起">
     </div>
 
     <div class="game-frame" id="frame-wrap">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div>游戏加载中…</div>
-      </div>
-      <iframe referrerpolicy="no-referrer" src="https://zaixianwan.app/nostalgist/?core=nes&id=f3f2a7ee-1517-4d97-9400-318f80f8682d&rom=https%3A%2F%2Fcdn.lxyong.com%2Fgames%2Fnes%2F%E7%82%B8%E5%BC%B9%E4%BA%BA%20HACK%EF%BC%88%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89-f3f2a7ee-1517-4d97-9400-318f80f8682d.zip" allow="fullscreen; gamepad; autoplay; cross-origin-isolated" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>
+      <div id="game" style="width:100%;height:100%;"></div>
     </div>
 
     <div class="toolbar">
@@ -136,5 +131,12 @@ H BY:晚风轻起</p>
 
 
   <script src="../game-detail.js"></script>
+
+  <script>
+    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/炸弹人 HACK（中文版）-f3f2a7ee-1517-4d97-9400-318f80f8682d.zip";
+    EmuJS_system = "nes";
+    EmuJS_startOnLoaded = true;
+  </script>
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>

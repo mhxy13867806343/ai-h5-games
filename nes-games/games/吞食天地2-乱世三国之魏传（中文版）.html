@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>《吞食天地2 乱世三国之魏传（中文版）》在线玩 - 红白机（FC / NES）游戏 - 复古游戏中文网</title>
@@ -57,11 +56,7 @@
     </div>
 
     <div class="game-frame" id="frame-wrap">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div>游戏加载中…</div>
-      </div>
-      <iframe referrerpolicy="no-referrer" src="https://zaixianwan.app/nostalgist/?core=nes&id=6da31f22-55e9-4148-ae6b-e95b3836a443&rom=https%3A%2F%2Fcdn.lxyong.com%2Fgames%2Fnes%2F%E5%90%9E%E9%A3%9F%E5%A4%A9%E5%9C%B02%20%E4%B9%B1%E4%B8%96%E4%B8%89%E5%9B%BD%E4%B9%8B%E9%AD%8F%E4%BC%A0%EF%BC%88%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89-6da31f22-55e9-4148-ae6b-e95b3836a443.zip" allow="fullscreen; gamepad; autoplay; cross-origin-isolated" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>
+      <div id="game" style="width:100%;height:100%;"></div>
     </div>
 
     <div class="toolbar">
@@ -124,5 +119,12 @@
 
 
   <script src="../game-detail.js"></script>
+
+  <script>
+    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/吞食天地2 乱世三国之魏传（中文版）-6da31f22-55e9-4148-ae6b-e95b3836a443.zip";
+    EmuJS_system = "nes";
+    EmuJS_startOnLoaded = true;
+  </script>
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>

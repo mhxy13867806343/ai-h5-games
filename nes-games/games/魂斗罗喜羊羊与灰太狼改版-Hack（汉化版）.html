@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>《魂斗罗喜羊羊与灰太狼改版 Hack（汉化版）》在线玩 - 红白机（FC / NES）游戏 - 复古游戏中文网</title>
@@ -59,11 +58,7 @@
     </div>
 
     <div class="game-frame" id="frame-wrap">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div>游戏加载中…</div>
-      </div>
-      <iframe referrerpolicy="no-referrer" src="https://zaixianwan.app/nostalgist/?core=nes&id=a23f8a1d-1436-4438-b61e-783611453643&rom=https%3A%2F%2Fcdn.lxyong.com%2Fgames%2Fnes%2F%E9%AD%82%E6%96%97%E7%BD%97%E5%96%9C%E7%BE%8A%E7%BE%8A%E4%B8%8E%E7%81%B0%E5%A4%AA%E7%8B%BC%E6%94%B9%E7%89%88%20Hack%EF%BC%88%E6%B1%89%E5%8C%96%E7%89%88%EF%BC%89-a23f8a1d-1436-4438-b61e-783611453643.zip" allow="fullscreen; gamepad; autoplay; cross-origin-isolated" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>
+      <div id="game" style="width:100%;height:100%;"></div>
     </div>
 
     <div class="toolbar">
@@ -127,5 +122,12 @@
 
 
   <script src="../game-detail.js"></script>
+
+  <script>
+    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/魂斗罗喜羊羊与灰太狼改版 Hack（汉化版）-a23f8a1d-1436-4438-b61e-783611453643.zip";
+    EmuJS_system = "nes";
+    EmuJS_startOnLoaded = true;
+  </script>
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>

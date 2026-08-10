@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>《火焰之纹章 修复版（中文版）》在线玩 - 红白机（FC / NES）游戏 - 复古游戏中文网</title>
@@ -71,11 +70,7 @@
     </div>
 
     <div class="game-frame" id="frame-wrap">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div>游戏加载中…</div>
-      </div>
-      <iframe referrerpolicy="no-referrer" src="https://zaixianwan.app/nostalgist/?core=nes&id=eaac9b1b-9060-4641-8a4a-a73e8193a432&rom=https%3A%2F%2Fcdn.lxyong.com%2Fgames%2Fnes%2F%E7%81%AB%E7%84%B0%E4%B9%8B%E7%BA%B9%E7%AB%A0%20%E4%BF%AE%E5%A4%8D%E7%89%88%EF%BC%88%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89-eaac9b1b-9060-4641-8a4a-a73e8193a432.zip" allow="fullscreen; gamepad; autoplay; cross-origin-isolated" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>
+      <div id="game" style="width:100%;height:100%;"></div>
     </div>
 
     <div class="toolbar">
@@ -145,5 +140,12 @@
 
 
   <script src="../game-detail.js"></script>
+
+  <script>
+    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/火焰之纹章 修复版（中文版）-eaac9b1b-9060-4641-8a4a-a73e8193a432.zip";
+    EmuJS_system = "nes";
+    EmuJS_startOnLoaded = true;
+  </script>
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>

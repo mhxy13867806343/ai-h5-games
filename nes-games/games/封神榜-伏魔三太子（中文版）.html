@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>《封神榜 伏魔三太子（中文版）》在线玩 - 红白机（FC / NES）游戏 - 复古游戏中文网</title>
@@ -53,11 +52,7 @@
     </div>
 
     <div class="game-frame" id="frame-wrap">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div>游戏加载中…</div>
-      </div>
-      <iframe referrerpolicy="no-referrer" src="https://zaixianwan.app/nostalgist/?core=nes&id=6227df59-e8f1-4194-a8ab-d7e5bd56dc50&rom=https%3A%2F%2Fcdn.lxyong.com%2Fgames%2Fnes%2F%E5%B0%81%E7%A5%9E%E6%A6%9C%20%E4%BC%8F%E9%AD%94%E4%B8%89%E5%A4%AA%E5%AD%90%EF%BC%88%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89-6227df59-e8f1-4194-a8ab-d7e5bd56dc50.zip" allow="fullscreen; gamepad; autoplay; cross-origin-isolated" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>
+      <div id="game" style="width:100%;height:100%;"></div>
     </div>
 
     <div class="toolbar">
@@ -118,5 +113,12 @@
 
 
   <script src="../game-detail.js"></script>
+
+  <script>
+    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/封神榜 伏魔三太子（中文版）-6227df59-e8f1-4194-a8ab-d7e5bd56dc50.zip";
+    EmuJS_system = "nes";
+    EmuJS_startOnLoaded = true;
+  </script>
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>
