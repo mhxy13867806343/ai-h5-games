@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>机甲战记 A · 网页复刻 Demo</title>
+<style>
+  :root{
+    --bg:#0c1018; --panel:#141b27; --panel2:#1b2433; --line:#26324a;
+    --txt:#d7e2f0; --muted:#8190a8; --accent:#39b6ff; --accent2:#ff5a52;
+    --good:#4cd07a; --warn:#ffcf4d; --sp:#c98bff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--txt);font-family:"Segoe UI","PingFang SC","Microsoft Yahei",system-ui,sans-serif;height:100%}
+  #wrap{display:flex;gap:10px;padding:10px;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+  #stage-box{position:relative}
+  canvas{background:#0a0e16;border:1px solid var(--line);border-radius:8px;display:block;touch-action:none}
+  #side{width:300px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:13px;min-height:560px}
+  #side h3{margin:4px 0 6px;font-size:14px;color:var(--accent)}
+  .bar{height:10px;border-radius:5px;background:#222c3d;overflow:hidden;margin:2px 0}
+  .bar>span{display:block;height:100%}
+  .hp>span{background:linear-gradient(90deg,#ff6a5e,#ffd24d)}
+  .en>span{background:linear-gradient(90deg,#39b6ff,#7ad0ff)}
+  .row{display:flex;justify-content:space-between;gap:6px;margin:3px 0}
+  .pill{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:3px 7px;font-size:12px;color:var(--muted)}
+  .btn{display:block;width:100%;margin:5px 0;padding:9px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);color:var(--txt);font-size:13px;cursor:pointer;text-align:left}
+  .btn:hover{border-color:var(--accent)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.primary{background:#1d3a55;border-color:var(--accent);color:#cfeaff}
+  .btn.danger{border-color:var(--accent2)}
+  .btn .sub{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  #log{height:120px;overflow:auto;background:#0a0e16;border:1px solid var(--line);border-radius:6px;padding:6px;font-size:11px;color:var(--muted);margin-top:8px}
+  #log div{margin:1px 0}
+  #overlay{position:absolute;inset:0;background:rgba(8,11,18,.92);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:5}
+  #overlay h1{font-size:26px;margin:0 0 8px;color:var(--accent)}
+  #overlay p{color:var(--muted);max-width:560px;line-height:1.6;font-size:13px}
+  #overlay .big{font-size:15px;color:var(--txt);margin:10px 0}
+  .hidden{display:none!important}
+  #topbar{width:100%;max-width:1060px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  #topbar .tag{font-size:12px;color:var(--muted)}
+  #topbar b{color:var(--accent)}
+  #toast{position:fixed;left:50%;top:14%;transform:translateX(-50%);background:#1d3a55;color:#cfeaff;padding:8px 16px;border:1px solid var(--accent);border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20}
+  #toast.show{opacity:1}
+  .small{font-size:11px;color:var(--muted)}
+  @media(max-width:760px){#side{width:94vw;min-height:auto}#wrap{gap:6px}}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="tag">机甲战记 A · 原创战术 SRPG 致敬 Demo（非商业，不含任何授权 IP）</div>
+  <div class="tag">关卡 <b id="stageNum">1</b> · <span id="phaseTag">—</span> · 击坠点 <b id="ptsTag">0</b></div>
+</div>
+<div id="wrap">
+  <div id="stage-box">
+    <canvas id="game" width="728" height="572"></canvas>
+    <div id="overlay">
+      <h1 id="ovTitle">机甲战记 A</h1>
+      <p id="ovText">原创网页战术机器人 RPG。指挥你的机甲小队，在方格战场上移动、选择武器、发动精神指令，击溃「影镜残党」。</p>
+      <p class="small">操作：鼠标点选机体→点高亮格移动→选「攻击/精神/待机」；也可用键盘 WASD 移动光标、J 确认、K 攻击、L 精神、空格结束回合。手机用屏幕按钮。</p>
+      <button class="btn primary" id="ovBtn" style="width:200px">开始作战</button>
+    </div>
+  </div>
+  <div id="side">
+    <h3>战术面板</h3>
+    <div id="unitInfo">点选一台我方机体查看详情。</div>
+    <div id="actions"></div>
+    <h3 style="margin-top:10px">战斗记录</h3>
+    <div id="log"></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+// ===================== 基础工具 =====================
+var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
+var dist=function(ax,ay,bx,by){return Math.abs(ax-bx)+Math.abs(ay-by);};
+var key=function(x,y){return x+','+y;};
+var TS=52;
+
+// ===================== 地形 =====================
+var TERRAIN={
+  '.':{name:'平原',move:1,def:0,eva:0,pass:true},
+  'f':{name:'森林',move:2,def:10,eva:20,pass:true},
+  'm':{name:'山地',move:3,def:25,eva:10,pass:true},
+  'w':{name:'水域',move:2,def:-10,eva:-5,pass:true},
+  '#':{name:'障碍',move:99,def:0,eva:0,pass:false},
+  'B':{name:'基地',move:1,def:5,eva:0,pass:true,base:true}
+};
+
+// ===================== 精神指令 =====================
+var SPIRITS={
+  focus:{name:'集中',cost:10,desc:'下次攻击 命中+40'},
+  zeal:{name:'斗志',cost:20,desc:'下次伤害 ×1.3'},
+  guard:{name:'铁壁',cost:20,desc:'本敌方阶段 受击×0.5'},
+  mirage:{name:'幻影',cost:10,desc:'本回合 回避+50'},
+  heal:{name:'治愈',cost:20,desc:'自身恢复30%HP'},
+  boost:{name:'激励',cost:10,desc:'EN +30'}
+};
+
+// ===================== 机体/机师模板（全部原创） =====================
+var MECHS={
+  origin:{name:'原点·突击',type:'real',maxHp:4200,maxEn:140,armor:380,mobility:6,
+    weapons:[
+      {name:'光束军刀',kind:'melee',power:2300,minR:1,maxR:1,hit:95,ammo:Infinity,enCost:12,crit:8,vsReal:1.2,vsSuper:1.0},
+      {name:'光束步枪',kind:'ranged',power:1900,minR:2,maxR:4,hit:88,ammo:10,enCost:8,crit:5,vsReal:1.0,vsSuper:1.2}
+    ],
+    pilot:{name:'凯',melee:155,shoot:150,hit:105,eva:30,def:20,luck:18,sp:120,maxSp:120,spirits:['focus','zeal','guard']}},
+  tepp:{name:'铁壁·重装',type:'super',maxHp:6200,maxEn:120,armor:620,mobility:4,
+    weapons:[
+      {name:'格斗铁拳',kind:'melee',power:2600,minR:1,maxR:1,hit:90,ammo:Infinity,enCost:10,crit:10,vsReal:1.0,vsSuper:1.2},
+      {name:'双管加农',kind:'ranged',power:2100,minR:2,maxR:3,hit:82,ammo:8,enCost:10,crit:4,vsReal:1.2,vsSuper:1.0}
+    ],
+    pilot:{name:'蕾娜',melee:130,shoot:120,hit:90,eva:12,def:35,luck:12,sp:110,maxSp:110,spirits:['guard','heal','boost']}},
+  aosh:{name:'苍隼·空战',type:'real',maxHp:3800,maxEn:150,armor:300,mobility:8,
+    weapons:[
+      {name:'追踪导弹',kind:'ranged',power:1700,minR:2,maxR:5,hit:85,ammo:8,enCost:9,crit:12,vsReal:1.1,vsSuper:1.1},
+      {name:'光束炮',kind:'ranged',power:2000,minR:2,maxR:4,hit:90,ammo:6,enCost:12,crit:8,vsReal:1.0,vsSuper:1.3}
+    ],
+    pilot:{name:'翔',melee:120,shoot:160,hit:115,eva:42,def:14,luck:22,sp:130,maxSp:130,spirits:['mirage','focus','heal']}},
+  e1:{name:'影镜·袭撃',type:'real',maxHp:3000,maxEn:100,armor:300,mobility:6,
+    weapons:[
+      {name:'脉冲刃',kind:'melee',power:1700,minR:1,maxR:1,hit:88,ammo:Infinity,enCost:8,crit:6,vsReal:1.1,vsSuper:1.1},
+      {name:'脉冲枪',kind:'ranged',power:1400,minR:2,maxR:4,hit:82,ammo:8,enCost:7,crit:5,vsReal:1.0,vsSuper:1.1}
+    ],
+    pilot:{name:'残党兵',melee:120,shoot:115,hit:88,eva:22,def:16,luck:10,sp:60,maxSp:60,spirits:['zeal']}},
+  e2:{name:'影镜·重炮',type:'super',maxHp:4600,maxEn:110,armor:520,mobility:4,
+    weapons:[
+      {name:'重锤',kind:'melee',power:2000,minR:1,maxR:1,hit:84,ammo:Infinity,enCost:8,crit:8,vsReal:1.0,vsSuper:1.2},
+      {name:'榴弹炮',kind:'ranged',power:1800,minR:2,maxR:3,hit:80,ammo:8,enCost:10,crit:4,vsReal:1.2,vsSuper:1.0}
+    ],
+    pilot:{name:'重装兵',melee:110,shoot:125,hit:82,eva:10,def:30,luck:8,sp:60,maxSp:60,spirits:['guard']}},
+  boss:{name:'影镜·统帅',type:'super',maxHp:7800,maxEn:160,armor:680,mobility:5,boss:true,
+    weapons:[
+      {name:'统帅斩舰刀',kind:'melee',power:2800,minR:1,maxR:1,hit:92,ammo:Infinity,enCost:12,crit:12,vsReal:1.0,vsSuper:1.3},
+      {name:'统帅主炮',kind:'ranged',power:2400,minR:2,maxR:5,hit:88,ammo:10,enCost:14,crit:8,vsReal:1.2,vsSuper:1.1}
+    ],
+    pilot:{name:'维恩',melee:165,shoot:160,hit:110,eva:18,def:40,luck:25,sp:140,maxSp:140,spirits:['zeal','guard','focus']}}
+};
+
+// ===================== 关卡定义 =====================
+// 地图字符：.平原 f森林 m山地 w水域 #障碍 B基地
+var STAGES=[
+  {name:'第一战 · 平原遭遇',intro:'影镜残党的侦察部队出现在平原。指挥小队清剿敌人，熟悉移动与攻击。',
+   cols:12,rows:9,
+   map:[
+    '............',
+    '..f.....f...',
+    '....#.......',
+    '......B.....',
+    '...f....f...',
+    '........#...',
+    '..m.......m.',
+    '............',
+    '............'],
+   players:[{tpl:'origin',x:2,y:7},{tpl:'tepp',x:3,y:7},{tpl:'aosh',x:1,y:6}],
+   enemies:[{tpl:'e1',x:9,y:2},{tpl:'e1',x:10,y:4},{tpl:'e2',x:9,y:6}]},
+  {name:'第二战 · 林山防线',intro:'敌人据守森林山地。利用地形掩护，优先击破重炮，小心反击。',
+   cols:13,rows:10,
+   map:[
+    '.............',
+    '.f...m...f...',
+    '..f..m..f....',
+    '....#...#....',
+    '..f.....f..B.',
+    '......m......',
+    '.f..#...#..f.',
+    '...f.....f...',
+    '..m.......m..',
+    '.............'],
+   players:[{tpl:'origin',x:2,y:8},{tpl:'tepp',x:3,y:8},{tpl:'aosh',x:1,y:7}],
+   enemies:[{tpl:'e1',x:10,y:1},{tpl:'e1',x:11,y:3},{tpl:'e2',x:10,y:5},{tpl:'e2',x:11,y:7}]},
+  {name:'第三战 · 统帅拦截',intro:'影镜统帅亲自出击。将其 HP 压到 30% 以下即可令其撤退，但在此之前必须突破护卫。',
+   cols:14,rows:11,
+   map:[
+    '..............',
+    '.f....m....f..',
+    '..f..#..#..f..',
+    '....m....m....',
+    '..f.....B...f.',
+    '......##......',
+    '.f..m....m..f.',
+    '...f......f...',
+    '..m..#..#..m..',
+    '.f..........f.',
+    '..............'],
+   players:[{tpl:'origin',x:2,y:9},{tpl:'tepp',x:3,y:9},{tpl:'aosh',x:1,y:8}],
+   enemies:[{tpl:'e1',x:11,y:1},{tpl:'e2',x:12,y:3},{tpl:'e1',x:11,y:5},{tpl:'e2',x:12,y:7},{tpl:'boss',x:11,y:9}]}
+];
+
+// ===================== 运行状态 =====================
+var canvas=document.getElementById('game');
+var ctx=canvas.getContext('2d');
+var state='title'; // title|brief|playerPhase|enemyPhase|upgrade|win|lose|clear
+var stageIndex=0;
+var map=[];               // map[y][x] = terrain char
+var COLS=12, ROWS=9;
+var units=[];            // 全部单位（原地清空保持引用）
+var uid=1;
+var sel=null;            // 当前选中单位
+var reach=null;          // Map "x,y"->cost（移动范围）
+var uiMode='idle';       // idle|move|action|target
+var targetList=[];       // 可攻击敌人 {unit,widx}
+var floaters=[];         // 飘字
+var particles=[];
+var pts=0;               // 击坠点（改造用）
+var logLines=[];
+var forceHit=false;
+var rng=Math.random;
+var upgrades={hp:0,armor:0,power:0,mobility:0,stat:0}; // 关间累计改造等级
+
+// ===================== 单位构建 =====================
+function makeUnit(tpl,side,x,y){
+  var t=MECHS[tpl];
+  var p=t.pilot;
+  var u={
+    id:uid++, side:side, tpl:tpl, name:t.name, type:t.type,
+    maxHp:t.maxHp, hp:t.maxHp, maxEn:t.maxEn, en:t.maxEn,
+    armor:t.armor, mobility:t.mobility, boss:!!t.boss,
+    weapons:t.weapons.map(function(w){var c={};for(var k in w)c[k]=w[k];c.ammo=w.ammo;return c;}),
+    pilot:{name:p.name,melee:p.melee,shoot:p.shoot,hit:p.hit,eva:p.eva,def:p.def,luck:p.luck,sp:p.sp,maxSp:p.maxSp,spirits:p.spirits.slice()},
+    x:x,y:y,acted:false,alive:true,
+    buffs:{hit:0,eva:0,dmg:1,focus:false,zeal:false,guard:false,mirage:false},
+    retreat:false
+  };
+  return u;
+}
+
+function buildStage(n){
+  var s=STAGES[n];
+  COLS=s.cols; ROWS=s.rows;
+  canvas.width=COLS*TS; canvas.height=ROWS*TS;
+  // 地图
+  map.length=0;
+  for(var y=0;y<ROWS;y++){ map[y]=s.map[y].split(''); }
+  // 单位：原地清空
+  units.length=0;
+  s.players.forEach(function(p){ units.push(makeUnit(p.tpl,'player',p.x,p.y)); });
+  s.enemies.forEach(function(e){ units.push(makeUnit(e.tpl,'enemy',e.x,e.y)); });
+  sel=null; reach=null; uiMode='idle'; targetList=[];
+}
+
+// ===================== 查询 =====================
+function inBounds(x,y){return x>=0&&y>=0&&x<COLS&&y<ROWS;}
+function terrainAt(x,y){ if(!inBounds(x,y))return TERRAIN['#']; return TERRAIN[map[y][x]]||TERRAIN['.']; }
+function occupied(x,y){ for(var i=0;i<units.length;i++){var u=units[i];if(u.alive&&u.x===x&&u.y===y)return true;} return false; }
+function unitAt(x,y){ for(var i=0;i<units.length;i++){var u=units[i];if(u.alive&&u.x===x&&u.y===y)return u;} return null; }
+function alivePlayers(){return units.filter(function(u){return u.side==='player'&&u.alive;});}
+function aliveEnemies(){return units.filter(function(u){return u.side==='enemy'&&u.alive;});}
+
+function computeReach(u){
+  var r=new Map(); r.set(key(u.x,u.y),0);
+  var q=[{x:u.x,y:u.y,c:0}];
+  while(q.length){
+    var cur=q.shift();
+    var dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+    for(var d=0;d<4;d++){
+      var nx=cur.x+dirs[d][0], ny=cur.y+dirs[d][1];
+      if(!inBounds(nx,ny))continue;
+      var tt=terrainAt(nx,ny); if(!tt.pass)continue;
+      if(occupied(nx,ny))continue;
+      var nc=cur.c+tt.move;
+      if(nc>u.mobility)continue;
+      var k=key(nx,ny);
+      if(!r.has(k)||r.get(k)>nc){ r.set(k,nc); q.push({x:nx,y:ny,c:nc}); }
+    }
+  }
+  r.delete(key(u.x,u.y));
+  return r;
+}
+
+function weaponUsable(u,w){ return (w.ammo===Infinity||w.ammo>0) && u.en>=w.enCost; }
+function inWeaponRange(u,t,w){ var dd=dist(u.x,u.y,t.x,t.y); return dd>=w.minR&&dd<=w.maxR; }
+
+// 返回对某目标可用的最优武器 idx（伤害期望最高）
+function bestWeapon(u,target){
+  var best=-1, bestScore=-1;
+  for(var i=0;i<u.weapons.length;i++){
+    var w=u.weapons[i];
+    if(!weaponUsable(u,w))continue;
+    if(!inWeaponRange(u,target,w))continue;
+    var sc=computeDamage(u,target,w,false)*(computeHit(u,target,w)/100)+1;
+    if(sc>bestScore){bestScore=sc;best=i;}
+  }
+  return best;
+}
+
+// ===================== 战斗结算（纯函数，供测试） =====================
+function computeHit(att,def,w){
+  var terr=terrainAt(def.x,def.y);
+  var h=att.pilot.hit*0.5 + w.hit - (def.pilot.eva*0.5 + terr.eva);
+  h += att.buffs.hit; h -= def.buffs.eva;
+  if(att.buffs.focus) h+=40;
+  if(def.buffs.mirage) h-=50;
+  return clamp(Math.round(h),5,99);
+}
+function computeDamage(att,def,w,crit){
+  var typeMod=(w.vsReal&&def.type==='real')?w.vsReal:((w.vsSuper&&def.type==='super')?w.vsSuper:1.0);
+  var base=w.power + (w.kind==='melee'?att.pilot.melee:att.pilot.shoot)*0.5;
+  var dmg=base*typeMod*(att.buffs.dmg)*(crit?1.5:1);
+  var red=(def.armor+terrainAt(def.x,def.y).def)*0.5;
+  if(def.buffs.guard) dmg*=0.5;
+  return Math.max(1,Math.round(dmg-red));
+}
+function critChance(att,w){ return att.pilot.luck*0.3 + (w.crit||0); }
+
+// 发动一次攻击（att 攻击 def，武器 wIdx）
+function resolveAttack(att,def,wIdx,allowCounter){
+  if(!att.alive||!def.alive)return;
+  var w=att.weapons[wIdx];
+  if(!weaponUsable(att,w))return;
+  // 消耗资源
+  if(w.ammo!==Infinity) w.ammo--;
+  att.en-=w.enCost;
+  var hit=forceHit?true:(rng()*100 < computeHit(att,def,w));
+  if(!hit){
+    log(att.name+' 攻击 '+def.name+'：未命中');
+    floater(def.x,def.y,'MISS','#9fb3cc');
+    sfx('miss');
+    clearTempBuffs(att);
+    if(allowCounter) tryCounter(def,att);
+    return;
+  }
+  var crit=rng()*100 < critChance(att,w);
+  var dmg=computeDamage(att,def,w,crit);
+  def.hp-=dmg;
+  burst(def.x,def.y, crit?'#ffd24d':'#ff7a6e');
+  floater(def.x,def.y, '-'+dmg+(crit?'!':''), crit?'#ffd24d':'#ff7a6e');
+  log(att.name+' 用'+w.name+(crit?' 暴击':'')+' 命中 '+def.name+'，造成 '+dmg+' 伤害');
+  sfx(crit?'crit':'hit');
+  clearTempBuffs(att);
+  if(def.boss && !def.retreat && (def.hp<=0 || def.hp<=def.maxHp*0.3)){
+    def.retreat=true; def.alive=false;
+    burst(def.x,def.y,'#ffd24d'); log(def.name+' 撤退！（作战目标达成）'); sfx('kill');
+    pts += 50; checkOutcome(); return;
+  }
+  if(def.hp<=0){ killUnit(def, att); }
+  else { if(allowCounter) tryCounter(def,att); }
+}
+function clearTempBuffs(u){ u.buffs.focus=false; u.buffs.zeal=false; u.buffs.dmg=1; }
+
+function tryCounter(def,att){
+  if(!def.alive||!att.alive)return;
+  var wi=bestWeapon(def,att);
+  if(wi<0)return;
+  // 反击伤害 ×0.8，且无二次反击
+  var w=def.weapons[wi];
+  if(w.ammo!==Infinity) w.ammo--;
+  def.en-=w.enCost;
+  var hit=rng()*100<computeHit(def,att,w);
+  if(!hit){ return; }
+  var crit=rng()*100<critChance(def,w);
+  var dmg=Math.round(computeDamage(def,att,w,crit)*0.8);
+  att.hp-=dmg;
+  floater(att.x,att.y,'-'+dmg,'#ff9a6e');
+  burst(att.x,att.y,'#ff9a6e');
+  log(def.name+' 反击 '+att.name+'，造成 '+dmg+' 伤害');
+  sfx('hit');
+  if(att.hp<=0) killUnit(att,def);
+}
+
+function killUnit(u,killer){
+  u.alive=false;
+  burst(u.x,u.y,'#ffd24d');
+  log(u.name+' 被击破！');
+  sfx('kill');
+  if(u.side==='enemy'){
+    pts += u.boss?50:10;
+    if(u.boss && !u.retreat){ /* 已击破 */ }
+  }
+  checkOutcome();
+}
+
+// ===================== 精神指令 =====================
+function useSpirit(u,idx){
+  if(!u.alive)return false;
+  var sid=u.pilot.spirits[idx]; if(!sid)return false;
+  var sp=SPIRITS[sid];
+  if(u.pilot.sp<sp.cost)return false;
+  u.pilot.sp-=sp.cost;
+  if(sid==='focus'){ u.buffs.focus=true; u.buffs.hit+=0; }
+  else if(sid==='zeal'){ u.buffs.zeal=true; u.buffs.dmg=1.3; }
+  else if(sid==='guard'){ u.buffs.guard=true; }
+  else if(sid==='mirage'){ u.buffs.mirage=true; u.buffs.eva+=50; }
+  else if(sid==='heal'){ u.hp=Math.min(u.maxHp,u.hp+Math.round(u.maxHp*0.3)); floater(u.x,u.y,'+HP','#4cd07a'); }
+  else if(sid==='boost'){ u.en=Math.min(u.maxEn,u.en+30); floater(u.x,u.y,'+EN','#39b6ff'); }
+  log(u.name+' 发动精神【'+sp.name+'】');
+  sfx('spirit');
+  return true;
+}
+
+// ===================== 玩家操作 API =====================
+function selectUnit(u){
+  if(!u||u.side!=='player'||!u.alive||u.acted)return false;
+  sel=u; reach=computeReach(u); uiMode='move';
+  renderPanel(); return true;
+}
+function moveSel(x,y){
+  if(!sel||uiMode!=='move')return false;
+  if(!reach.has(key(x,y)))return false;
+  sel.x=x; sel.y=y;
+  if(terrainAt(x,y).base){ sel.hp=Math.min(sel.maxHp,sel.hp+Math.round(sel.maxHp*0.15)); sel.en=Math.min(sel.maxEn,sel.en+10); }
+  uiMode='action';
+  renderPanel();
+  return true;
+}
+// 选择攻击：列出可攻击目标
+function planAttack(){
+  if(!sel||uiMode!=='action')return false;
+  targetList=[];
+  var ens=aliveEnemies();
+  for(var i=0;i<ens.length;i++){
+    for(var w=0;w<sel.weapons.length;w++){
+      if(weaponUsable(sel,sel.weapons[w])&&inWeaponRange(sel,ens[i],sel.weapons[w])){
+        targetList.push({unit:ens[i],widx:w});
+      }
+    }
+  }
+  if(targetList.length===0){ toast('射程内无目标'); return false; }
+  uiMode='target';
+  renderPanel();
+  return true;
+}
+function doAttack(targetUnit,widx){
+  if(!sel||!targetUnit||!targetUnit.alive)return false;
+  var att=sel;
+  resolveAttack(att,targetUnit,widx,true);
+  att.acted=true;
+  sel=null; reach=null; uiMode='idle'; targetList=[];
+  afterPlayerAction();
+  return true;
+}
+function doSpirit(idx){
+  if(!sel)return false;
+  var ok=useSpirit(sel,idx);
+  if(ok){ renderPanel(); }
+  return ok;
+}
+function doWait(){
+  if(!sel)return false;
+  sel.acted=true; sel=null; reach=null; uiMode='idle';
+  afterPlayerAction();
+  return true;
+}
+function afterPlayerAction(){
+  renderPanel();
+  // 若全部我方已行动，自动结束回合
+  if(alivePlayers().every(function(u){return u.acted;})){ endTurn(); }
+}
+
+// ===================== 回合 / 敌方 AI =====================
+function endTurn(){
+  if(state!=='playerPhase')return;
+  // 清除玩家临时 buff
+  alivePlayers().forEach(function(u){u.buffs.mirage=false;u.buffs.eva-=0;});
+  state='enemyPhase';
+  phaseTag();
+  // 清除敌方 guard 旧值
+  aliveEnemies().forEach(function(u){u.buffs.guard=false;});
+  // 敌方依次行动
+  var list=aliveEnemies().slice();
+  for(var i=0;i<list.length;i++){
+    var e=list[i];
+    if(e.alive) enemyAct(e);
+  }
+  // 回合结束：恢复玩家 SP 少量、清除 buff
+  alivePlayers().forEach(function(u){
+    u.acted=false;
+    u.buffs={hit:0,eva:0,dmg:1,focus:false,zeal:false,guard:false,mirage:false};
+    u.pilot.sp=Math.min(u.maxSp,u.pilot.sp+8);
+    if(terrainAt(u.x,u.y).base){ u.hp=Math.min(u.maxHp,u.hp+Math.round(u.maxHp*0.1)); u.en=Math.min(u.maxEn,u.en+8); }
+  });
+  state='playerPhase';
+  // 自动选中第一个未行动单位
+  var ps=alivePlayers();
+  if(ps.length) selectUnit(ps[0]); else phaseTag();
+  phaseTag();
+  renderPanel();
+  toast('我方回合');
+}
+
+function enemyAct(e){
+  if(!e.alive)return;
+  // 找最近玩家
+  var ps=alivePlayers(); if(ps.length===0)return;
+  var near=ps[0], nd=1e9;
+  for(var i=0;i<ps.length;i++){ var d=dist(e.x,e.y,ps[i].x,ps[i].y); if(d<nd){nd=d;near=ps[i];} }
+  // 候选落点：原地 + 可达
+  var rc=computeReach(e);
+  var cands=[{x:e.x,y:e.y}];
+  rc.forEach(function(c,k){ var p=k.split(','); cands.push({x:+p[0],y:+p[1]}); });
+  // 评估：能攻击优先
+  var bestCand=null, bestScore=-1e9, bestTarget=null, bestW=-1;
+  for(var c=0;c<cands.length;c++){
+    var cx=cands[c].x, cy=cands[c].y;
+    // 临时位置
+    var ox=e.x, oy=e.y; e.x=cx; e.y=cy;
+    var tw=bestWeapon(e,near); // 仅针对最近目标测试；也试其他
+    var score=-dist(cx,cy,near.x,near.y);
+    if(tw>=0){ score+=1000; }
+    e.x=ox; e.y=oy;
+    if(score>bestScore){ bestScore=score; bestCand=cands[c]; bestTarget=near; bestW=tw; }
+  }
+  // 移动
+  e.x=bestCand.x; e.y=bestCand.y;
+  if(terrainAt(e.x,e.y).base){ e.hp=Math.min(e.maxHp,e.hp+Math.round(e.maxHp*0.1)); e.en=Math.min(e.maxEn,e.en+8); }
+  // 攻击
+  if(bestW>=0){
+    // 对范围内最优目标（重新选，可能换了位置后 others 进入射程）
+    var ti=bestTargetFor(e);
+    if(ti){ resolveAttack(e,ti.unit,ti.widx,true); }
+  }
+  e.acted=true;
+}
+function bestTargetFor(e){
+  var ps=alivePlayers(); var best=null,bestSc=-1;
+  for(var i=0;i<ps.length;i++){
+    var wi=bestWeapon(e,ps[i]);
+    if(wi<0)continue;
+    var w=e.weapons[wi];
+    var sc=computeDamage(e,ps[i],w,false);
+    if(sc>bestSc){bestSc=sc;best={unit:ps[i],widx:wi};}
+  }
+  return best;
+}
+
+// ===================== 胜负 / 关卡推进 =====================
+function checkOutcome(){
+  if(state==='win'||state==='lose')return;
+  if(alivePlayers().length===0){ loseGame(); return; }
+  if(aliveEnemies().length===0){ stageClear(); return; }
+}
+function stageClear(){
+  if(stageIndex>=STAGES.length-1){ winGame(); return; }
+  state='upgrade';
+  showUpgrade();
+}
+function winGame(){ state='win'; showOverlay('作战胜利！','你击溃了影镜残党的全部防线，维护了世界的和平。','再玩一次',restartAll); }
+function loseGame(){ state='lose'; showOverlay('作战失败','我方机甲全数被击破。整备后再来一次吧。','重新作战',restartAll); }
+function restartAll(){ stageIndex=0; pts=0; upgrades={hp:0,armor:0,power:0,mobility:0,stat:0}; startGame(); }
+
+function showUpgrade(){
+  // 应用累计改造到玩家模板的“下一关”基础（在 buildStage 后叠加）
+  state='upgrade';
+  renderUpgrade();
+}
+
+// ===================== 渲染 =====================
+function applyUpgrades(u){
+  u.maxHp += upgrades.hp*600; u.hp=u.maxHp;
+  u.armor += upgrades.armor*80;
+  u.mobility += upgrades.mobility; if(u.mobility>10)u.mobility=10;
+  u.weapons.forEach(function(w){ w.power += upgrades.power*250; });
+  u.pilot.melee += upgrades.stat*10; u.pilot.shoot += upgrades.stat*10;
+  u.pilot.hit += upgrades.stat*6; u.pilot.eva += upgrades.stat*4; u.pilot.def += upgrades.stat*6; u.pilot.luck += upgrades.stat*3;
+}
+
+function startGame(){
+  buildStage(stageIndex);
+  alivePlayers().forEach(applyUpgrades);
+  state='brief';
+  showBrief();
+  renderPanel();
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // 地形
+  for(var y=0;y<ROWS;y++)for(var x=0;x<COLS;x++){
+    var t=terrainAt(x,y); var px=x*TS, py=y*TS;
+    ctx.fillStyle=terrainColor(t);
+    ctx.fillRect(px,py,TS,TS);
+    ctx.strokeStyle='rgba(255,255,255,0.05)';
+    ctx.strokeRect(px+0.5,py+0.5,TS-1,TS-1);
+    // 地形标记
+    if(t.base){ ctx.fillStyle='rgba(120,220,160,0.5)'; ctx.beginPath(); ctx.arc(px+TS/2,py+TS/2,6,0,7); ctx.fill(); }
+  }
+  // 移动范围高亮
+  if(reach){
+    reach.forEach(function(c,k){ var p=k.split(','); var px=+p[0]*TS, py=+p[1]*TS; ctx.fillStyle='rgba(57,182,255,0.18)'; ctx.fillRect(px,py,TS,TS); });
+  }
+  // 攻击目标高亮
+  if(uiMode==='target'){
+    targetList.forEach(function(t){ ctx.fillStyle='rgba(255,90,82,0.22)'; ctx.fillRect(t.unit.x*TS,t.unit.y*TS,TS,TS); });
+  }
+  // 单位
+  for(var i=0;i<units.length;i++){ if(units[i].alive) drawMech(units[i]); }
+  // 飘字/粒子
+  drawFloaters();
+}
+function terrainColor(t){
+  if(t.pass===false)return '#2a2030';
+  switch(t.name){
+    case '平原':return '#101826';
+    case '森林':return '#13241a';
+    case '山地':return '#241d14';
+    case '水域':return '#0e2330';
+    case '基地':return '#15241f';
+  }
+  return '#101826';
+}
+function drawMech(u){
+  var px=u.x*TS, py=u.y*TS, cx=px+TS/2, cy=py+TS/2;
+  // 选中环
+  if(sel===u){ ctx.strokeStyle='#39b6ff'; ctx.lineWidth=3; ctx.strokeRect(px+3,py+3,TS-6,TS-6); ctx.lineWidth=1; }
+  var col = u.side==='player' ? (u.type==='real'?'#3aa0e0':'#5b8def') : (u.type==='real'?'#e0634a':'#d23b32');
+  ctx.fillStyle=col;
+  // 机体主体
+  roundRect(px+12,py+14,TS-24,TS-26,6); ctx.fill();
+  // 座舱
+  ctx.fillStyle='rgba(255,255,255,0.85)';
+  ctx.fillRect(cx-5,py+18,10,8);
+  // 肩/翼
+  ctx.fillStyle=col;
+  ctx.fillRect(px+8,py+18,6,10); ctx.fillRect(px+TS-14,py+18,6,10);
+  if(u.type==='super'){ ctx.fillRect(cx-3,py+8,6,8); } // 头顶角
+  if(u.boss){ ctx.strokeStyle='#ffd24d'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(cx,py+8,4,0,7); ctx.stroke(); ctx.lineWidth=1; }
+  // 名称缩写
+  ctx.fillStyle='#fff'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+  ctx.fillText(u.boss?'BO':(u.side==='player'?'P':'E'), cx, py+TS-6);
+  // HP 条
+  var bw=TS-16;
+  ctx.fillStyle='#222c3d'; ctx.fillRect(px+8,py+TS-13,bw,4);
+  ctx.fillStyle = u.hp/u.maxHp>0.3?'#4cd07a':'#ff5a52';
+  ctx.fillRect(px+8,py+TS-13,bw*clamp(u.hp/u.maxHp,0,1),4);
+  ctx.textAlign='left';
+}
+function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+
+// 飘字 / 粒子
+function floater(x,y,text,color){ floaters.push({x:x*TS+TS/2,y:y*TS+10,text:text,color:color,life:1.0}); }
+function burst(x,y,color){ for(var i=0;i<10;i++){ var a=Math.random()*7; particles.push({x:x*TS+TS/2,y:y*TS+TS/2,vx:Math.cos(a)*2,vy:Math.sin(a)*2,life:0.6,color:color}); } }
+function drawFloaters(){
+  for(var i=floaters.length-1;i>=0;i--){ var f=floaters[i]; f.y-=0.6; f.life-=0.02; ctx.globalAlpha=clamp(f.life,0,1); ctx.fillStyle=f.color; ctx.font='bold 14px sans-serif'; ctx.textAlign='center'; ctx.fillText(f.text,f.x,f.y); ctx.globalAlpha=1; ctx.textAlign='left'; if(f.life<=0)floaters.splice(i,1); }
+  for(var j=particles.length-1;j>=0;j--){ var p=particles[j]; p.x+=p.vx;p.y+=p.vy;p.life-=0.03; ctx.globalAlpha=clamp(p.life,0,1); ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,3,3); ctx.globalAlpha=1; if(p.life<=0)particles.splice(j,1); }
+}
+
+// ===================== 侧栏 UI =====================
+function bar(cls,val,max){ return '<div class="bar '+cls+'"><span style="width:'+clamp(val/max*100,0,100)+'%"></span></div>'; }
+function renderPanel(){
+  var info=document.getElementById('unitInfo');
+  var act=document.getElementById('actions');
+  if(sel){
+    var u=sel;
+    var wp=u.weapons.map(function(w,i){ return (i+1)+'.'+w.name+' ('+(w.ammo===Infinity?'∞':w.ammo)+'/EN'+w.enCost+')'; }).join('　');
+    var sp=u.pilot.spirits.map(function(s,i){ return SPIRITS[s].name+'('+SPIRITS[s].cost+')'; }).join(' ');
+    info.innerHTML='<b style="color:'+(u.side==='player'?'#7ad0ff':'#ff8a7e')+'">'+u.name+'</b> <span class="pill">'+(u.type==='real'?'真实系':'超级系')+(u.boss?' · BOSS':'')+'</span>'+
+      bar('hp',u.hp,u.maxHp)+'<div class="small">HP '+Math.max(0,Math.round(u.hp))+'/'+u.maxHp+'</div>'+
+      bar('en',u.en,u.maxEn)+'<div class="small">EN '+Math.round(u.en)+'/'+u.maxEn+'</div>'+
+      '<div class="row"><span class="pill">格斗 '+u.pilot.melee+'</span><span class="pill">射击 '+u.pilot.shoot+'</span></div>'+
+      '<div class="row"><span class="pill">命中 '+u.pilot.hit+'</span><span class="pill">回避 '+u.pilot.eva+'</span><span class="pill">防御 '+u.pilot.def+'</span><span class="pill">运 '+u.pilot.luck+'</span></div>'+
+      '<div class="small">武器：'+wp+'</div>'+
+      '<div class="small">精神：'+sp+'（SP '+u.pilot.sp+'/'+u.maxSp+'）</div>';
+    // 行动按钮
+    if(u.side==='player'&&!u.acted){
+      act.innerHTML='';
+      var bA=document.createElement('button'); bA.className='btn primary'; bA.innerHTML='攻击 <span class="sub">选择射程内敌人</span>';
+      bA.onclick=function(){ planAttack(); };
+      var bS=document.createElement('button'); bS.className='btn'; bS.innerHTML='精神 <span class="sub">发动精神指令</span>';
+      bS.onclick=function(){ showSpirits(u); };
+      var bW=document.createElement('button'); bW.className='btn'; bW.innerHTML='待机 <span class="sub">结束该机行动</span>';
+      bW.onclick=function(){ doWait(); };
+      act.appendChild(bA); act.appendChild(bS); act.appendChild(bW);
+      if(uiMode==='target'){
+        targetList.forEach(function(t){
+          var b=document.createElement('button'); b.className='btn danger';
+          b.innerHTML='▶ '+t.unit.name+' · '+t.unit.weapons[t.widx].name+' <span class="sub">命中'+computeHit(u,t.unit,t.unit.weapons[t.widx])+'% 伤害~'+computeDamage(u,t.unit,t.unit.weapons[t.widx],false)+'</span>';
+          b.onclick=function(){ doAttack(t.unit,t.widx); };
+          act.appendChild(b);
+        });
+      }
+    } else { act.innerHTML='<div class="small">该机本回合已行动。</div>'; }
+  } else {
+    info.innerHTML='点选一台我方机体查看详情。';
+    act.innerHTML='<button class="btn primary" id="endBtn">结束回合</button>';
+    var eb=document.getElementById('endBtn'); if(eb)eb.onclick=function(){ endTurn(); };
+  }
+  document.getElementById('stageNum').textContent=(stageIndex+1);
+  document.getElementById('ptsTag').textContent=pts;
+  phaseTag();
+}
+function showSpirits(u){
+  var act=document.getElementById('actions');
+  act.innerHTML='<div class="small">选择精神指令：</div>';
+  u.pilot.spirits.forEach(function(s,i){
+    var sp=SPIRITS[s];
+    var b=document.createElement('button'); b.className='btn'; b.disabled=(u.pilot.sp<sp.cost);
+    b.innerHTML=sp.name+' <span class="sub">'+sp.cost+'SP · '+sp.desc+'</span>';
+    b.onclick=function(){ doSpirit(i); showSpirits(u); };
+    act.appendChild(b);
+  });
+  var back=document.createElement('button'); back.className='btn'; back.innerHTML='返回';
+  back.onclick=function(){ renderPanel(); };
+  act.appendChild(back);
+}
+function phaseTag(){ var t=document.getElementById('phaseTag'); if(t)t.textContent=(state==='enemyPhase'?'敌方回合':(state==='playerPhase'?'我方回合':state)); }
+
+// ===================== 升级界面 =====================
+function renderUpgrade(){
+  var ov=document.getElementById('overlay');
+  ov.classList.remove('hidden');
+  var costItem=function(name,key,max){ var lvl=upgrades[key]; return '<button class="btn" id="up_'+key+'" '+(lvl>=max?'disabled':'')+'>'+name+' Lv'+lvl+' <span class="sub">消耗5点（剩余'+pts+'）</span></button>'; };
+  document.getElementById('ovTitle').textContent='整备 · 击坠点 '+pts;
+  document.getElementById('ovText').innerHTML='用击坠点强化部队，进入下一战。<div id="upList"></div>';
+  var list=document.getElementById('upList');
+  list.innerHTML=
+    '<button class="btn" id="up_hp"'+(upgrades.hp>=6?'disabled':'')+'>强化装甲HP Lv'+upgrades.hp+' <span class="sub">+600HP/级</span></button>'+
+    '<button class="btn" id="up_armor"'+(upgrades.armor>=6?'disabled':'')+'>强化装甲 Lv'+upgrades.armor+' <span class="sub">+80装甲/级</span></button>'+
+    '<button class="btn" id="up_power"'+(upgrades.power>=6?'disabled':'')+'>强化武器 Lv'+upgrades.power+' <span class="sub">+250威力/级</span></button>'+
+    '<button class="btn" id="up_mobility"'+(upgrades.mobility>=3?'disabled':'')+'>强化机动 Lv'+upgrades.mobility+' <span class="sub">+1移动/级</span></button>'+
+    '<button class="btn" id="up_stat"'+(upgrades.stat>=6?'disabled':'')+'>强化机师 Lv'+upgrades.stat+' <span class="sub">格斗/射击/命中等</span></button>';
+  function buy(k,max){ if(upgrades[k]>=max)return; if(pts<5)return; pts-=5; upgrades[k]++; renderUpgrade(); renderPanel(); }
+  document.getElementById('up_hp').onclick=function(){buy('hp',6);};
+  document.getElementById('up_armor').onclick=function(){buy('armor',6);};
+  document.getElementById('up_power').onclick=function(){buy('power',6);};
+  document.getElementById('up_mobility').onclick=function(){buy('mobility',3);};
+  document.getElementById('up_stat').onclick=function(){buy('stat',6);};
+  var go=document.createElement('button'); go.className='btn primary'; go.style.marginTop='8px'; go.textContent='进入下一战 ▶';
+  go.onclick=function(){ ov.classList.add('hidden'); stageIndex++; startGame(); };
+  list.appendChild(go);
+}
+
+// ===================== 覆盖层 / 提示 =====================
+function showOverlay(title,text,btn,fn){
+  var ov=document.getElementById('overlay'); ov.classList.remove('hidden');
+  document.getElementById('ovTitle').textContent=title;
+  document.getElementById('ovText').textContent=text;
+  var b=document.getElementById('ovBtn'); b.textContent=btn; b.onclick=fn;
+}
+function showBrief(){
+  var s=STAGES[stageIndex];
+  showOverlay(s.name, s.intro+'\n\n我方 3 机 vs 敌方 '+s.enemies.length+' 机。', '出击！', function(){ document.getElementById('overlay').classList.add('hidden'); state='playerPhase'; phaseTag(); renderPanel(); });
+}
+var toastTimer=null;
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); if(toastTimer)clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove('show');},1400); }
+function log(msg){ logLines.push(msg); if(logLines.length>60)logLines.shift(); var el=document.getElementById('log'); if(el){ el.innerHTML=logLines.slice(-30).map(function(l){return '<div>· '+l+'</div>';}).join(''); el.scrollTop=el.scrollHeight; } }
+
+// ===================== 音效（WebAudio 合成） =====================
+var AC=null;
+function audio(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC=null; } } return AC; }
+function tone(freq,dur,type,vol,slideTo){
+  var a=audio(); if(!a)return; var o=a.createOscillator(),g=a.createGain();
+  o.type=type||'square'; o.frequency.value=freq;
+  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo,a.currentTime+dur);
+  g.gain.value=vol||0.08; g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+dur);
+  o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+dur);
+}
+function sfx(kind){
+  if(kind==='hit')tone(220,0.12,'square',0.09,90);
+  else if(kind==='crit'){tone(180,0.18,'sawtooth',0.1,60);tone(400,0.12,'square',0.06);}
+  else if(kind==='miss')tone(300,0.08,'sine',0.05,200);
+  else if(kind==='kill'){tone(140,0.3,'sawtooth',0.1,50);}
+  else if(kind==='spirit')tone(520,0.18,'triangle',0.08,880);
+  else if(kind==='move')tone(330,0.05,'sine',0.04);
+}
+
+// ===================== 输入 =====================
+function canvasTile(ev){
+  var r=canvas.getBoundingClientRect();
+  var cx=(ev.clientX-r.left)*(canvas.width/r.width);
+  var cy=(ev.clientY-r.top)*(canvas.height/r.height);
+  return {x:Math.floor(cx/TS), y:Math.floor(cy/TS)};
+}
+canvas.addEventListener('click',function(ev){
+  if(state!=='playerPhase')return;
+  var t=canvasTile(ev);
+  if(!inBounds(t.x,t.y))return;
+  var u=unitAt(t.x,t.y);
+  if(uiMode==='move'&&sel){
+    if(moveSel(t.x,t.y)){ sfx('move'); return; }
+  }
+  if(uiMode==='target'&&sel){
+    // 点击高亮敌人则攻击（用其最优武器）
+    var tl=targetList.filter(function(o){return o.unit.x===t.x&&o.unit.y===t.y;});
+    if(tl.length){ doAttack(tl[0].unit, tl[0].widx); return; }
+  }
+  if(u&&u.side==='player'){ selectUnit(u); sfx('move'); }
+});
+// 键盘
+var keyState={};
+window.addEventListener('keydown',function(ev){
+  if(state!=='playerPhase')return;
+  if(ev.key===' '){ ev.preventDefault(); endTurn(); return; }
+  if(sel&&uiMode==='action'){
+    if(ev.key==='j'||ev.key==='k'){ planAttack(); return; }
+    if(ev.key==='l'){ showSpirits(sel); return; }
+  }
+  if(ev.key==='Enter'){
+    // 若点了单位未移动，尝试在周围选最近可达；简化：无操作
+  }
+});
+
+// ===================== 主循环 =====================
+var last=0;
+function loop(ts){
+  var dt=(ts-last)/1000||0; last=ts;
+  if(state!=='title') draw();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// ===================== 启动 =====================
+document.getElementById('ovBtn').onclick=function(){
+  if(state==='title'){ startGame(); return; }
+};
+// 初始展示标题
+showOverlay('机甲战记 A','原创网页战术机器人 RPG。指挥你的机甲小队，在方格战场上移动、选择武器、发动精神指令，击溃「影镜残党」。\n\n（本作为向《超级机器人大战 A》战术 SRPG 核心玩法致敬的原创 Demo，不含任何 Banpresto / 万代南梦宫及授权动画 IP。）','开始作战',function(){ startGame(); });
+
+// ===================== 测试钩子 =====================
+window.__GAME__={
+  get state(){return state;},
+  get units(){return units;},
+  get COLS(){return COLS;}, get ROWS(){return ROWS;}, get TS(){return TS;},
+  terrainAt:terrainAt, inBounds:inBounds, occupied:occupied, unitAt:unitAt,
+  alivePlayers:alivePlayers, aliveEnemies:aliveEnemies,
+  computeHit:computeHit, computeDamage:computeDamage, critChance:critChance,
+  selectUnit:selectUnit, moveSel:moveSel, planAttack:planAttack, doAttack:doAttack, doSpirit:doSpirit, doWait:doWait,
+  useSpirit:useSpirit, resolveAttack:resolveAttack, buildStage:buildStage,
+  startGame:startGame, endTurn:endTurn, restartAll:restartAll,
+  confirmBrief:function(){ if(state==='brief'){ state='playerPhase'; phaseTag(); renderPanel(); } },
+  setForceHit:function(v){forceHit=v;}, setRng:function(f){rng=f;},
+  get stageIndex(){return stageIndex;}, setStageIndex:function(i){stageIndex=i;},
+  get pts(){return pts;}, get upgrades(){return upgrades;},
+  get sel(){return sel;}, get uiMode(){return uiMode;}, get reach(){return reach;},
+  get targetList(){return targetList;},
+  MECHS:MECHS, STAGES:STAGES, SPIRITS:SPIRITS, TERRAIN:TERRAIN
+};
+})();
+</script>
+</body>
+</html>
