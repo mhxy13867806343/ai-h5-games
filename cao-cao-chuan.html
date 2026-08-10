@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三国志 - 曹操传 - 在线玩丨老游戏在线玩</title>
+    <meta name="description" content="三国志 - 曹操传 HTML5在线版 - 经典FC策略战棋RPG，包含经典战役、地形战术、策士计谋、宝物收集与魏国雄霸天下！">
+    <link rel="stylesheet" href="cao-cao-chuan/style.css">
+</head>
+<body>
+    <div class="site-header">
+        <div class="header-content">
+            <div class="logo">老游戏在线玩</div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">FC红白机</a>
+                <a href="#">策略战棋</a>
+                <a href="#">三国志专区</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-wrapper">
+            <div class="game-header">
+                <h1>三国志：曹操传 (San Guo Zhi: Legend of Cao Cao)</h1>
+                <div class="game-stats">
+                    <span>⭐ 评分: 9.9</span>
+                    <span>🔥 人气: 3,420,100</span>
+                </div>
+            </div>
+            
+            <div class="canvas-container" id="canvas-container">
+                <div id="loading-screen" class="overlay active">
+                    <div class="loading-title">LEGEND OF CAO CAO</div>
+                    <div class="loading-subtitle">三国志：曹操传</div>
+                    <div class="loading-text">加载中... 0%</div>
+                    <div class="loading-bar"><div class="progress"></div></div>
+                </div>
+                <canvas id="game-canvas" width="900" height="650"></canvas>
+            </div>
+
+            <div class="game-info">
+                <div class="controls-panel">
+                    <h3>操作指南</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">鼠标左键</span>
+                            <span class="desc">选择武将 / 移动格子 / 释放策略</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">WASD / 方向键</span>
+                            <span class="desc">战棋地图视角移动</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">1 - 4 快捷键</span>
+                            <span class="desc">切换移动 / 攻击 / 计谋 / 结束回合</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Space / J</span>
+                            <span class="desc">确认选择</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Esc / P</span>
+                            <span class="desc">取消 / 暂停游戏</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Enter</span>
+                            <span class="desc">开始 / 下一回合</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-fullscreen" class="btn">全屏游戏</button>
+                    <button id="btn-restart" class="btn">重新开始</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-description">
+            <h2>游戏介绍</h2>
+            <p>《三国志：曹操传》是光荣三国志战棋SLG的传世之作。游戏以魏武帝曹操的视角重现三国宏伟历史！玩家将率领夏侯惇、曹仁、荀彧、郭嘉、典韦等魏国名将，在颍川、虎牢关、官渡与赤壁等数十场经典战役中指挥兵种相克、地形防守与火计水攻。收集倚天剑、青龙宝刀等稀有宝物，体验红色霸王与蓝色英雄的不同抉择线！</p>
+            <div class="game-tags">
+                <span class="tag">三国志</span>
+                <span class="tag">曹操传</span>
+                <span class="tag">策略战棋</span>
+                <span class="tag">SLG</span>
+                <span class="tag">FC经典</span>
+                <span class="tag">历史战役</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="cao-cao-chuan/game.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new CaoCaoGame();
+            game.init();
+            
+            document.getElementById('btn-fullscreen').addEventListener('click', () => {
+                const container = document.getElementById('canvas-container');
+                if (container.requestFullscreen) container.requestFullscreen();
+                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+            });
+            
+            document.getElementById('btn-restart').addEventListener('click', () => {
+                game.restart();
+            });
+        });
+    </script>
+</body>
+</html>
