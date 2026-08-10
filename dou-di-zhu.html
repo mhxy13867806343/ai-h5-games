@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>斗地主经典版 - 4399小游戏</title>
+    <link rel="stylesheet" href="dou-di-zhu/style.css">
+</head>
+<body>
+    <header class="game-header">
+        <div class="logo">4399小游戏</div>
+        <nav class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">棋牌</a>
+            <a href="#">扑克</a>
+        </nav>
+    </header>
+    
+    <main class="game-container">
+        <div class="game-header-bar">
+            <h1>斗地主经典版</h1>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="900" height="650"></canvas>
+            <div id="loadingOverlay" class="overlay">
+                <div class="loader"></div>
+                <p>游戏加载中...</p>
+            </div>
+            
+            <div id="uiOverlay" class="ui-overlay">
+                <div id="actionButtons" class="action-buttons hidden">
+                    <button id="btnPass" class="btn">不出</button>
+                    <button id="btnHint" class="btn">提示</button>
+                    <button id="btnPlay" class="btn primary">出牌</button>
+                </div>
+                
+                <div id="bidButtons" class="bid-buttons hidden">
+                    <button id="btnBidPass" class="btn">不叫</button>
+                    <button id="btnBid" class="btn primary">叫地主</button>
+                </div>
+                
+                <div id="gameOverPanel" class="game-over hidden">
+                    <h2 id="gameOverTitle">游戏结束</h2>
+                    <p id="gameOverMsg"></p>
+                    <button id="btnRestart" class="btn primary">再来一局</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-info">
+            <div class="controls">
+                <h3>操作说明</h3>
+                <p>鼠标左键：选牌/出牌</p>
+                <p>鼠标右键：取消选牌</p>
+            </div>
+            <div class="actions">
+                <button id="btnFullscreen" class="btn-small">全屏游戏</button>
+                <button id="btnReset" class="btn-small">重新开始</button>
+            </div>
+        </div>
+        
+        <div class="game-desc">
+            <h3>游戏介绍</h3>
+            <p>斗地主是一种经典的扑克游戏。游戏由3个玩家进行，用一副54张牌（连鬼牌），其中一方为地主，其余两家为另一方，双方对战，先出完牌的一方获胜。</p>
+            <div class="tags">
+                <span class="tag">棋牌</span>
+                <span class="tag">扑克</span>
+                <span class="tag">经典</span>
+                <span class="tag">策略</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="dou-di-zhu/game.js"></script>
+</body>
+</html>

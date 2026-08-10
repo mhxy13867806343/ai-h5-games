@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>忍者拆炸弹 - 4399小游戏</title>
+    <meta name="description" content="忍者拆炸弹 HTML5在线版 - 经典敏捷解谜游戏，考验反映与拆弹技巧">
+    <link rel="stylesheet" href="ninja-bomb/style.css">
+</head>
+<body>
+    <div class="site-header">
+        <div class="header-content">
+            <div class="logo">4399小游戏</div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">敏捷游戏</a>
+                <a href="#">益智游戏</a>
+                <a href="#">忍者游戏</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-wrapper">
+            <div class="game-header">
+                <h1>忍者拆炸弹 (Ninja Bomb Defusal)</h1>
+                <div class="game-stats">
+                    <span>⭐ 评分: 9.7</span>
+                    <span>🔥 人气: 892,104</span>
+                </div>
+            </div>
+            
+            <div class="canvas-container" id="canvas-container">
+                <div id="loading-screen" class="overlay active">
+                    <div class="loading-title">NINJA BOMB</div>
+                    <div class="loading-subtitle">忍者拆炸弹</div>
+                    <div class="loading-text">加载中... 0%</div>
+                    <div class="loading-bar"><div class="progress"></div></div>
+                </div>
+                <canvas id="game-canvas" width="800" height="600"></canvas>
+            </div>
+
+            <div class="game-info">
+                <div class="controls-panel">
+                    <h3>操作指南</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">← → / A D</span>
+                            <span class="desc">忍者左右移动</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">↑ / W / Space</span>
+                            <span class="desc">跳跃</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">鼠标左键</span>
+                            <span class="desc">拆除炸弹 / 剪线</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">↑ ↓ ← →</span>
+                            <span class="desc">结印解弹 (查克拉弹)</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">P / Esc</span>
+                            <span class="desc">暂停游戏</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Enter</span>
+                            <span class="desc">开始 / 重试</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-fullscreen" class="btn">全屏游戏</button>
+                    <button id="btn-restart" class="btn">重新开始</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-description">
+            <h2>游戏介绍</h2>
+            <p>《忍者拆炸弹》是一款结合敏捷动作与密室拆弹解谜的经典HTML5小游戏。黑夜之中，敌方忍者在木叶村与天守阁埋下了大量定时炸弹！玩家将扮演身手敏捷的暗部忍者，在引信烧完之前迅速移动、识别炸弹类型，并通过剪断正确颜色的电线、完成忍印结印或快速斩断引信来拆除炸弹，保卫村庄的和平！</p>
+            <div class="game-tags">
+                <span class="tag">敏捷</span>
+                <span class="tag">忍者</span>
+                <span class="tag">解谜</span>
+                <span class="tag">拆炸弹</span>
+                <span class="tag">经典</span>
+                <span class="tag">反应力</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="ninja-bomb/game.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new NinjaBombGame();
+            game.init();
+            
+            document.getElementById('btn-fullscreen').addEventListener('click', () => {
+                const container = document.getElementById('canvas-container');
+                if (container.requestFullscreen) container.requestFullscreen();
+                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+            });
+            
+            document.getElementById('btn-restart').addEventListener('click', () => {
+                game.restart();
+            });
+        });
+    </script>
+</body>
+</html>
