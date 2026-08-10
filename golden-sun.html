@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄金太阳 - Golden Sun - 在线玩丨瑾龙游戏复刻</title>
+    <meta name="description" content="黄金太阳 Golden Sun HTML5在线版 - 经典GBA RPG大作，四大元素地水火风精神力魔法、精灵收集召唤与史诗战役！">
+    <link rel="stylesheet" href="golden-sun/style.css">
+</head>
+<body>
+    <div class="site-header">
+        <div class="header-content">
+            <div class="logo">瑾龙游戏复刻</div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">GBA经典</a>
+                <a href="#">JRPG</a>
+                <a href="#">黄金太阳专区</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-wrapper">
+            <div class="game-header">
+                <h1>黄金太阳 (Golden Sun RPG)</h1>
+                <div class="game-stats">
+                    <span>⭐ 评分: 9.9</span>
+                    <span>🔥 人气: 5,210,000</span>
+                </div>
+            </div>
+            
+            <div class="canvas-container" id="canvas-container">
+                <div id="loading-screen" class="overlay active">
+                    <div class="loading-title">GOLDEN SUN</div>
+                    <div class="loading-subtitle">黄金太阳：开启的封印</div>
+                    <div class="loading-text">加载中... 0%</div>
+                    <div class="loading-bar"><div class="progress"></div></div>
+                </div>
+                <canvas id="game-canvas" width="900" height="650"></canvas>
+            </div>
+
+            <div class="game-info">
+                <div class="controls-panel">
+                    <h3>操作指南</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">鼠标左键</span>
+                            <span class="desc">地图解谜 / 选择指令 / 释放精神力</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">WASD / 方向键</span>
+                            <span class="desc">控制罗宾在遗迹中移动</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">1 - 4 快捷键</span>
+                            <span class="desc">攻击 / 精神力 / 元素精灵召唤 / 恢复</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Space / J</span>
+                            <span class="desc">确认 / 触发机关</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Esc / P</span>
+                            <span class="desc">取消 / 暂停</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Enter</span>
+                            <span class="desc">开始 / 推进剧情</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-fullscreen" class="btn">全屏游戏</button>
+                    <button id="btn-restart" class="btn">重新开始</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-description">
+            <h2>游戏介绍</h2>
+            <p>《黄金太阳》(Golden Sun) 是任天堂 GBA 史诗级的 JRPG 巅峰之作。游戏讲述了地水火风四大元素失控后，少年罗宾与同伴杰拉德、伊万、米雅莉踏上唤醒古代神殿的精神力之旅。玩家将使用索力 (Move)、盖亚岩击、狂雷电闪等精神力解开遗迹谜题，收集四大元素精灵 (Djinn) 释放震撼天地的主神召唤魔法，决战火焰魔王萨图罗斯！</p>
+            <div class="game-tags">
+                <span class="tag">黄金太阳</span>
+                <span class="tag">Golden Sun</span>
+                <span class="tag">GBA经典</span>
+                <span class="tag">JRPG</span>
+                <span class="tag">精神力解谜</span>
+                <span class="tag">精灵召唤</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="golden-sun/game.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new GoldenSunGame();
+            game.init();
+            
+            document.getElementById('btn-fullscreen').addEventListener('click', () => {
+                const container = document.getElementById('canvas-container');
+                if (container.requestFullscreen) container.requestFullscreen();
+                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+            });
+            
+            document.getElementById('btn-restart').addEventListener('click', () => {
+                game.restart();
+            });
+        });
+    </script>
+</body>
+</html>
