@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Fruit Ninja - 免费在线玩! | Poki (宝玩)</title>
+  <meta name="description" content="Fruit Ninja 是一款爽快的街机游戏，凌空切水果！滑动切西瓜、苹果、香蕉拿分，小心炸弹！切到就 game over！">
+  <link rel="icon" href="assets/LogoFruit.png" sizes="any" type="image/png">
+  <link rel="stylesheet" href="fruit-ninja.css">
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <header class="topbar">
+    <a class="brand" href="../index.html">
+      <span class="brand-logo">P</span>
+      <span>Poki (宝玩)</span>
+    </a>
+    <nav class="nav-links">
+      <a href="../index.html">首页</a>
+      <a href="#">街机游戏</a>
+      <a href="#">技巧游戏</a>
+      <a href="#">女生小游戏</a>
+      <a href="#">双人游戏</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="nav-btn" title="搜索">🔍</button>
+      <button class="nav-btn" title="用户">👤</button>
+    </div>
+  </header>
+
+  <!-- 主体三栏布局 -->
+  <main class="layout">
+
+    <!-- 左侧：相关游戏 -->
+    <aside class="sidebar sidebar-left">
+      <h3>你可能也喜欢</h3>
+      <div class="thumb-grid">
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/31c3d77f-fa9e-4d4c-8d70-9b21ec5e76f3.jpg" alt=""><span class="thumb-label">Sushi Party</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/7714395a-4f5a-4a6b-83f2-23c69a64b69a.jpg" alt=""><span class="thumb-label">Slice Master</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/0e1d39df-2f7b-4b5a-95b1-d11a8b53b8ac.jpg" alt=""><span class="thumb-label">Watermelon Drop</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/64ad12eb-4c11-4e9b-8a91-9e1d4c5ec7bd.jpg" alt=""><span class="thumb-label">Happy Glass</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/9d23b9a4-3a3b-4b8d-b7e9-2c4c1e9a4f1c.jpg" alt=""><span class="thumb-label">Iron Snout</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/8a4f9b1c-d2e3-4a5b-9c7d-1e8f4a5b6c2d.jpg" alt=""><span class="thumb-label">Puppet Master</span></a>
+      </div>
+    </aside>
+
+    <!-- 中间主区 -->
+    <section class="main-col">
+
+      <!-- 游戏区 -->
+      <div class="game-shell">
+        <canvas id="game" width="720" height="1280"></canvas>
+      </div>
+
+      <!-- 评分 / 工具 -->
+      <div class="game-meta">
+        <button class="like-btn" id="btn-like">👍</button>
+        <span>830.8K 喜欢</span>
+        <span>·</span>
+        <button class="like-btn" id="btn-dislike">👎</button>
+        <span>130.2K 不喜欢</span>
+        <span style="margin-left:auto">
+          <button class="like-btn" id="btn-fullscreen" title="全屏">⛶</button>
+          <button class="like-btn" id="btn-restart" title="重新开始">↻</button>
+          <button class="like-btn" id="btn-start" title="开始">▶</button>
+        </span>
+      </div>
+
+      <!-- 标题 + 操作 -->
+      <div class="title-row">
+        <h1>Fruit Ninja</h1>
+      </div>
+
+      <!-- 描述 -->
+      <div class="info-card">
+        <h2>关于此游戏</h2>
+        <p>Fruit Ninja 是款爽快街機遊戲，凌空切水果！滑动切西瓜、苹果、香蕉拿分，小心炸弹！切到就 game over！</p>
+        <p style="margin-top:10px">在这里你可以玩 Fruit Ninja。Fruit Ninja 是我们的精选街机游戏之一。</p>
+        <div class="tag-row" style="margin-top:12px">
+          <span class="tag">技巧游戏</span>
+          <span class="tag">街机</span>
+          <span class="tag">水果</span>
+          <span class="tag">切水果</span>
+          <span class="tag">休闲</span>
+        </div>
+      </div>
+
+      <!-- 操作 / 设备信息 -->
+      <div class="info-card">
+        <h2>游戏信息</h2>
+        <ul class="info-list">
+          <li><span class="ico">🖱</span> <span>操作：使用鼠标点击和 swipe 来切水果。移动设备上 swipe 来切水果。</span></li>
+          <li><span class="ico">💻</span> <span>支持的设备：电脑、手机和平板</span></li>
+          <li><span class="ico">👾</span> <span>开发者：Storms</span></li>
+          <li><span class="ico">🎮</span> <span>类型：技巧游戏</span></li>
+          <li><span class="ico">📅</span> <span>发布日期：2022年7月</span></li>
+          <li><span class="ico">🔄</span> <span>最新更新：2022年10月</span></li>
+          <li><span class="ico">⭐</span> <span>评分：4.5（961,028 次投票）</span></li>
+        </ul>
+      </div>
+
+      <!-- 类别 -->
+      <div class="info-card">
+        <h2>相关类别</h2>
+        <div class="cat-grid">
+          <a class="cat-tile" href="#"><span class="ico">👧</span> 女生小游戏 <span class="num">211</span></a>
+          <a class="cat-tile" href="#"><span class="ico">🎯</span> 技巧游戏 <span class="num">507</span></a>
+          <a class="cat-tile" href="#"><span class="ico">🕹</span> 街机游戏 <span class="num">295</span></a>
+          <a class="cat-tile" href="#"><span class="ico">🍉</span> 西瓜游戏 <span class="num">22</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧：开发者更多游戏 -->
+    <aside class="sidebar sidebar-right">
+      <h3>该开发者的更多游戏</h3>
+      <div class="thumb-grid">
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/2c4a9b1d-3e5f-4a6b-9c7d-1e8f4a5b6c2d.jpg" alt=""><span class="thumb-label">Jetpack Joyride</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/4d5b8c2e-1f3a-4b7d-9e8c-2f3a5b6c7d8e.jpg" alt=""><span class="thumb-label">Moto X3M</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/6e7c9d3f-2a4b-4c8e-bd9f-3a4b6c7d8e9f.jpg" alt=""><span class="thumb-label">Temple Run 2</span></a>
+        <a class="thumb" href="#"><img src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=120,height=120,fit=cover,f=auto/8f9d1e4a-3b5c-4d9f-ae1a-4b5c7d8e9f0a.jpg" alt=""><span class="thumb-label">Tunnel Rush</span></a>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    本地复刻版本 · 仅供学习交流使用 · 灵感与素材源自 poki.com
+    <div style="margin-top:8px">
+      <a href="../index.html">返回主页</a> ·
+      <a href="https://poki.com/zh/g/fruit-ninja" target="_blank" rel="noopener">Poki 原版</a>
+    </div>
+  </footer>
+
+  <script src="fruit-ninja.js"></script>
+</body>
+</html>

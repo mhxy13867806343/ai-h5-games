@@ -1,0 +1,251 @@
+/* ============================================
+ *  Fruit Ninja — Poki 1:1 复刻版样式
+ *  - 与 Poki.com/zh/g/fruit-ninja 视觉一致
+ *  - 顶部导航、左右侧栏、游戏区、信息卡
+ * ============================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: #1d1d27;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+/* ===== 顶部导航（Poki 风格） ===== */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  height: 64px;
+  display: flex; align-items: center;
+  background: rgba(20, 20, 28, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0 20px;
+  gap: 20px;
+}
+.brand {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 18px;
+  color: #fff;
+}
+.brand-logo {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, #ffb300, #ff6f00);
+  border-radius: 6px;
+  display: grid; place-items: center;
+  color: #1a1a1a; font-weight: 800;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 18px;
+  flex: 1;
+}
+.nav-links a {
+  font-size: 14px; font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+.nav-actions {
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-btn {
+  height: 36px; min-width: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 0; border-radius: 8px;
+  color: #fff; padding: 0 10px;
+  font-size: 14px;
+}
+.nav-btn:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* ===== 主体布局 ===== */
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar-left, .sidebar-right { display: none; }
+}
+
+.sidebar {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+}
+.sidebar h3 {
+  font-size: 14px; font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.thumb-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.thumb {
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.thumb-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  font-size: 11px;
+  padding: 6px 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  color: #fff;
+}
+
+/* ===== 中间主区 ===== */
+.main-col {
+  min-width: 0;
+}
+.game-shell {
+  position: relative;
+  width: 100%;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  margin-bottom: 18px;
+}
+#game {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #2a1a10;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+
+.game-meta {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 4px;
+  font-size: 14px; color: rgba(255, 255, 255, 0.7);
+}
+.game-meta .like { display: flex; align-items: center; gap: 6px; }
+.game-meta .like-btn {
+  background: transparent; border: 0; color: inherit; font-size: 16px;
+}
+.game-meta .like-btn.active { color: #4caf50; }
+
+/* ===== 标题 + 操作 ===== */
+.title-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 4px 16px;
+  flex-wrap: wrap;
+}
+.title-row h1 {
+  font-size: 28px; font-weight: 800;
+  flex: 1; min-width: 0;
+}
+.title-actions {
+  display: flex; gap: 8px;
+}
+.title-actions button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 0; border-radius: 8px;
+  width: 38px; height: 38px;
+  color: #fff; font-size: 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.title-actions button:hover { background: rgba(255, 255, 255, 0.12); }
+
+/* ===== 信息卡 ===== */
+.info-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 14px;
+}
+.info-card h2 {
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 12px;
+}
+.info-card p {
+  font-size: 14px; line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+}
+.info-list {
+  list-style: none;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.info-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.info-list .ico {
+  width: 32px; height: 32px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag {
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px 10px;
+  border-radius: 99px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ===== 类别卡 ===== */
+.cat-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  margin-top: 10px;
+}
+.cat-tile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  font-size: 14px;
+}
+.cat-tile:hover { background: rgba(255, 255, 255, 0.08); }
+.cat-tile .ico {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #ffb300, #ff6f00);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 16px;
+}
+.cat-tile .num {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+/* ===== Footer ===== */
+.footer {
+  margin-top: 40px;
+  padding: 30px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+.footer a { color: rgba(255, 255, 255, 0.7); }
+.footer a:hover { color: #fff; }

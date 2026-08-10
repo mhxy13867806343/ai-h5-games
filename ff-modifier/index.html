@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>最终幻想 1-6 · FFD 属性修改器</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">⚔️</div>
+      <div>
+        <h1>最终幻想 1-6 · FFD 属性修改器</h1>
+        <p class="sub">本地解析 · 浏览器端编辑 · 一键导出新存档</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="btn-help" class="btn ghost" title="使用说明">?</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左侧:文件与模板 -->
+    <aside class="panel left">
+      <section class="card">
+        <h3>① 加载存档</h3>
+        <label class="dropzone" id="dropzone">
+          <input type="file" id="file-input" accept=".ffd,.sav,.srm,.bin,.dat,*/*" hidden />
+          <div class="dz-icon">📁</div>
+          <div class="dz-text">点击或拖入 <b>.ffd / .sav / .srm</b> 存档</div>
+          <div class="dz-meta" id="file-meta">未选择文件</div>
+        </label>
+        <div class="row">
+          <button id="btn-load-sample" class="btn ghost small">载入示例</button>
+          <button id="btn-clear" class="btn ghost small">清空</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>② 选择游戏</h3>
+        <select id="game-select" class="select">
+          <optgroup label="Final Fantasy I (FF1)">
+            <option value="ff1-nes">FF1 · NES (8-bit)</option>
+            <option value="ff1-gba">FF1 · GBA / Dawn of Souls</option>
+            <option value="ff1-psp">FF1 · PSP 复刻版</option>
+          </optgroup>
+          <optgroup label="Final Fantasy II (FF2)">
+            <option value="ff2-nes">FF2 · NES (8-bit)</option>
+            <option value="ff2-gba">FF2 · GBA / Dawn of Souls</option>
+            <option value="ff2-psp">FF2 · PSP 复刻版</option>
+          </optgroup>
+          <optgroup label="Final Fantasy III (FF3)">
+            <option value="ff3-nes">FF3 · NES (8-bit)</option>
+            <option value="ff3-ds">FF3 · NDS 复刻版</option>
+          </optgroup>
+          <optgroup label="Final Fantasy IV (FF4)">
+            <option value="ff4-snes">FF4 · SNES (美版 Easy Type)</option>
+            <option value="ff4-gba">FF4 · GBA / 完整版</option>
+            <option value="ff4-ds">FF4 · NDS 复刻版</option>
+          </optgroup>
+          <optgroup label="Final Fantasy V (FF5)">
+            <option value="ff5-snes">FF5 · SNES</option>
+            <option value="ff5-gba">FF5 · GBA 复刻版</option>
+          </optgroup>
+          <optgroup label="Final Fantasy VI (FF6)">
+            <option value="ff6-snes">FF6 · SNES</option>
+            <option value="ff6-gba">FF6 · GBA 复刻版</option>
+          </optgroup>
+          <optgroup label="通用 / 自定义">
+            <option value="custom">自定义 (Hex 视图自由编辑)</option>
+          </optgroup>
+        </select>
+        <p class="hint" id="template-hint">选择游戏以加载对应存档结构模板</p>
+      </section>
+
+      <section class="card">
+        <h3>③ 批量操作</h3>
+        <div class="row">
+          <button id="btn-max-all" class="btn primary small">全员满级/9999</button>
+          <button id="btn-max-gil" class="btn primary small">金钱 9999999</button>
+          <button id="btn-unlock" class="btn primary small">全道具/魔法</button>
+        </div>
+        <div class="row">
+          <button id="btn-save" class="btn success small" disabled>💾 导出修改后存档</button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- 中间:角色卡 -->
+    <section class="panel center">
+      <div id="characters" class="characters empty">
+        <div class="empty-state">
+          <div class="empty-icon">🗡️</div>
+          <h2>欢迎使用 FF1-6 FFD 属性修改器</h2>
+          <p>从左侧加载 .ffd 存档或示例数据,即可在此编辑角色属性。</p>
+          <ul>
+            <li>支持 <b>FF1-FF6</b> 多个版本(NES / SNES / GBA / NDS / PSP)</li>
+            <li>可修改等级、HP、MP、力量、敏捷等核心属性</li>
+            <li>支持金钱、道具、魔法解锁等批量操作</li>
+            <li>所有操作均在浏览器本地完成,不上传任何数据</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧:Hex 视图 -->
+    <aside class="panel right">
+      <section class="card">
+        <h3>Hex 视图</h3>
+        <div class="hex-toolbar">
+          <label class="mini">
+            <input type="checkbox" id="auto-refresh" checked /> 实时同步
+          </label>
+          <span class="meta" id="hex-meta">—</span>
+        </div>
+        <div class="hex-wrap">
+          <pre id="hex-view">请先加载存档</pre>
+        </div>
+        <div class="row">
+          <button id="btn-export-hex" class="btn ghost small" disabled>导出 Hex</button>
+          <button id="btn-copy" class="btn ghost small" disabled>复制 Hex 字符串</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>📋 使用说明</h3>
+        <ol class="hint-list">
+          <li>从模拟器(e.g. <b>RetroArch / Snes9x / VBA</b>)导出存档为 <code>.srm</code> / <code>.sav</code>,部分版本可能命名为 <code>.ffd</code>。</li>
+          <li>选择对应游戏版本(模板定义了属性在存档中的字节偏移)。</li>
+          <li>编辑左侧数值,中间区域实时显示新属性。</li>
+          <li>点击"导出修改后存档"保存为新文件,放回模拟器覆盖即可生效。</li>
+        </ol>
+      </section>
+    </aside>
+  </main>
+
+  <!-- 帮助弹窗 -->
+  <div class="modal" id="help-modal" hidden>
+    <div class="modal-box">
+      <header>
+        <h3>使用说明 / 注意事项</h3>
+        <button class="close" data-close>×</button>
+      </header>
+      <div class="modal-body">
+        <h4>关于 FFD 格式</h4>
+        <p>FFD 在不同社区有不同含义:<b>Final Fantasy Dawn</b>、<b>Final Fantasy Data</b> 或仅为模拟器自定义扩展名。本工具支持 <b>.ffd / .sav / .srm / .bin / .dat</b> 等任意扩展名,核心按字节解析。</p>
+        <h4>关于存档版本</h4>
+        <p>同一作不同平台(NES / SNES / GBA / NDS / PSP) 存档结构差异极大,请务必选择正确的"游戏 + 平台"组合,否则读出的属性会错位。</p>
+        <h4>关于备份</h4>
+        <p>导出文件会保留原扩展名,默认下载为 <code>原文件名.modified.ffd</code>。建议覆盖前先备份原存档。</p>
+        <h4>安全提示</h4>
+        <p>所有解析与编辑均在本地浏览器执行,文件不会上传到任何服务器。</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
