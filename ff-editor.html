@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最终幻想 1-6 属性与存档修改器 - FF1-6 Trainer Editor</title>
+    <meta name="description" content="最终幻想 1-6 (FF1~FF6) 在线属性与存档修改器 - 支持角色等级、HP/MP、力量敏捷魔力、9999999金币、全顶级武器道具与究极魔法一键改满！">
+    <link rel="stylesheet" href="ff-editor/style.css">
+</head>
+<body>
+    <div class="site-header">
+        <div class="header-content">
+            <div class="logo">FF1-6 修改大厅</div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">FF1-6 修改器</a>
+                <a href="#">像素复刻</a>
+                <a href="#">水晶大厅</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-wrapper">
+            <div class="game-header">
+                <h1>最终幻想 1-6 (FF1-FF6) 属性修改器</h1>
+                <div class="game-stats">
+                    <span>⭐ 实用指数: 9.9</span>
+                    <span>🔥 人气: 6,120,000</span>
+                </div>
+            </div>
+            
+            <div class="trainer-container" id="trainer-container">
+                <!-- Game Generation Switcher Tabs -->
+                <div class="game-selector-tabs">
+                    <button class="game-tab active" data-game="ff1">FF I 最终幻想1</button>
+                    <button class="game-tab" data-game="ff2">FF II 最终幻想2</button>
+                    <button class="game-tab" data-game="ff3">FF III 最终幻想3</button>
+                    <button class="game-tab" data-game="ff4">FF IV 最终幻想4</button>
+                    <button class="game-tab" data-game="ff5">FF V 最终幻想5</button>
+                    <button class="game-tab" data-game="ff6">FF VI 最终幻想6</button>
+                </div>
+
+                <!-- Main Trainer Workspace Layout -->
+                <div class="trainer-workspace">
+                    <!-- Left: Party Members & General Settings -->
+                    <aside class="party-sidebar">
+                        <div class="panel-box">
+                            <h3>全队通用资产</h3>
+                            <div class="field-group">
+                                <label>金币 (Gil / ギル):</label>
+                                <input type="number" id="input-gil" value="9999999" min="0" max="9999999" />
+                            </div>
+                            <div class="field-group">
+                                <label>步数/遇敌控制:</label>
+                                <select id="select-encounter">
+                                    <option value="normal">正常遇敌</option>
+                                    <option value="none" selected>不遇敌 (安全斗篷)</option>
+                                    <option value="instant">步步遇敌 (练级专用)</option>
+                                </select>
+                            </div>
+                            <div class="preset-btns">
+                                <button id="btn-max-gil" class="preset-btn">💰 一键 999W 金币</button>
+                                <button id="btn-max-party" class="preset-btn highlight">🚀 一键全员满级神装</button>
+                            </div>
+                        </div>
+
+                        <div class="panel-box">
+                            <h3>队伍角色列表</h3>
+                            <div class="character-list" id="character-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Right: Detailed Attribute Editor & Inventory -->
+                    <main class="editor-detail-panel">
+                        <!-- Navigation Sections -->
+                        <div class="editor-sub-tabs">
+                            <button class="sub-tab active" data-target="tab-stats">📊 基础与战力属性</button>
+                            <button class="sub-tab" data-target="tab-inventory">🗡️ 武器防具与道具</button>
+                            <button class="sub-tab" data-target="tab-magic">🔮 究极魔法与召唤兽</button>
+                        </div>
+
+                        <!-- Sub Tab 1: Stats -->
+                        <div class="sub-content active" id="tab-stats">
+                            <div class="char-header-info">
+                                <div class="char-avatar" id="char-avatar">⚔️</div>
+                                <div>
+                                    <h2 id="char-name-title">战士 (Warrior / 光之战士)</h2>
+                                    <p id="char-job-desc">职业: 骑士 (Knight) / 元素守卫</p>
+                                </div>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <label>等级 (Level 1-99):</label>
+                                    <input type="number" id="stat-level" value="99" min="1" max="99" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>当前 HP (1-9999):</label>
+                                    <input type="number" id="stat-hp" value="9999" min="1" max="9999" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>最大 HP (1-9999):</label>
+                                    <input type="number" id="stat-maxhp" value="9999" min="1" max="9999" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>当前 MP (0-999):</label>
+                                    <input type="number" id="stat-mp" value="999" min="0" max="999" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>最大 MP (0-999):</label>
+                                    <input type="number" id="stat-maxmp" value="999" min="0" max="999" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>力量 (Strength):</label>
+                                    <input type="number" id="stat-str" value="255" min="1" max="255" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>敏捷 (Agility):</label>
+                                    <input type="number" id="stat-agi" value="255" min="1" max="255" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>体质 (Stamina):</label>
+                                    <input type="number" id="stat-sta" value="255" min="1" max="255" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>智力 (Intelligence):</label>
+                                    <input type="number" id="stat-int" value="255" min="1" max="255" />
+                                </div>
+                                <div class="stat-card">
+                                    <label>精神 (Spirit):</label>
+                                    <input type="number" id="stat-spr" value="255" min="1" max="255" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub Tab 2: Inventory -->
+                        <div class="sub-content" id="tab-inventory">
+                            <div class="inventory-top-bar">
+                                <h3>背包道具与神器装备</h3>
+                                <button id="btn-all-items-99" class="preset-btn">📦 一键全道具 x99</button>
+                            </div>
+                            <div class="inventory-grid" id="inventory-grid">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Sub Tab 3: Magic -->
+                        <div class="sub-content" id="tab-magic">
+                            <div class="inventory-top-bar">
+                                <h3>究极黑白时空魔法与全召唤兽</h3>
+                                <button id="btn-learn-all-magic" class="preset-btn">🔮 一键习得全魔法召唤兽</button>
+                            </div>
+                            <div class="magic-list-grid" id="magic-grid">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Save & Test Visualizer Area -->
+                        <div class="save-actions-footer">
+                            <button id="btn-apply-changes" class="btn primary">💾 保存应用修改</button>
+                            <button id="btn-export-json" class="btn secondary">📤 导出 JSON/SAV 存档</button>
+                            <button id="btn-import-json" class="btn secondary">📥 导入 存档文件</button>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+            <div class="game-info">
+                <div class="controls-panel">
+                    <h3>使用说明与热键</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">FF1 - FF6 切换</span>
+                            <span class="desc">顶栏自由切换一代到六代游戏设定</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">属性实时修改</span>
+                            <span class="desc">等级、HP/MP、力量敏捷魔力即时生效</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">一键满级神装</span>
+                            <span class="desc">自动装配圣剑 Ragnarok/创世武器/Ribbon</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">全魔法解锁</span>
+                            <span class="desc">一键习得 Ultima 究极魔法与巴哈姆特召唤</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-description">
+            <h2>功能介绍</h2>
+            <p>《最终幻想 1-6 (FF1~FF6) 属性与存档修改器》专为 FF 像素复刻版及经典 FC/SFC 世代设计。支持修改 FF1 光之战士、FF2 菲利奥尼尔、FF3 洋葱骑士、FF4 塞西尔、FF5 巴兹与 FF6 蒂娜/洛克全员 99 级、9999 HP / 999 MP、255 满属性。一键满金币 9999999 ギル、背包圣灵药 x99、全创世神器与 Ultima 究极魔法！支持导入导出 SAV/JSON 存档。</p>
+            <div class="game-tags">
+                <span class="tag">最终幻想</span>
+                <span class="tag">FF1-6</span>
+                <span class="tag">属性修改器</span>
+                <span class="tag">存档修改</span>
+                <span class="tag">一键满级</span>
+                <span class="tag">JRPG神装</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="file-import" accept=".json,.sav,.txt" style="display:none;" />
+
+    <script src="ff-editor/editor.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const editor = new FFEditor();
+            editor.init();
+        });
+    </script>
+</body>
+</html>

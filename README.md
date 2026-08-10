@@ -17,6 +17,7 @@
 | 7 | **螺旋泡泡柱 2** (Spiral Bubble 2) | 敏捷 3D 消除 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/spiral-bubble-2/spiral-bubble-2.html) |
 | 8 | **水果忍者** (Fruit Ninja) | 敏捷切水果 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/fruit-ninja.html) |
 | 9 | **黄金太阳** (Golden Sun) | GBA JRPG 经典 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/golden-sun.html) |
+| 10 | **最终幻想 1-6 属性修改器** (FF1-6 Trainer) | JRPG 存档工具 | [在线试用](https://mhxy13867806343.github.io/ai-h5-games/ff-editor.html) |
 
 ---
 
