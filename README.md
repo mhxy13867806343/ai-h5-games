@@ -15,6 +15,7 @@
 | 5 | **真侍魂：武士道列传** (Samurai Shodown RPG) | 动作 RPG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/samurai-shodown.html) |
 | 6 | **三国志：曹操传** (Legend of Cao Cao SLG) | 策略战棋 SLG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/cao-cao-chuan.html) |
 | 7 | **螺旋泡泡柱 2** (Spiral Bubble 2) | 敏捷 3D 消除 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/spiral-bubble-2/spiral-bubble-2.html) |
+| 8 | **水果忍者** (Fruit Ninja) | 敏捷切水果 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/fruit-ninja.html) |
 
 ---
 
