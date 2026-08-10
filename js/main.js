@@ -7,6 +7,10 @@ const { createApp, ref, computed, onMounted } = Vue;
 const GAMES_DATA = [
     // antigravity-game 专区
     {
+        id: 'pokemon-dark-rising', name: '口袋妖怪：暗黑升起', url: 'pokemon-dark-rising.html', icon: '🐲', tag: '📂 antigravity-game · GBA 宝可梦', desc: '神级三大龙系初始宝可梦、暗黑修罗神剧情，内置预载 ROM 引擎。',
+        htmlUrl: 'pokemon-dark-rising.html', cssUrl: 'pokemon-dark-rising/style.css', jsUrl: 'pokemon-dark-rising/game.js', folder: 'antigravity-game'
+    },
+    {
         id: 'fire-emblem-girls', name: '火焰纹章：圣魔之光石（女孩版）', url: 'fire-emblem-girls.html', icon: '⚔️', tag: '📂 antigravity-game · GBA 战棋', desc: 'gbarom.cn 1:1 在线复刻！GBA 史诗改版 FE Girls，全女性角色阵容、武器相克法则与策略战棋。',
         htmlUrl: 'fire-emblem-girls.html', cssUrl: 'fire-emblem-girls/style.css', jsUrl: 'fire-emblem-girls/game.js', folder: 'antigravity-game'
     },

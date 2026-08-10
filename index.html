@@ -16,8 +16,8 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (12)</button>
-        <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (5)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (13)</button>
+        <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (1)</button>
       </div>
@@ -41,6 +41,40 @@
     <div class="grid mode-grid" id="cards-container">
 
       <!-- ==================== antigravity-game 专区 ==================== -->
+      <!-- 口袋妖怪：暗黑升起 -->
+      <div class="card" data-folder="antigravity-game" data-url="pokemon-dark-rising.html" data-name="口袋妖怪：暗黑升起">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge">📂 antigravity-game</span>
+              <span class="tag">GBA 宝可梦</span>
+            </div>
+            <h2>🐲 口袋妖怪：暗黑升起 (Pokémon Dark Rising)</h2>
+            <p>经典 GBA 改版！神级三大龙系初始宝可梦、全新原创剧情与战术对决，内置预载 ROM，开局即玩。</p>
+            <div class="meta"><span>宝可梦</span><span>GBA</span><span>龙系初始</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="pokemon-dark-rising.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('pokemon-dark-rising', '口袋妖怪：暗黑升起', 'pokemon-dark-rising.html', 'pokemon-dark-rising/style.css', 'pokemon-dark-rising/game.js')">📄 源码</button>
+            <button class="card-btn" onclick="downloadZip('pokemon-dark-rising', '口袋妖怪：暗黑升起', 'pokemon-dark-rising.html', 'pokemon-dark-rising/style.css', 'pokemon-dark-rising/game.js')">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 试玩预览 · 《口袋妖怪：暗黑升起》</span>
+            <div class="preview-actions">
+              <a href="pokemon-dark-rising.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
       <!-- 火焰纹章：圣魔之光石（女孩版） -->
       <div class="card" data-folder="antigravity-game" data-url="fire-emblem-girls.html" data-name="火焰纹章：圣魔之光石（女孩版）">
         <div class="card-main">

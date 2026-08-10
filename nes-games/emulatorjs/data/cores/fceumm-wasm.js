@@ -1,0 +1,1 @@
+Couldn't find the requested file /data/cores/fceumm-wasm.js in EmulatorJS/EmulatorJS.

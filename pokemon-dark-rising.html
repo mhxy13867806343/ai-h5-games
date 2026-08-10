@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>口袋妖怪：暗黑升起 (Pokémon Dark Rising) - GBA 在线玩丨掌机迷在线复刻</title>
+    <meta name="description" content="口袋妖怪：暗黑升起 (Pokémon Dark Rising) HTML5 在线版 - 经典 GBA 宝可梦改版，神级三大龙系初始宝可梦、暗黑修罗神剧情、野外捕捉与道馆对决！">
+    <!-- 外部 CSS 样式表 -->
+    <link rel="stylesheet" href="pokemon-dark-rising/style.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <span>🎮</span> 掌机迷 GBAROM
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">首页大厅</a>
+                <a href="index.html" class="nav-link active">GBA 游戏</a>
+                <a href="index.html" class="nav-link">口袋妖怪专题</a>
+            </nav>
+            <div class="header-spacer"></div>
+            <span class="platform-badge">GBA / 宝可梦改版</span>
+        </div>
+    </header>
+
+    <!-- 主页面内容 -->
+    <main class="main-wrap">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>›</span>
+            <a href="index.html">GBA 游戏大全</a>
+            <span>›</span>
+            <span style="color:#fff;">口袋妖怪：暗黑升起 (Pokémon Dark Rising)</span>
+        </div>
+
+        <!-- 游戏标题与操作卡片 -->
+        <div class="game-info-card">
+            <div class="game-title-group">
+                <h1>🔥 口袋妖怪：暗黑升起 <span style="font-size:14px; font-weight:normal; color:#c084fc;">(Pokémon Dark Rising GBA)</span></h1>
+                <div class="game-meta-tags">
+                    <span class="meta-item">语言: <b>中文汉化版</b></span>
+                    <span class="meta-item">类型: <b>RPG 宝可梦冒险</b></span>
+                    <span class="meta-item">平台: <b>GBA 掌机</b></span>
+                    <span class="meta-item">特色: <b>三大龙系初始宠</b></span>
+                    <span class="meta-item">支持: <b>PC / 手机双端</b></span>
+                </div>
+            </div>
+            <div class="action-buttons-group">
+                <a href="index.html" class="action-btn">🏠 返回首页大厅</a>
+                <a href="main.html#pokemon-dark-rising" class="action-btn">📱 切换大厅视图</a>
+                <button onclick="ShareHelper.open({ name: '口袋妖怪：暗黑升起', url: 'pokemon-dark-rising.html' })" class="action-btn">🔗 一键分享</button>
+                <button onclick="CodeViewerDownloader.open({ id: 'pokemon-dark-rising', name: '口袋妖怪：暗黑升起', htmlUrl: 'pokemon-dark-rising.html', cssUrl: 'pokemon-dark-rising/style.css', jsUrl: 'pokemon-dark-rising/game.js', folder: 'pokemon-dark-rising' })" class="action-btn">📄 查看/复制源码</button>
+                <button onclick="CodeViewerDownloader.downloadZip({ id: 'pokemon-dark-rising', name: '口袋妖怪：暗黑升起', htmlUrl: 'pokemon-dark-rising.html', cssUrl: 'pokemon-dark-rising/style.css', jsUrl: 'pokemon-dark-rising/game.js' })" class="action-btn">💾 打包下载 (.zip)</button>
+                <button onclick="window.history.back()" class="action-btn">⬅️ 返回上一页</button>
+            </div>
+        </div>
+
+        <!-- 模拟器视口区域 (内置自动启动，无需手动上传 ROM) -->
+        <div class="emulator-wrapper" id="emulator-wrapper">
+            <!-- 状态工具栏 -->
+            <div class="toolbar-bar">
+                <div class="tool-btn-group">
+                    <button class="tool-btn" id="tool-restart">🔄 重新开始游戏</button>
+                </div>
+                <div class="tool-btn-group">
+                    <button class="tool-btn" id="tool-fullscreen">🖥️ 全屏游玩</button>
+                </div>
+            </div>
+
+            <!-- Canvas 模拟器屏幕 -->
+            <div class="canvas-screen">
+                <canvas id="game-canvas"></canvas>
+            </div>
+
+            <!-- GBA 虚拟手柄区 -->
+            <div class="gamepad-container">
+                <!-- 顶部 L / R 肩键 -->
+                <div class="shoulder-keys">
+                    <button class="shoulder-btn" id="btn-l">L (包裹/快捷键)</button>
+                    <button class="shoulder-btn" id="btn-r">R (快捷键)</button>
+                </div>
+
+                <!-- 左侧十字 D-Pad -->
+                <div class="dpad">
+                    <button class="dpad-btn dpad-up" id="btn-dpad-up">▲</button>
+                    <button class="dpad-btn dpad-down" id="btn-dpad-down">▼</button>
+                    <button class="dpad-btn dpad-left" id="btn-dpad-left">◄</button>
+                    <button class="dpad-btn dpad-right" id="btn-dpad-right">►</button>
+                    <div class="dpad-center"></div>
+                </div>
+
+                <!-- 中间 Select / Start 键 -->
+                <div class="center-keys">
+                    <div class="pill-btn-wrapper">
+                        <button class="pill-btn" id="btn-select"></button>
+                        <span class="pill-label">Select</span>
+                    </div>
+                    <div class="pill-btn-wrapper">
+                        <button class="pill-btn" id="btn-start"></button>
+                        <span class="pill-label">Start</span>
+                    </div>
+                </div>
+
+                <!-- 右侧 A / B 动作键 -->
+                <div class="action-keys">
+                    <div class="round-btn-wrapper">
+                        <button class="round-btn" id="btn-b">B</button>
+                        <span class="btn-label">取消 / 跑鞋</span>
+                    </div>
+                    <div class="round-btn-wrapper">
+                        <button class="round-btn" id="btn-a">A</button>
+                        <span class="btn-label">确认 / 对话</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏介绍与按键说明 -->
+        <div class="details-section" id="download">
+            <div class="detail-panel">
+                <h2>🐲 游戏介绍 (Game Overview)</h2>
+                <p>《口袋妖怪：暗黑升起》(Pokémon Dark Rising) 是基于 GBA《火红》打造的知名宝可梦改版！游戏最大的亮点在于初始提供**三大龙系霸主宝可梦**（迷你龙、宝贝龙、圆陆鲨），拥有全新原创剧情、暗黑修罗神 Darugis 恶梦预言以及高难度宝可梦联盟对决！</p>
+                <p>在 HTML5 页面中已**完整内置预载 ROM 引擎**，无需手动上传 `.gba` 文件即可直接在浏览器畅玩！</p>
+            </div>
+
+            <div class="detail-panel">
+                <h2>🎮 键盘按键映射 (Key Controls)</h2>
+                <div class="controls-grid">
+                    <div class="control-card">
+                        <span class="key-desc">移动 / 选择</span>
+                        <span class="key-badge">WASD / 方向键</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">确认 / 攻击</span>
+                        <span class="key-badge">J / Z</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">取消 / 逃跑</span>
+                        <span class="key-badge">K / X</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">菜单 / 启动</span>
+                        <span class="key-badge">Enter</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        © 2026 掌机迷 GBAROM · 纯前端 HTML5 《口袋妖怪：暗黑升起》网页 1:1 复刻版
+    </footer>
+
+    <!-- 外部 JavaScript 导入 -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/code-viewer-downloader.js?v=3"></script>
+    <script src="pokemon-dark-rising/game.js"></script>
+    <script src="pokemon-dark-rising/main.js"></script>
+</body>
+</html>
