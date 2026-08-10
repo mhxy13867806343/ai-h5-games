@@ -1,5 +1,5 @@
 /* ============================================================
-   AI H5 游戏大厅 - 查看源码、一键复制、全量下载与全能社交分享器
+   AI H5 游戏大厅 - 查看源码、一键复制、全量下载与 CSS+jQuery 分享器
    ============================================================ */
 
 class CodeViewerDownloader {
@@ -200,45 +200,56 @@ class CodeViewerDownloader {
 
 
 /* ============================================================
-   一键社交分享器 (ShareHelper) - 全环境兼容与自动复制版
+   CSS + jQuery 专属高颜值分享弹窗系统 (ShareHelper)
    ============================================================ */
 class ShareHelper {
     static initModal() {
-        if (document.getElementById('share-modal')) return;
+        if (document.getElementById('share-modal-overlay')) return;
 
         const modalHtml = `
-            <div id="share-modal" class="cvd-overlay" style="display:none;" onclick="if(event.target===this) ShareHelper.closeModal()">
-                <div class="share-box">
-                    <div class="cvd-header">
-                        <div class="cvd-title" id="share-modal-title">🔗 一键分享游戏</div>
-                        <button class="cvd-close" onclick="ShareHelper.closeModal()">✕</button>
+            <div id="share-modal-overlay">
+                <div id="share-modal-dialog">
+                    <!-- Header -->
+                    <div class="s-modal-header">
+                        <div class="s-modal-title">
+                            <span>🔗</span> 一键分享游戏
+                        </div>
+                        <button class="s-modal-close-btn" id="s-btn-close-x">✕</button>
                     </div>
-                    <div class="share-body">
-                        <div class="share-toast" id="share-toast" style="display:none; background:#10b981; color:#fff; text-align:center; padding:8px 12px; border-radius:6px; font-size:13px; font-weight:bold;">
-                            ✅ 已成功复制分享链接到剪贴板！
+
+                    <!-- Body -->
+                    <div class="s-modal-body">
+                        <!-- Toast Alert -->
+                        <div class="s-toast-bar" id="s-toast-bar">
+                            ✅ 已成功复制分享链接与邀请文案到剪贴板！
                         </div>
 
-                        <div class="share-card-info">
-                            <div class="share-game-title" id="share-game-name">🎮 游戏名称</div>
-                            <div class="share-sub-text">快来重温经典网页复刻游戏，浏览器即开即玩！</div>
+                        <!-- Card Info -->
+                        <div class="s-game-card">
+                            <div class="s-game-name" id="s-game-name">🎮 游戏名称</div>
+                            <div class="s-game-desc">纯前端 HTML5 复刻，免安装浏览器即开即玩！</div>
                         </div>
 
-                        <div class="share-field">
-                            <label>分享链接 (Share Link)：</label>
-                            <div class="share-input-group">
-                                <input type="text" id="share-link-input" readonly onclick="this.select()" />
-                                <button class="share-btn-copy" id="share-btn-copy-link">📋 复制链接</button>
+                        <!-- Link Input Box -->
+                        <div>
+                            <label class="s-input-label">分享链接 (Share Link)：</label>
+                            <div class="s-input-group">
+                                <input type="text" id="s-link-input" class="s-link-input" readonly onclick="this.select()" />
+                                <button class="s-btn-copy" id="s-btn-copy">📋 复制链接</button>
                             </div>
                         </div>
 
-                        <div class="share-qr-section">
-                            <div class="qr-title">📱 手机微信/相机扫码即刻游玩：</div>
-                            <img id="share-qr-img" src="" alt="QR Code" />
+                        <!-- QR Code -->
+                        <div class="s-qr-box">
+                            <div class="s-qr-title">📱 手机微信 / 相机扫码即刻游玩：</div>
+                            <img id="s-qr-img" class="s-qr-img" src="" alt="QR Code" />
                         </div>
                     </div>
-                    <div class="cvd-footer" style="justify-content: flex-end;">
-                        <button class="cvd-btn primary" id="share-btn-native" style="display:none;">🚀 调用系统分享</button>
-                        <button class="cvd-btn outline" onclick="ShareHelper.closeModal()">关闭窗口</button>
+
+                    <!-- Footer -->
+                    <div class="s-modal-footer">
+                        <button class="s-footer-btn native" id="s-btn-native" style="display:none;">🚀 调用系统分享</button>
+                        <button class="s-footer-btn close" id="s-btn-close-footer">关闭窗口</button>
                     </div>
                 </div>
             </div>
@@ -246,43 +257,261 @@ class ShareHelper {
 
         const styleHtml = `
             <style>
-                .share-box {
-                    width: 90%; max-width: 480px;
-                    background: #111827; border: 1px solid #374151; border-radius: 12px;
-                    display: flex; flex-direction: column; overflow: hidden;
-                    box-shadow: 0 20px 50px rgba(0,0,0,0.9); color: #f3f4f6;
-                    animation: shareModalIn 0.25s ease-out;
+                #share-modal-overlay {
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    bottom: 0 !important;
+                    width: 100vw !important;
+                    height: 100vh !important;
+                    background: rgba(10, 15, 29, 0.85) !important;
+                    backdrop-filter: blur(10px) !important;
+                    -webkit-backdrop-filter: blur(10px) !important;
+                    display: none;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    z-index: 9999999 !important;
+                    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif !important;
+                    box-sizing: border-box !important;
+                    padding: 20px !important;
                 }
-                @keyframes shareModalIn {
-                    from { transform: scale(0.9); opacity: 0; }
+
+                #share-modal-dialog {
+                    width: 100% !important;
+                    max-width: 460px !important;
+                    background: #111827 !important;
+                    border: 1px solid #374151 !important;
+                    border-radius: 16px !important;
+                    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.15) !important;
+                    overflow: hidden !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    color: #f3f4f6 !important;
+                    box-sizing: border-box !important;
+                    animation: jqueryModalZoom 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+
+                @keyframes jqueryModalZoom {
+                    from { transform: scale(0.88); opacity: 0; }
                     to { transform: scale(1); opacity: 1; }
                 }
-                .share-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-                .share-card-info { background: rgba(255, 183, 3, 0.1); border: 1px solid rgba(255, 183, 3, 0.25); padding: 14px; border-radius: 8px; text-align: center; }
-                .share-game-title { font-size: 18px; font-weight: 800; color: #ffb703; margin-bottom: 4px; }
-                .share-sub-text { font-size: 12px; color: #9ca3af; }
-                .share-field { display: flex; flex-direction: column; gap: 6px; }
-                .share-field label { font-size: 12px; font-weight: bold; color: #d1d5db; }
-                .share-input-group { display: flex; gap: 8px; }
-                #share-link-input {
-                    flex: 1; padding: 8px 12px; background: #0b0f19; border: 1px solid #374151;
-                    border-radius: 6px; color: #38bdf8; font-size: 13px; font-family: monospace; outline: none;
+
+                .s-modal-header {
+                    padding: 16px 20px !important;
+                    background: #1f2937 !important;
+                    border-bottom: 1px solid #374151 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
                 }
-                .share-btn-copy {
-                    padding: 8px 14px; background: #ffb703; border: none; border-radius: 6px;
-                    color: #000; font-weight: bold; font-size: 13px; cursor: pointer; transition: background 0.2s;
+
+                .s-modal-title {
+                    font-size: 16px !important;
+                    font-weight: 800 !important;
+                    color: #38bdf8 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 8px !important;
                 }
-                .share-btn-copy:hover { background: #fb8500; color: #fff; }
-                .share-qr-section { display: flex; flex-direction: column; align-items: center; gap: 8px; background: #1f2937; padding: 14px; border-radius: 8px; border: 1px solid #374151; }
-                .qr-title { font-size: 12px; color: #9ca3af; font-weight: bold; }
-                #share-qr-img { width: 150px; height: 150px; background: #fff; padding: 6px; border-radius: 6px; border: 1px solid #4b5563; }
+
+                .s-modal-close-btn {
+                    background: rgba(255, 255, 255, 0.1) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                    color: #9ca3af !important;
+                    font-size: 16px !important;
+                    width: 32px !important;
+                    height: 32px !important;
+                    border-radius: 50% !important;
+                    cursor: pointer !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    transition: all 0.2s !important;
+                    outline: none !important;
+                }
+
+                .s-modal-close-btn:hover {
+                    background: #ef4444 !important;
+                    border-color: #ef4444 !important;
+                    color: #fff !important;
+                    transform: rotate(90deg) !important;
+                }
+
+                .s-modal-body {
+                    padding: 20px !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    gap: 16px !important;
+                }
+
+                .s-toast-bar {
+                    background: linear-gradient(90deg, #10b981, #059669) !important;
+                    color: #fff !important;
+                    text-align: center !important;
+                    padding: 10px 14px !important;
+                    border-radius: 8px !important;
+                    font-size: 13px !important;
+                    font-weight: bold !important;
+                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+                    display: none;
+                }
+
+                .s-game-card {
+                    background: rgba(255, 183, 3, 0.08) !important;
+                    border: 1px solid rgba(255, 183, 3, 0.3) !important;
+                    padding: 14px !important;
+                    border-radius: 10px !important;
+                    text-align: center !important;
+                }
+
+                .s-game-name {
+                    font-size: 18px !important;
+                    font-weight: 900 !important;
+                    color: #ffb703 !important;
+                    margin-bottom: 4px !important;
+                }
+
+                .s-game-desc {
+                    font-size: 12px !important;
+                    color: #9ca3af !important;
+                }
+
+                .s-input-label {
+                    font-size: 12px !important;
+                    font-weight: bold !important;
+                    color: #d1d5db !important;
+                    margin-bottom: 6px !important;
+                    display: block !important;
+                    text-align: left !important;
+                }
+
+                .s-input-group {
+                    display: flex !important;
+                    gap: 8px !important;
+                }
+
+                .s-link-input {
+                    flex: 1 !important;
+                    padding: 9px 12px !important;
+                    background: #0b0f19 !important;
+                    border: 1px solid #374151 !important;
+                    border-radius: 8px !important;
+                    color: #38bdf8 !important;
+                    font-size: 13px !important;
+                    font-family: monospace !important;
+                    outline: none !important;
+                    box-sizing: border-box !important;
+                }
+
+                .s-link-input:focus {
+                    border-color: #38bdf8 !important;
+                }
+
+                .s-btn-copy {
+                    padding: 9px 16px !important;
+                    background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%) !important;
+                    border: none !important;
+                    border-radius: 8px !important;
+                    color: #000 !important;
+                    font-weight: 800 !important;
+                    font-size: 13px !important;
+                    cursor: pointer !important;
+                    transition: all 0.2s !important;
+                    white-space: nowrap !important;
+                    box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3) !important;
+                    outline: none !important;
+                }
+
+                .s-btn-copy:hover {
+                    transform: translateY(-2px) !important;
+                    box-shadow: 0 6px 20px rgba(255, 183, 3, 0.5) !important;
+                }
+
+                .s-qr-box {
+                    display: flex !important;
+                    flex-direction: column !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    background: #1f2937 !important;
+                    padding: 14px !important;
+                    border-radius: 10px !important;
+                    border: 1px solid #374151 !important;
+                }
+
+                .s-qr-title {
+                    font-size: 12px !important;
+                    color: #9ca3af !important;
+                    font-weight: bold !important;
+                }
+
+                .s-qr-img {
+                    width: 150px !important;
+                    height: 150px !important;
+                    background: #fff !important;
+                    padding: 6px !important;
+                    border-radius: 8px !important;
+                    border: 1px solid #4b5563 !important;
+                }
+
+                .s-modal-footer {
+                    padding: 14px 20px !important;
+                    background: #1f2937 !important;
+                    border-top: 1px solid #374151 !important;
+                    display: flex !important;
+                    gap: 12px !important;
+                    justify-content: flex-end !important;
+                    align-items: center !important;
+                }
+
+                .s-footer-btn {
+                    padding: 8px 18px !important;
+                    border-radius: 8px !important;
+                    font-size: 13px !important;
+                    font-weight: 700 !important;
+                    cursor: pointer !important;
+                    transition: all 0.2s !important;
+                    outline: none !important;
+                    border: 1px solid transparent !important;
+                }
+
+                .s-footer-btn.close {
+                    background: rgba(255, 255, 255, 0.08) !important;
+                    border-color: #4b5563 !important;
+                    color: #d1d5db !important;
+                }
+
+                .s-footer-btn.close:hover {
+                    background: rgba(255, 255, 255, 0.15) !important;
+                    color: #fff !important;
+                }
+
+                .s-footer-btn.native {
+                    background: #3b82f6 !important;
+                    color: #fff !important;
+                }
+
+                .s-footer-btn.native:hover {
+                    background: #2563eb !important;
+                }
             </style>
         `;
 
         document.body.insertAdjacentHTML('beforeend', modalHtml + styleHtml);
+
+        // Bind jQuery close events
+        if (window.$) {
+            $('#s-btn-close-x, #s-btn-close-footer').on('click', function () {
+                ShareHelper.closeModal();
+            });
+
+            $('#share-modal-overlay').on('click', function (e) {
+                if (e.target === this) ShareHelper.closeModal();
+            });
+        }
     }
 
-    // Universal copy text helper with fallback for non-secure / HTTP / iframe contexts
+    // Universal Copy Text Helper with Fallback
     static copyText(text) {
         if (navigator.clipboard && window.isSecureContext) {
             return navigator.clipboard.writeText(text).catch(() => {
@@ -312,7 +541,7 @@ class ShareHelper {
         }
     }
 
-    // Main Share Opener supporting Objects, Strings, HTML Elements
+    // Main Open Handler with jQuery Animations
     static open(param) {
         this.initModal();
 
@@ -332,7 +561,6 @@ class ShareHelper {
             targetUrl = param.url || targetUrl;
         }
 
-        // Resolve absolute URL
         try {
             targetUrl = new URL(targetUrl, window.location.href).href;
         } catch (e) {
@@ -341,38 +569,41 @@ class ShareHelper {
 
         const shareMsg = `🎮 邀请你重温经典网页复刻游戏《${gameName}》！\n1:1 在线纯前端 HTML5 复刻，浏览器即开即玩：\n${targetUrl}`;
 
-        // Auto copy to clipboard on click!
+        // Auto copy to clipboard
         this.copyText(shareMsg).then(() => {
-            const toast = document.getElementById('share-toast');
-            if (toast) {
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 2500);
+            if (window.$) {
+                $('#s-toast-bar').stop(true, true).slideDown(200).delay(2000).slideUp(200);
             }
         });
 
         // Set UI values
-        document.getElementById('share-game-name').textContent = `🎮 《${gameName}》`;
-        document.getElementById('share-link-input').value = targetUrl;
+        document.getElementById('s-game-name').textContent = `🎮 《${gameName}》`;
+        document.getElementById('s-link-input').value = targetUrl;
 
-        // QR Code generation
+        // Set QR Code
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(targetUrl)}`;
-        document.getElementById('share-qr-img').src = qrUrl;
+        document.getElementById('s-qr-img').src = qrUrl;
 
-        // Show modal
-        const modal = document.getElementById('share-modal');
-        if (modal) modal.style.display = 'flex';
+        // jQuery fadeIn animation for centered popup!
+        if (window.$) {
+            $('#share-modal-overlay').css('display', 'flex').hide().fadeIn(250);
+        } else {
+            const overlay = document.getElementById('share-modal-overlay');
+            if (overlay) overlay.style.display = 'flex';
+        }
 
-        // Bind copy button
-        document.getElementById('share-btn-copy-link').onclick = () => {
-            this.copyText(shareMsg).then(() => {
-                const btn = document.getElementById('share-btn-copy-link');
-                btn.textContent = '✅ 已成功复制！';
-                setTimeout(() => { btn.textContent = '📋 复制链接'; }, 2000);
+        // Bind copy button with jQuery
+        if (window.$) {
+            $('#s-btn-copy').off('click').on('click', () => {
+                this.copyText(shareMsg).then(() => {
+                    $('#s-btn-copy').text('✅ 已成功复制！');
+                    setTimeout(() => { $('#s-btn-copy').text('📋 复制链接'); }, 2000);
+                });
             });
-        };
+        }
 
-        // Native share if supported
-        const nativeBtn = document.getElementById('share-btn-native');
+        // Native share binding
+        const nativeBtn = document.getElementById('s-btn-native');
         if (navigator.share) {
             nativeBtn.style.display = 'inline-flex';
             nativeBtn.onclick = () => {
@@ -392,12 +623,16 @@ class ShareHelper {
     }
 
     static closeModal() {
-        const modal = document.getElementById('share-modal');
-        if (modal) modal.style.display = 'none';
+        if (window.$) {
+            $('#share-modal-overlay').fadeOut(200);
+        } else {
+            const overlay = document.getElementById('share-modal-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
     }
 }
 
-// Global Exports and Helper Shortcuts
+// Global Exports
 window.CodeViewerDownloader = CodeViewerDownloader;
 window.ShareHelper = ShareHelper;
 window.openShareModal = function(param) { ShareHelper.open(param); };
