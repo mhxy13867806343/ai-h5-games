@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开心农场 - 4399小游戏</title>
+    <meta name="description" content="开心农场 HTML5在线版 - 经典模拟经营小游戏，播种、养殖、加工与订单发货，体验田园乐趣！">
+    <link rel="stylesheet" href="happy-farm/style.css">
+</head>
+<body>
+    <div class="site-header">
+        <div class="header-content">
+            <div class="logo">4399小游戏</div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">模拟经营</a>
+                <a href="#">休闲游戏</a>
+                <a href="#">开心农场</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-wrapper">
+            <div class="game-header">
+                <h1>开心农场 (Happy Farm H5)</h1>
+                <div class="game-stats">
+                    <span>⭐ 评分: 9.8</span>
+                    <span>🔥 人气: 1,520,388</span>
+                </div>
+            </div>
+            
+            <div class="canvas-container" id="canvas-container">
+                <div id="loading-screen" class="overlay active">
+                    <div class="loading-title">HAPPY FARM</div>
+                    <div class="loading-subtitle">开心农场</div>
+                    <div class="loading-text">加载中... 0%</div>
+                    <div class="loading-bar"><div class="progress"></div></div>
+                </div>
+                <canvas id="game-canvas" width="900" height="650"></canvas>
+            </div>
+
+            <div class="game-info">
+                <div class="controls-panel">
+                    <h3>操作指南</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">鼠标左键</span>
+                            <span class="desc">点击耕地播种 / 浇水 / 收割</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">拖拽/点击</span>
+                            <span class="desc">喂养动物 / 收集农产品</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">告示板</span>
+                            <span class="desc">查看并完成农场订单</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">加工厂</span>
+                            <span class="desc">制作面包、奶酪与果汁</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">数字键 1-6</span>
+                            <span class="desc">快捷选择种子/工具</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Esc / P</span>
+                            <span class="desc">暂停游戏</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-fullscreen" class="btn">全屏游戏</button>
+                    <button id="btn-restart" class="btn">重新开始</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-description">
+            <h2>游戏介绍</h2>
+            <p>《开心农场》是一款温馨好玩的HTML5模拟经营小游戏。在充满阳光与欢笑的田园里，你可以自由开垦土地、种植胡萝卜、小麦、玉米、草莓与向日葵等高产作物；喂养小鸡、奶牛与草羊，产出新鲜鸡蛋、牛奶与羊毛；还能建立烘培坊与乳品厂加工美食，驾驶送货卡车完成村民订单，赚取丰厚金币与经验，打造属于你的独一无二梦幻农场！</p>
+            <div class="game-tags">
+                <span class="tag">模拟经营</span>
+                <span class="tag">农场</span>
+                <span class="tag">种植</span>
+                <span class="tag">养殖</span>
+                <span class="tag">订单</span>
+                <span class="tag">休闲</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="happy-farm/game.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new HappyFarmGame();
+            game.init();
+            
+            document.getElementById('btn-fullscreen').addEventListener('click', () => {
+                const container = document.getElementById('canvas-container');
+                if (container.requestFullscreen) container.requestFullscreen();
+                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+            });
+            
+            document.getElementById('btn-restart').addEventListener('click', () => {
+                game.restart();
+            });
+        });
+    </script>
+</body>
+</html>
