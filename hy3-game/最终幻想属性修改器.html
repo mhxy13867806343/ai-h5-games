@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>最终幻想 I-VI 属性修改器</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070a16; --bg2:#0d142b;
+  --win:linear-gradient(180deg,#12235c 0%,#0a1235 100%);
+  --winb:#8fb4ff; --line:#26386e;
+  --txt:#e8eeff; --dim:#8ea2d0;
+  --acc:#4a7cff; --gold:#ffd166; --red:#ff6b6b; --grn:#5ddb9a;
+}
+html,body{height:100%}
+body{
+  background:radial-gradient(1200px 700px at 50% -10%,#16265c 0%,var(--bg) 60%),var(--bg);
+  color:var(--txt);
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,sans-serif;
+  font-size:14px;-webkit-font-smoothing:antialiased;
+  padding:14px;min-height:100vh;
+}
+.wrap{max-width:1280px;margin:0 auto}
+
+/* ---------- 标题 ---------- */
+header{text-align:center;margin-bottom:14px}
+h1{
+  font-size:26px;letter-spacing:4px;font-weight:800;
+  background:linear-gradient(180deg,#fff 30%,var(--gold) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 18px rgba(255,209,102,.25);
+}
+.sub{color:var(--dim);font-size:12px;margin-top:4px;letter-spacing:2px}
+
+/* ---------- 通用窗口 ---------- */
+.win{
+  background:var(--win);border:2px solid var(--winb);border-radius:8px;
+  box-shadow:0 0 0 1px #04081a inset,0 6px 24px rgba(0,0,0,.5);
+  padding:12px;
+}
+.win.tight{padding:8px}
+
+/* ---------- 标签页 ---------- */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+.tab{
+  padding:7px 15px;border:2px solid var(--line);border-radius:7px;cursor:pointer;
+  background:#0c1430;color:var(--dim);font-weight:700;font-size:13px;letter-spacing:1px;
+  transition:.15s;user-select:none;
+}
+.tab:hover{border-color:var(--winb);color:var(--txt)}
+.tab.on{background:linear-gradient(180deg,#2a51b8,#16307c);border-color:var(--winb);color:#fff;box-shadow:0 0 12px rgba(74,124,255,.5)}
+.modebar{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.modebar .tab{min-width:150px;text-align:center}
+
+/* ---------- 主布局 ---------- */
+.layout{display:grid;grid-template-columns:236px 1fr;gap:12px;align-items:start}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+
+/* ---------- 角色列表 ---------- */
+.gtitle{
+  font-size:12px;color:var(--gold);letter-spacing:2px;font-weight:700;
+  border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px;
+}
+.clist{display:flex;flex-direction:column;gap:5px;max-height:520px;overflow-y:auto}
+.citem{
+  display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;cursor:pointer;
+  border:1px solid transparent;transition:.12s;
+}
+.citem:hover{background:rgba(74,124,255,.14);border-color:var(--line)}
+.citem.on{background:linear-gradient(90deg,rgba(74,124,255,.35),rgba(74,124,255,.06));border-color:var(--winb)}
+.face{width:30px;height:30px;border-radius:5px;flex:0 0 auto;border:1px solid rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#0b1020}
+.cname{font-weight:700;font-size:13px}
+.cjob{font-size:11px;color:var(--dim)}
+.clv{margin-left:auto;font-size:11px;color:var(--gold);font-weight:700}
+
+/* ---------- 属性面板 ---------- */
+.phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;
+  border-bottom:1px solid var(--line);padding-bottom:10px}
+.pname{font-size:19px;font-weight:800;letter-spacing:1px}
+.pjob{font-size:12px;color:var(--dim)}
+.badge{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(74,124,255,.2);
+  border:1px solid var(--line);color:var(--dim)}
+
+.groups{display:flex;flex-direction:column;gap:12px;max-height:560px;overflow-y:auto;padding-right:4px}
+.group{border:1px solid var(--line);border-radius:7px;padding:9px 10px;background:rgba(4,8,26,.4)}
+.glabel{font-size:11px;color:var(--gold);letter-spacing:2px;font-weight:700;margin-bottom:8px}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px}
+@media(max-width:760px){.rows{grid-template-columns:1fr}}
+.row{display:flex;align-items:center;gap:8px}
+.rn{width:88px;flex:0 0 auto;font-size:12px;color:var(--dim)}
+input[type=range]{flex:1;min-width:60px;height:4px;-webkit-appearance:none;appearance:none;
+  background:linear-gradient(90deg,var(--acc) 0%,var(--acc) var(--p,0%),#1b2550 var(--p,0%));
+  border-radius:3px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+  background:#fff;border:2px solid var(--acc);cursor:pointer;box-shadow:0 0 6px rgba(74,124,255,.8)}
+input[type=number],input[type=text],select{
+  background:#070d24;border:1px solid var(--line);color:var(--txt);border-radius:5px;
+  padding:4px 6px;font-size:12px;font-family:inherit;outline:none;
+}
+input[type=number]{width:74px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=number]:focus,input[type=text]:focus,select:focus{border-color:var(--winb);box-shadow:0 0 8px rgba(74,124,255,.4)}
+input[type=number].bad{border-color:var(--red)}
+select{width:100%;cursor:pointer}
+.row.wide{grid-column:1/-1}
+
+/* ---------- 按钮 ---------- */
+.bar{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
+button{
+  padding:7px 13px;border-radius:6px;border:2px solid var(--line);cursor:pointer;
+  background:#101a3d;color:var(--txt);font-family:inherit;font-size:12px;font-weight:700;
+  transition:.13s;letter-spacing:1px;
+}
+button:hover{border-color:var(--winb);background:#18265a;transform:translateY(-1px)}
+button:active{transform:translateY(0)}
+button.p{background:linear-gradient(180deg,#2a51b8,#16307c);border-color:var(--winb)}
+button.g{background:linear-gradient(180deg,#8a6a12,#5c4708);border-color:var(--gold);color:#fff2cc}
+button.d{background:linear-gradient(180deg,#7d2020,#4a1010);border-color:#ff8a8a}
+button.sm{padding:4px 9px;font-size:11px;border-width:1px}
+
+/* ---------- 全局队伍 ---------- */
+.party{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:12px}
+.pcell{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:6px;padding:6px 9px;background:rgba(4,8,26,.4)}
+.pcell label{font-size:11px;color:var(--dim);flex:0 0 auto}
+.pcell input{flex:1;width:100%}
+
+/* ---------- 存档编辑器 ---------- */
+.drop{
+  border:2px dashed var(--line);border-radius:9px;padding:26px;text-align:center;cursor:pointer;
+  transition:.15s;background:rgba(4,8,26,.4);
+}
+.drop:hover,.drop.hot{border-color:var(--gold);background:rgba(255,209,102,.07)}
+.drop .big{font-size:15px;font-weight:700;margin-bottom:5px}
+.drop .sm2{font-size:11px;color:var(--dim);line-height:1.7}
+.finfo{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin-top:9px}
+.finfo b{color:var(--gold)}
+
+.srow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg span{padding:4px 10px;font-size:11px;cursor:pointer;color:var(--dim);background:#0a1230;user-select:none}
+.seg span+span{border-left:1px solid var(--line)}
+.seg span.on{background:var(--acc);color:#fff;font-weight:700}
+
+.res{margin-top:10px;max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+th,td{padding:5px 8px;text-align:left;border-bottom:1px solid rgba(38,56,110,.6)}
+th{background:#0a1230;color:var(--gold);font-size:11px;position:sticky;top:0;letter-spacing:1px}
+tbody tr:hover{background:rgba(74,124,255,.1)}
+td.mono{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--grn)}
+td input{width:88px}
+
+.hexbox{margin-top:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;
+  background:#04081a;border:1px solid var(--line);border-radius:6px;padding:8px;
+  max-height:240px;overflow:auto;line-height:1.65;white-space:pre}
+.hexbox .off{color:var(--gold)}
+.hexbox .b{cursor:pointer;padding:0 1px;border-radius:2px}
+.hexbox .b:hover{background:var(--acc);color:#fff}
+.hexbox .b.mod{color:var(--red);font-weight:700}
+.hexbox .asc{color:var(--dim)}
+
+.tip{font-size:11px;color:var(--dim);line-height:1.8;margin-top:9px;
+  border-left:2px solid var(--gold);padding-left:9px}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(180deg,#2a51b8,#0d1a44);border:2px solid var(--winb);
+  padding:9px 20px;border-radius:8px;font-weight:700;font-size:13px;
+  opacity:0;pointer-events:none;transition:.25s;z-index:99;box-shadow:0 8px 28px rgba(0,0,0,.6)
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.hide{display:none!important}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:#070d24}
+::-webkit-scrollbar-thumb{background:#25376c;border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:#364d92}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>FINAL FANTASY I-VI 属性修改器</h1>
+    <div class="sub">角色数值编辑 · 存档字节修改 · 方案导入导出</div>
+  </header>
+
+  <div class="modebar">
+    <div class="tab on" data-mode="editor">① 角色属性面板</div>
+    <div class="tab" data-mode="save">② 存档文件修改</div>
+  </div>
+
+  <!-- ============ 模式一：属性面板 ============ -->
+  <div id="modeEditor">
+    <div class="tabs" id="gameTabs"></div>
+
+    <div class="layout">
+      <div class="win" id="leftPane">
+        <div class="gtitle" id="rosterTitle">角色列表</div>
+        <div class="clist" id="charList"></div>
+        <div class="bar" style="margin-top:9px;padding-top:9px">
+          <button class="sm" id="btnAllMax">全员满级</button>
+          <button class="sm d" id="btnAllReset">全员还原</button>
+        </div>
+      </div>
+
+      <div class="win" id="rightPane">
+        <div class="phead">
+          <div class="face" id="pFace" style="width:38px;height:38px;font-size:17px"></div>
+          <div>
+            <div class="pname" id="pName">—</div>
+            <div class="pjob" id="pJob"></div>
+          </div>
+          <div class="badge" id="pGame"></div>
+          <div class="badge" id="pPower"></div>
+        </div>
+
+        <div class="groups" id="statGroups"></div>
+
+        <div class="bar">
+          <button class="p" id="btnMax">属性全满</button>
+          <button class="g" id="btnLv99">等级拉满</button>
+          <button id="btnRand">随机强化</button>
+          <button class="d" id="btnReset">还原初始</button>
+          <button id="btnCopy">复制到全员</button>
+        </div>
+
+        <div class="gtitle" style="margin-top:14px">队伍共通数据</div>
+        <div class="party" id="partyBox"></div>
+
+        <div class="bar">
+          <button id="btnSave">保存方案</button>
+          <button id="btnLoad">读取方案</button>
+          <button id="btnExport">导出 JSON</button>
+          <button id="btnImport">导入 JSON</button>
+          <button class="d" id="btnClear">清空存储</button>
+        </div>
+        <input type="file" id="jsonFile" accept=".json" class="hide">
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 模式二：存档修改 ============ -->
+  <div id="modeSave" class="hide">
+    <div class="win">
+      <div class="gtitle">存档文件载入</div>
+      <div class="drop" id="drop">
+        <div class="big">点击选择，或把存档文件拖进来</div>
+        <div class="sm2">
+          支持 .sav / .srm / .sa1 / .state / .bin 等任意二进制存档<br>
+          文件只在你本地浏览器内处理，不会上传到任何服务器
+        </div>
+      </div>
+      <input type="file" id="saveFile" class="hide">
+      <div class="finfo hide" id="fileInfo"></div>
+
+      <div class="tip">
+        用法：先在游戏里记下要改的数值（例如金币 <b>1250</b>），选好位宽后点「首次搜索」；
+        回游戏让该数值变化，再回来输入新值点「结果内筛选」，反复几次即可锁定唯一偏移，改完下载覆盖原存档。
+        <b>修改前请务必备份原文件。</b>
+      </div>
+    </div>
+
+    <div class="win" style="margin-top:12px">
+      <div class="gtitle">数值搜索</div>
+      <div class="srow">
+        <span style="font-size:12px;color:var(--dim)">数值</span>
+        <input type="number" id="sVal" value="1000" style="width:130px">
+        <span style="font-size:12px;color:var(--dim)">位宽</span>
+        <div class="seg" id="segWidth">
+          <span data-w="1">8位</span><span data-w="2" class="on">16位</span>
+          <span data-w="3">24位</span><span data-w="4">32位</span>
+        </div>
+        <span style="font-size:12px;color:var(--dim)">字节序</span>
+        <div class="seg" id="segEndian">
+          <span data-e="le" class="on">小端</span><span data-e="be">大端</span>
+        </div>
+        <button class="p" id="btnSearch">首次搜索</button>
+        <button id="btnFilter">结果内筛选</button>
+        <button class="d" id="btnResetSearch">重置</button>
+      </div>
+      <div style="font-size:12px;color:var(--dim);margin-top:8px" id="searchStat">尚未搜索</div>
+      <div class="res hide" id="resBox">
+        <table>
+          <thead><tr><th style="width:120px">偏移</th><th style="width:100px">当前值</th><th style="width:150px">改为</th><th>操作</th></tr></thead>
+          <tbody id="resBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="win" style="margin-top:12px">
+      <div class="gtitle">十六进制查看 / 直接改写</div>
+      <div class="srow">
+        <span style="font-size:12px;color:var(--dim)">跳转偏移(十六进制)</span>
+        <input type="text" id="hexJump" value="0" style="width:110px" placeholder="如 1A40">
+        <button class="sm" id="btnJump">跳转</button>
+        <button class="sm" id="btnPrev">◀ 上一页</button>
+        <button class="sm" id="btnNext">下一页 ▶</button>
+        <span style="font-size:11px;color:var(--dim)">点击任意字节可直接输入新值</span>
+      </div>
+      <div class="hexbox" id="hexView">载入存档后显示</div>
+      <div class="bar">
+        <button class="g" id="btnDownload">下载修改后的存档</button>
+        <button class="d" id="btnUndo">撤销全部修改</button>
+        <span style="font-size:12px;color:var(--dim);align-self:center" id="modStat">已修改 0 字节</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   最终幻想 I-VI 属性修改器
+   纯原创实现，不含任何官方素材 / ROM 数据。
+   角色与属性上限参考各作公开设定，用于本地方案编辑与存档字节修改。
+   ===================================================================== */
+
+/* ---------------- 纯函数（可被无头测试直接调用） ---------------- */
+function clamp(v, min, max){
+  v = Number(v);
+  if (!isFinite(v)) v = min;
+  v = Math.floor(v);
+  return v < min ? min : (v > max ? max : v);
+}
+function readInt(bytes, off, width, endian){
+  if (off < 0 || off + width > bytes.length) return null;
+  let v = 0;
+  if (endian === 'le'){ for (let k = width - 1; k >= 0; k--) v = v * 256 + bytes[off + k]; }
+  else { for (let k = 0; k < width; k++) v = v * 256 + bytes[off + k]; }
+  return v;
+}
+function writeInt(bytes, off, width, endian, value){
+  if (off < 0 || off + width > bytes.length) return false;
+  const maxv = Math.pow(256, width) - 1;
+  let v = clamp(value, 0, maxv);
+  for (let k = 0; k < width; k++){
+    const byte = v % 256; v = Math.floor(v / 256);
+    bytes[endian === 'le' ? off + k : off + width - 1 - k] = byte;
+  }
+  return true;
+}
+function searchValue(bytes, value, width, endian, candidates){
+  const out = [];
+  if (candidates && candidates.length){
+    for (let i = 0; i < candidates.length; i++){
+      if (readInt(bytes, candidates[i], width, endian) === value) out.push(candidates[i]);
+    }
+    return out;
+  }
+  const n = bytes.length - width;
+  for (let i = 0; i <= n; i++){
+    if (readInt(bytes, i, width, endian) === value) out.push(i);
+  }
+  return out;
+}
+
+/* ---------------- 字段构造器 ---------------- */
+const F = (k, n, min, max, def, g) => ({ k, n, min, max, def, g: g || '基础' });
+const S = (k, n, opts, def, g) => ({ k, n, type: 'select', opts, def, g: g || '基础' });
+
+const JOBS3 = ['洋葱剑士','白魔道士','黑魔道士','红魔道士','武僧','战士','盗贼','学者','风水士','龙骑士','空手士','吟游诗人','魔剑士','幻术师','骑士','狩人','导师','忍者','贤者','超究武神霸斩','召唤师','魔人','忍犬'];
+const JOBS5 = ['见习战士','骑士','枪术士','武僧','忍者','狩人','铁匠','神秘剑士','白魔道士','黑魔道士','时空魔道士','召唤士','青魔道士','赤魔道士','魔法剑士','吟游诗人','舞者','药剂师','风水士','潜水士','算术士','兽使','怪物使','咏唱士','物真似士','自由人'];
+const ESPERS6 = ['未装备','拉姆','希瓦','伊夫利特','奇美拉','希拉','昂',
+  '碧丝美拉','菲尼克斯','奥丁','巴哈姆特','亚历山大','克鲁夏','阿隆·迪隆','扎恩','麒麟','斯特雷','塞拉芬','幻兽王'];
+
+/* ---------------- 六部作品数据 ---------------- */
+const GAMES = {
+  ff1: {
+    title: 'FF I', full: '最终幻想 I', sub: '1987 · FC / NES',
+    note: '职业制，无固定角色名（可自由取名）；魔法为次数制。',
+    fields: [
+      F('lv','等级',1,50,1), F('exp','经验值',0,999999,0),
+      F('hp','当前 HP',0,999,35), F('mhp','最大 HP',1,999,35),
+      F('str','力量',1,99,20,'能力值'), F('agi','敏捷',1,99,5,'能力值'),
+      F('vit','体力',1,99,10,'能力值'), F('int','智力',1,99,1,'能力值'),
+      F('lck','幸运',1,99,5,'能力值'),
+      F('hit','命中率',0,255,10,'战斗参数'), F('def','防御力',0,255,0,'战斗参数'),
+      F('eva','回避率',0,255,48,'战斗参数'), F('mdf','魔法防御',0,255,0,'战斗参数'),
+      F('m1','魔法次数 Lv1',0,9,0,'魔法次数'), F('m2','魔法次数 Lv2',0,9,0,'魔法次数'),
+      F('m3','魔法次数 Lv3',0,9,0,'魔法次数'), F('m4','魔法次数 Lv4',0,9,0,'魔法次数'),
+      F('m5','魔法次数 Lv5',0,9,0,'魔法次数'), F('m6','魔法次数 Lv6',0,9,0,'魔法次数'),
+      F('m7','魔法次数 Lv7',0,9,0,'魔法次数'), F('m8','魔法次数 Lv8',0,9,0,'魔法次数')
+    ],
+    chars: [
+      { id:'fighter', n:'战士',     j:'Fighter → 骑士',        c:'#e05a3d', base:{ mhp:35,hp:35,str:20,agi:5,vit:10,int:1,lck:5,hit:10,eva:48 } },
+      { id:'thief',   n:'盗贼',     j:'Thief → 忍者',          c:'#5ddb9a', base:{ mhp:30,hp:30,str:5,agi:10,vit:1,int:5,lck:15,hit:5,eva:53 } },
+      { id:'monk',    n:'武僧',     j:'BlackBelt → 空手大师',  c:'#d9b45a', base:{ mhp:33,hp:33,str:5,agi:5,vit:20,int:1,lck:5,hit:5,eva:48 } },
+      { id:'redm',    n:'赤魔术士', j:'RedMage → 赤魔道士',    c:'#ff7aa2', base:{ mhp:30,hp:30,str:10,agi:10,vit:5,int:10,lck:10,hit:7,eva:50 } },
+      { id:'whim',    n:'白魔术士', j:'WhiteMage → 白魔道士',  c:'#e8eeff', base:{ mhp:28,hp:28,str:5,agi:5,vit:5,int:15,lck:10,hit:5,eva:48 } },
+      { id:'blkm',    n:'黑魔术士', j:'BlackMage → 黑魔道士',  c:'#9d7aff', base:{ mhp:25,hp:25,str:1,agi:10,vit:1,int:20,lck:10,hit:5,eva:48 } }
+    ]
+  },
+
+  ff2: {
+    title: 'FF II', full: '最终幻想 II', sub: '1988 · FC / NES',
+    note: '无等级，采用行动成长制；熟练度上限 16 级。',
+    fields: [
+      F('hp','最大 HP',1,9999,35), F('mp','最大 MP',0,999,0),
+      F('str','力量',1,99,10,'能力值'), F('vit','耐力',1,99,10,'能力值'),
+      F('mag','魔力',1,99,10,'能力值'), F('spr','精神',1,99,10,'能力值'),
+      F('agi','敏捷',1,99,10,'能力值'),
+      F('hitn','攻击次数',1,16,1,'战斗参数'), F('evan','回避次数',1,16,1,'战斗参数'),
+      F('def','防御力',0,255,0,'战斗参数'), F('mdf','魔法防御',0,255,0,'战斗参数'),
+      F('w_sword','剑 熟练度',1,16,1,'武器熟练度'), F('w_spear','枪 熟练度',1,16,1,'武器熟练度'),
+      F('w_axe','斧 熟练度',1,16,1,'武器熟练度'), F('w_bow','弓 熟练度',1,16,1,'武器熟练度'),
+      F('w_fist','格斗 熟练度',1,16,1,'武器熟练度'), F('w_knife','短刀 熟练度',1,16,1,'武器熟练度'),
+      F('w_shield','盾 熟练度',1,16,1,'武器熟练度'),
+      F('m_white','白魔法熟练',1,16,1,'魔法熟练度'), F('m_black','黑魔法熟练',1,16,1,'魔法熟练度')
+    ],
+    chars: [
+      { id:'frionel', n:'弗里奥尼尔', j:'主角 · 全能型',  c:'#7fa8ff', base:{ hp:40,mp:10,str:12,vit:11,mag:8,spr:8,agi:10 } },
+      { id:'maria',   n:'玛丽亚',     j:'弓与黑魔法',      c:'#ff9ac2', base:{ hp:32,mp:24,str:8,vit:8,mag:14,spr:11,agi:12 } },
+      { id:'guy',     n:'盖伊',       j:'怪力斧战士',      c:'#c98a4b', base:{ hp:48,mp:6,str:16,vit:15,mag:4,spr:6,agi:7 } },
+      { id:'leon',    n:'雷昂哈特',   j:'黑骑士',          c:'#8c6bff', base:{ hp:45,mp:14,str:14,vit:13,mag:10,spr:9,agi:9 } },
+      { id:'minwu',   n:'明武',       j:'客座 · 白魔道士', c:'#e8eeff', base:{ hp:38,mp:40,str:9,vit:9,mag:16,spr:18,agi:11 } },
+      { id:'josef',   n:'约瑟夫',     j:'客座 · 格斗家',   c:'#8fd3ff', base:{ hp:55,mp:0,str:18,vit:16,mag:3,spr:5,agi:8 } },
+      { id:'gordon',  n:'戈顿',       j:'客座 · 王子',      c:'#ffd166', base:{ hp:36,mp:16,str:10,vit:9,mag:11,spr:11,agi:10 } },
+      { id:'leila',   n:'蕾拉',       j:'客座 · 海盗',      c:'#5ddb9a', base:{ hp:40,mp:12,str:13,vit:10,mag:8,spr:8,agi:15 } },
+      { id:'richard', n:'理查德',     j:'客座 · 龙骑士',    c:'#ff6b6b', base:{ hp:60,mp:18,str:17,vit:15,mag:9,spr:10,agi:12 } }
+    ]
+  },
+
+  ff3: {
+    title: 'FF III', full: '最终幻想 III', sub: '1990 · FC / NES',
+    note: '光之战士四人组 + 职业转换系统。',
+    fields: [
+      F('lv','等级',1,99,1), F('exp','经验值',0,9999999,0),
+      F('hp','最大 HP',1,9999,20), F('mp','最大 MP',0,999,0),
+      S('job','当前职业',JOBS3,'洋葱剑士','职业'),
+      F('joblv','职业等级',1,99,1,'职业'),
+      F('str','力量',1,99,5,'能力值'), F('agi','敏捷',1,99,5,'能力值'),
+      F('vit','体力',1,99,5,'能力值'), F('int','智力',1,99,5,'能力值'),
+      F('mnd','精神',1,99,5,'能力值'),
+      F('atk','攻击力',0,255,0,'战斗参数'), F('def','防御力',0,255,0,'战斗参数'),
+      F('mdf','魔法防御',0,255,0,'战斗参数'), F('eva','回避率',0,255,0,'战斗参数')
+    ],
+    chars: [
+      { id:'luneth', n:'路内斯', j:'风之戦士 · 主角',  c:'#8fd3ff', base:{ hp:22,str:6,agi:6,vit:6,int:4,mnd:4 } },
+      { id:'arc',    n:'亚兹',   j:'风之戦士 · 魔法型', c:'#9d7aff', base:{ hp:18,str:4,agi:5,vit:4,int:7,mnd:6 } },
+      { id:'refia',  n:'蕾菲雅', j:'风之戦士 · 均衡型', c:'#ff9ac2', base:{ hp:20,str:5,agi:6,vit:5,int:5,mnd:6 } },
+      { id:'ingus',  n:'印格斯', j:'风之戦士 · 力量型', c:'#ffd166', base:{ hp:24,str:7,agi:4,vit:7,int:4,mnd:5 } }
+    ]
+  },
+
+  ff4: {
+    title: 'FF IV', full: '最终幻想 IV', sub: '1991 · SFC / SNES',
+    note: '固定角色 + ATB 战斗，首次引入即时条系统。',
+    fields: [
+      F('lv','等级',1,99,1), F('exp','经验值',0,9999999,0),
+      F('hp','最大 HP',1,9999,50), F('mp','最大 MP',0,999,0),
+      F('str','力量',1,99,10,'能力值'), F('agi','敏捷',1,99,10,'能力值'),
+      F('vit','体力',1,99,10,'能力值'), F('int','智力',1,99,10,'能力值'),
+      F('spr','精神',1,99,10,'能力值'),
+      F('atk','攻击力',0,255,10,'战斗参数'), F('hitp','命中率 %',0,99,50,'战斗参数'),
+      F('def','防御力',0,255,0,'战斗参数'), F('evap','回避率 %',0,99,0,'战斗参数'),
+      F('mdf','魔法防御',0,255,0,'战斗参数'), F('mevp','魔法回避 %',0,99,0,'战斗参数')
+    ],
+    chars: [
+      { id:'cecil',   n:'塞西尔',   j:'暗黑骑士 → 圣骑士', c:'#a9b7ff', base:{ lv:10,hp:220,mp:0,str:14,agi:9,vit:12,int:4,spr:6 } },
+      { id:'kain',    n:'凯恩',     j:'龙骑士',            c:'#ffd166', base:{ lv:10,hp:230,mp:0,str:16,agi:10,vit:12,int:3,spr:5 } },
+      { id:'rosa',    n:'罗莎',     j:'白魔道士 / 弓箭手', c:'#ffe1ec', base:{ lv:10,hp:150,mp:60,str:7,agi:11,vit:7,int:8,spr:16 } },
+      { id:'rydia',   n:'莉迪亚',   j:'召唤士 / 黑魔道士', c:'#5ddb9a', base:{ lv:10,hp:120,mp:70,str:5,agi:12,vit:5,int:17,spr:9 } },
+      { id:'edge',    n:'艾奇',     j:'忍者',              c:'#ff8a5c', base:{ lv:25,hp:600,mp:70,str:15,agi:20,vit:11,int:12,spr:10 } },
+      { id:'yang',    n:'雅可布',   j:'武僧',              c:'#c98a4b', base:{ lv:12,hp:330,mp:0,str:17,agi:11,vit:16,int:3,spr:4 } },
+      { id:'cid',     n:'西德',     j:'飞空艇技师',        c:'#e0533d', base:{ lv:14,hp:400,mp:0,str:18,agi:6,vit:18,int:3,spr:3 } },
+      { id:'palom',   n:'帕罗姆',   j:'黑魔道士',          c:'#9d7aff', base:{ lv:10,hp:100,mp:60,str:4,agi:12,vit:4,int:18,spr:8 } },
+      { id:'porom',   n:'波罗姆',   j:'白魔道士',          c:'#e8eeff', base:{ lv:10,hp:105,mp:60,str:4,agi:11,vit:5,int:8,spr:18 } },
+      { id:'tellah',  n:'特拉',     j:'贤者',              c:'#bfa6ff', base:{ lv:20,hp:250,mp:90,str:5,agi:8,vit:5,int:20,spr:20 } },
+      { id:'edward',  n:'吉尔巴特', j:'吟游诗人',          c:'#8fd3ff', base:{ lv:10,hp:130,mp:20,str:6,agi:13,vit:6,int:9,spr:10 } },
+      { id:'fusoya',  n:'富斯佐亚', j:'月之民 · 贤者',     c:'#d9f0ff', base:{ lv:50,hp:1500,mp:250,str:20,agi:20,vit:20,int:35,spr:35 } }
+    ]
+  },
+
+  ff5: {
+    title: 'FF V', full: '最终幻想 V', sub: '1992 · SFC / SNES',
+    note: '自由职业系统（Job）+ 能力继承（ABP）。',
+    fields: [
+      F('lv','等级',1,99,1), F('exp','经验值',0,9999999,0),
+      F('hp','最大 HP',1,9999,40), F('mp','最大 MP',0,999,0),
+      S('job','当前职业',JOBS5,'见习战士','职业'),
+      F('joblv','职业等级',1,7,1,'职业'), F('abp','累计 ABP',0,999,0,'职业'),
+      F('str','力量',1,99,25,'能力值'), F('agi','敏捷',1,99,24,'能力值'),
+      F('vit','体力',1,99,24,'能力值'), F('mag','魔力',1,99,24,'能力值'),
+      F('atk','攻击力',0,255,0,'战斗参数'), F('def','防御力',0,255,0,'战斗参数'),
+      F('mdf','魔法防御',0,255,0,'战斗参数'), F('eva','回避率',0,99,0,'战斗参数')
+    ],
+    chars: [
+      { id:'bartz',  n:'巴兹',   j:'主角 · 旅人',      c:'#8fd3ff', base:{ hp:40,str:27,agi:26,vit:26,mag:25 } },
+      { id:'lenna',  n:'蕾娜',   j:'塔克恩王女',        c:'#ff9ac2', base:{ hp:36,str:24,agi:25,vit:24,mag:29 } },
+      { id:'galuf',  n:'加拉夫', j:'失忆的老人',        c:'#d9b45a', base:{ hp:44,str:29,agi:23,vit:29,mag:22 } },
+      { id:'faris',  n:'法莉丝', j:'海盗船长',          c:'#5ddb9a', base:{ hp:42,str:28,agi:28,vit:25,mag:24 } },
+      { id:'krile',  n:'克露露', j:'加拉夫之孙',        c:'#ffd166', base:{ hp:36,str:24,agi:27,vit:24,mag:29 } }
+    ]
+  },
+
+  ff6: {
+    title: 'FF VI', full: '最终幻想 VI', sub: '1994 · SFC / SNES',
+    note: '14 名可用角色 + 魔石（幻兽）成长加成。',
+    fields: [
+      F('lv','等级',1,99,1), F('exp','经验值',0,16777215,0),
+      F('hp','最大 HP',1,9999,50), F('mp','最大 MP',0,999,0),
+      F('vig','体力 Vigor',1,99,25,'能力值'), F('spd','速度 Speed',1,99,30,'能力值'),
+      F('sta','耐力 Stamina',1,99,25,'能力值'), F('mag','魔力 MagPwr',1,99,28,'能力值'),
+      S('esper','装备魔石',ESPERS6,'未装备','魔石'),
+      F('mlv','魔石熟练度 %',0,100,0,'魔石'),
+      F('atk','攻击力',0,255,10,'战斗参数'), F('def','防御力',0,255,0,'战斗参数'),
+      F('mdf','魔法防御',0,255,0,'战斗参数'), F('eva','回避率',0,255,0,'战斗参数'),
+      F('mev','魔法回避',0,255,0,'战斗参数')
+    ],
+    chars: [
+      { id:'terra',   n:'蒂娜',     j:'魔导战士 · 变身',   c:'#5ddb9a', base:{ lv:3,hp:110,mp:30,vig:28,spd:33,sta:27,mag:39 } },
+      { id:'locke',   n:'洛克',     j:'宝物猎人 · 偷窃',   c:'#8fd3ff', base:{ lv:3,hp:120,mp:20,vig:32,spd:40,sta:28,mag:32 } },
+      { id:'celes',   n:'赛丽丝',   j:'魔导剑士 · 魔封剑', c:'#d9f0ff', base:{ lv:9,hp:250,mp:40,vig:32,spd:33,sta:30,mag:37 } },
+      { id:'edgar',   n:'艾德加',   j:'费加罗王 · 机械',   c:'#ffd166', base:{ lv:6,hp:200,mp:20,vig:37,spd:32,sta:33,mag:28 } },
+      { id:'sabin',   n:'玛修',     j:'武僧 · 必杀技',     c:'#c98a4b', base:{ lv:6,hp:230,mp:15,vig:42,spd:35,sta:38,mag:26 } },
+      { id:'cyan',    n:'卡岩',     j:'武士 · 剑技',       c:'#a9b7ff', base:{ lv:8,hp:260,mp:20,vig:40,spd:29,sta:35,mag:24 } },
+      { id:'shadow',  n:'夏都',     j:'忍者 · 投掷',       c:'#8c6bff', base:{ lv:8,hp:240,mp:18,vig:35,spd:42,sta:30,mag:28 } },
+      { id:'gau',     n:'迦南',     j:'野生児 · 暴走',     c:'#5dbb6b', base:{ lv:10,hp:280,mp:20,vig:38,spd:38,sta:36,mag:30 } },
+      { id:'setzer',  n:'赛兹',     j:'赌徒 · 老虎机',     c:'#bfa6ff', base:{ lv:12,hp:320,mp:25,vig:33,spd:34,sta:30,mag:31 } },
+      { id:'strago',  n:'斯特拉戈', j:'青魔道士 · 魔法剑', c:'#8fb4ff', base:{ lv:12,hp:260,mp:60,vig:24,spd:28,sta:26,mag:41 } },
+      { id:'relm',    n:'莉尔姆',   j:'画家 · 素描',       c:'#ff9ac2', base:{ lv:12,hp:230,mp:65,vig:22,spd:31,sta:24,mag:44 } },
+      { id:'mog',     n:'莫古',     j:'莫古力 · 舞蹈',     c:'#e8eeff', base:{ lv:9,hp:250,mp:30,vig:34,spd:33,sta:32,mag:30 } },
+      { id:'umaro',   n:'乌马鲁',   j:'雪男 · 暴走',       c:'#d9f0ff', base:{ lv:16,hp:600,mp:0,vig:60,spd:30,sta:50,mag:10 } },
+      { id:'gogo',    n:'戈戈',     j:'物真似士 · 模仿',   c:'#ff8a5c', base:{ lv:16,hp:400,mp:50,vig:30,spd:33,sta:28,mag:35 } }
+    ]
+  }
+};
+
+const PARTY_FIELDS = [
+  F('gp','金币 GP',0,9999999,0),
+  F('hour','游戏时间(时)',0,99,0),
+  F('min','游戏时间(分)',0,59,0),
+  F('steps','行走步数',0,999999,0)
+];
+
+const STORE_KEY = 'ff16_tuner_v1';
+
+/* ---------------- 状态 ---------------- */
+const state = {
+  game: 'ff1',
+  char: 'fighter',
+  data: {},   // data[game][charId] = {stat:value}
+  party: {}   // party[game] = {gp,hour,min,steps}
+};
+
+function defaultsOf(gid, cid){
+  const g = GAMES[gid];
+  const c = g.chars.find(x => x.id === cid);
+  const o = {};
+  g.fields.forEach(f => { o[f.k] = (c.base && c.base[f.k] !== undefined) ? c.base[f.k] : f.def; });
+  return o;
+}
+function initData(){
+  Object.keys(GAMES).forEach(gid => {
+    if (!state.data[gid]) state.data[gid] = {};
+    GAMES[gid].chars.forEach(c => {
+      if (!state.data[gid][c.id]) state.data[gid][c.id] = defaultsOf(gid, c.id);
+    });
+    if (!state.party[gid]) {
+      state.party[gid] = {};
+      PARTY_FIELDS.forEach(f => state.party[gid][f.k] = f.def);
+    }
+  });
+}
+function cur(){ return state.data[state.game][state.char]; }
+function curChar(){ return GAMES[state.game].chars.find(c => c.id === state.char); }
+
+/* 设置某个属性并自动钳制 */
+function setStat(gid, cid, key, val){
+  const f = GAMES[gid].fields.find(x => x.k === key);
+  if (!f) return null;
+  if (f.type === 'select'){
+    state.data[gid][cid][key] = f.opts.indexOf(val) >= 0 ? val : f.opts[0];
+  } else {
+    state.data[gid][cid][key] = clamp(val, f.min, f.max);
+  }
+  return state.data[gid][cid][key];
+}
+function maxAll(gid, cid){
+  GAMES[gid].fields.forEach(f => {
+    if (f.type === 'select') return;
+    state.data[gid][cid][f.k] = f.max;
+  });
+  // HP 不超过最大 HP 的逻辑
+  const d = state.data[gid][cid];
+  if (d.hp !== undefined && d.mhp !== undefined) d.hp = d.mhp;
+  return d;
+}
+function resetChar(gid, cid){
+  state.data[gid][cid] = defaultsOf(gid, cid);
+  return state.data[gid][cid];
+}
+function lv99(gid, cid){
+  const g = GAMES[gid], d = state.data[gid][cid];
+  const lvF = g.fields.find(f => f.k === 'lv');
+  if (lvF) d.lv = lvF.max;
+  const expF = g.fields.find(f => f.k === 'exp');
+  if (expF) d.exp = expF.max;
+  ['hp','mhp','mp'].forEach(k => {
+    const f = g.fields.find(x => x.k === k); if (f) d[k] = f.max;
+  });
+  return d;
+}
+function randBoost(gid, cid){
+  const g = GAMES[gid], d = state.data[gid][cid];
+  g.fields.forEach(f => {
+    if (f.type === 'select') return;
+    const lo = Math.floor(f.max * 0.6);
+    d[f.k] = clamp(lo + Math.floor(Math.random() * (f.max - lo + 1)), f.min, f.max);
+  });
+  if (d.hp !== undefined && d.mhp !== undefined) d.hp = d.mhp;
+  return d;
+}
+/* 综合战力评估：主要能力值占比平均 */
+function powerOf(gid, cid){
+  const g = GAMES[gid], d = state.data[gid][cid];
+  let sum = 0, n = 0;
+  g.fields.forEach(f => {
+    if (f.type === 'select') return;
+    if (f.g !== '能力值' && f.k !== 'hp' && f.k !== 'mhp' && f.k !== 'lv') return;
+    sum += (d[f.k] - f.min) / Math.max(1, f.max - f.min); n++;
+  });
+  return n ? Math.round(sum / n * 100) : 0;
+}
+
+function exportPlan(){
+  return JSON.stringify({ v: 1, app: 'FF1-6 Tuner', at: new Date().toISOString(),
+    data: state.data, party: state.party }, null, 2);
+}
+function importPlan(text){
+  const o = JSON.parse(text);
+  if (!o || !o.data) throw new Error('不是有效的方案文件');
+  Object.keys(GAMES).forEach(gid => {
+    if (!o.data[gid]) return;
+    GAMES[gid].chars.forEach(c => {
+      const src = o.data[gid][c.id]; if (!src) return;
+      GAMES[gid].fields.forEach(f => {
+        if (src[f.k] === undefined) return;
+        setStat(gid, c.id, f.k, src[f.k]);
+      });
+    });
+    if (o.party && o.party[gid]){
+      PARTY_FIELDS.forEach(f => {
+        const v = o.party[gid][f.k];
+        if (v !== undefined) state.party[gid][f.k] = clamp(v, f.min, f.max);
+      });
+    }
+  });
+  return true;
+}
+
+/* ================= 以下为 UI 层（无 DOM 时自动跳过） ================= */
+const $ = id => (typeof document !== 'undefined' ? document.getElementById(id) : null);
+const hasDOM = (typeof document !== 'undefined') && !!$('gameTabs');
+
+function toast(msg){
+  const t = $('toast'); if (!t) return;
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 1600);
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+
+function renderTabs(){
+  const box = $('gameTabs'); if (!box) return;
+  box.innerHTML = Object.keys(GAMES).map(gid =>
+    `<div class="tab ${gid === state.game ? 'on' : ''}" data-g="${gid}">${GAMES[gid].title}</div>`).join('');
+}
+function renderRoster(){
+  const box = $('charList'); if (!box) return;
+  const g = GAMES[state.game];
+  const t = $('rosterTitle'); if (t) t.textContent = g.full + ' · 角色';
+  box.innerHTML = g.chars.map(c => {
+    const d = state.data[state.game][c.id];
+    const lvTxt = d.lv !== undefined ? ('Lv' + d.lv) : ('HP' + d.hp);
+    return `<div class="citem ${c.id === state.char ? 'on' : ''}" data-c="${c.id}">
+      <div class="face" style="background:${c.c}">${esc(c.n.charAt(0))}</div>
+      <div><div class="cname">${esc(c.n)}</div><div class="cjob">${esc(c.j)}</div></div>
+      <div class="clv">${lvTxt}</div></div>`;
+  }).join('');
+}
+function renderStats(){
+  const box = $('statGroups'); if (!box) return;
+  const g = GAMES[state.game], c = curChar(), d = cur();
+
+  const face = $('pFace'); if (face){ face.style.background = c.c; face.textContent = c.n.charAt(0); }
+  $('pName').textContent = c.n;
+  $('pJob').textContent = c.j;
+  $('pGame').textContent = g.full + ' · ' + g.sub;
+  $('pPower').textContent = '综合评估 ' + powerOf(state.game, state.char) + '%';
+
+  const groups = [];
+  g.fields.forEach(f => {
+    let grp = groups.find(x => x.name === f.g);
+    if (!grp){ grp = { name: f.g, list: [] }; groups.push(grp); }
+    grp.list.push(f);
+  });
+
+  box.innerHTML = groups.map(grp => `
+    <div class="group"><div class="glabel">${esc(grp.name)}</div><div class="rows">
+    ${grp.list.map(f => {
+      if (f.type === 'select'){
+        return `<div class="row wide"><div class="rn">${esc(f.n)}</div>
+          <select data-sel="${f.k}">${f.opts.map(o =>
+            `<option ${o === d[f.k] ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></div>`;
+      }
+      const p = ((d[f.k] - f.min) / Math.max(1, f.max - f.min) * 100).toFixed(1) + '%';
+      return `<div class="row"><div class="rn">${esc(f.n)}</div>
+        <input type="range" data-rng="${f.k}" min="${f.min}" max="${f.max}" value="${d[f.k]}" style="--p:${p}">
+        <input type="number" data-num="${f.k}" min="${f.min}" max="${f.max}" value="${d[f.k]}"
+          title="范围 ${f.min} ~ ${f.max}"></div>`;
+    }).join('')}
+    </div></div>`).join('') +
+    `<div class="tip">${esc(g.note)}　数值上限依各作公开设定设置，超出会自动回落到合法范围。</div>`;
+}
+function renderParty(){
+  const box = $('partyBox'); if (!box) return;
+  const p = state.party[state.game];
+  box.innerHTML = PARTY_FIELDS.map(f =>
+    `<div class="pcell"><label>${esc(f.n)}</label>
+      <input type="number" data-party="${f.k}" min="${f.min}" max="${f.max}" value="${p[f.k]}"></div>`).join('');
+}
+function renderAll(){ renderTabs(); renderRoster(); renderStats(); renderParty(); }
+
+/* ---------------- 事件绑定 ---------------- */
+function bindEditor(){
+  $('gameTabs').addEventListener('click', e => {
+    const t = e.target.closest('[data-g]'); if (!t) return;
+    state.game = t.dataset.g;
+    state.char = GAMES[state.game].chars[0].id;
+    renderAll();
+  });
+  $('charList').addEventListener('click', e => {
+    const t = e.target.closest('[data-c]'); if (!t) return;
+    state.char = t.dataset.c; renderRoster(); renderStats();
+  });
+
+  const sg = $('statGroups');
+  sg.addEventListener('input', e => {
+    const el = e.target;
+    if (el.dataset.rng){
+      const k = el.dataset.rng, v = setStat(state.game, state.char, k, el.value);
+      const num = sg.querySelector(`[data-num="${k}"]`); if (num) num.value = v;
+      const f = GAMES[state.game].fields.find(x => x.k === k);
+      el.style.setProperty('--p', ((v - f.min) / Math.max(1, f.max - f.min) * 100).toFixed(1) + '%');
+      $('pPower').textContent = '综合评估 ' + powerOf(state.game, state.char) + '%';
+      if (k === 'lv' || k === 'hp') renderRoster();
+    } else if (el.dataset.num){
+      const k = el.dataset.num;
+      const f = GAMES[state.game].fields.find(x => x.k === k);
+      const raw = Number(el.value);
+      el.classList.toggle('bad', el.value !== '' && (raw < f.min || raw > f.max));
+      const v = setStat(state.game, state.char, k, el.value === '' ? f.min : el.value);
+      const rng = sg.querySelector(`[data-rng="${k}"]`);
+      if (rng){ rng.value = v; rng.style.setProperty('--p', ((v - f.min) / Math.max(1, f.max - f.min) * 100).toFixed(1) + '%'); }
+      $('pPower').textContent = '综合评估 ' + powerOf(state.game, state.char) + '%';
+      if (k === 'lv' || k === 'hp') renderRoster();
+    }
+  });
+  sg.addEventListener('change', e => {
+    const el = e.target;
+    if (el.dataset.sel){ setStat(state.game, state.char, el.dataset.sel, el.value); }
+    if (el.dataset.num){ el.classList.remove('bad'); el.value = cur()[el.dataset.num]; }
+  });
+
+  $('partyBox').addEventListener('input', e => {
+    const k = e.target.dataset.party; if (!k) return;
+    const f = PARTY_FIELDS.find(x => x.k === k);
+    state.party[state.game][k] = clamp(e.target.value, f.min, f.max);
+  });
+  $('partyBox').addEventListener('change', e => {
+    const k = e.target.dataset.party; if (!k) return;
+    e.target.value = state.party[state.game][k];
+  });
+
+  $('btnMax').onclick = () => { maxAll(state.game, state.char); renderStats(); renderRoster(); toast('属性已全部拉满'); };
+  $('btnLv99').onclick = () => { lv99(state.game, state.char); renderStats(); renderRoster(); toast('等级 / HP / MP 已拉满'); };
+  $('btnRand').onclick = () => { randBoost(state.game, state.char); renderStats(); renderRoster(); toast('已随机强化'); };
+  $('btnReset').onclick = () => { resetChar(state.game, state.char); renderStats(); renderRoster(); toast('已还原初始值'); };
+  $('btnCopy').onclick = () => {
+    const src = JSON.parse(JSON.stringify(cur()));
+    GAMES[state.game].chars.forEach(c => {
+      if (c.id === state.char) return;
+      GAMES[state.game].fields.forEach(f => setStat(state.game, c.id, f.k, src[f.k]));
+    });
+    renderRoster(); toast('已复制到本作全部角色');
+  };
+  $('btnAllMax').onclick = () => {
+    GAMES[state.game].chars.forEach(c => { maxAll(state.game, c.id); lv99(state.game, c.id); });
+    renderStats(); renderRoster(); toast('全员已满级满属性');
+  };
+  $('btnAllReset').onclick = () => {
+    GAMES[state.game].chars.forEach(c => resetChar(state.game, c.id));
+    renderStats(); renderRoster(); toast('全员已还原');
+  };
+
+  $('btnSave').onclick = () => {
+    try { localStorage.setItem(STORE_KEY, exportPlan()); toast('方案已保存到本机'); }
+    catch (err){ toast('保存失败：' + err.message); }
+  };
+  $('btnLoad').onclick = () => {
+    const s = localStorage.getItem(STORE_KEY);
+    if (!s){ toast('本机还没有已保存的方案'); return; }
+    try { importPlan(s); renderAll(); toast('方案已读取'); }
+    catch (err){ toast('读取失败：' + err.message); }
+  };
+  $('btnExport').onclick = () => {
+    const blob = new Blob([exportPlan()], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'FF1-6_属性方案.json';
+    a.click(); URL.revokeObjectURL(a.href);
+    toast('已导出 JSON 方案');
+  };
+  $('btnImport').onclick = () => $('jsonFile').click();
+  $('jsonFile').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try { importPlan(r.result); renderAll(); toast('已导入方案'); }
+      catch (err){ toast('导入失败：' + err.message); }
+    };
+    r.readAsText(f);
+    e.target.value = '';
+  };
+  $('btnClear').onclick = () => {
+    localStorage.removeItem(STORE_KEY);
+    Object.keys(GAMES).forEach(gid => GAMES[gid].chars.forEach(c => resetChar(gid, c.id)));
+    renderAll(); toast('已清空本机存储并还原');
+  };
+}
+
+/* ================= 模式二：存档字节编辑 ================= */
+const sav = {
+  name: '', orig: null, buf: null,
+  width: 2, endian: 'le',
+  cands: null, first: true,
+  page: 0, mods: {}
+};
+
+function hex(n, w){ return n.toString(16).toUpperCase().padStart(w, '0'); }
+
+function renderHex(){
+  const box = $('hexView'); if (!box) return;
+  if (!sav.buf){ box.textContent = '载入存档后显示'; return; }
+  const per = 16, rows = 16;
+  const start = Math.max(0, Math.min(sav.page * per * rows, Math.max(0, sav.buf.length - per)));
+  let out = '';
+  for (let r = 0; r < rows; r++){
+    const base = start + r * per;
+    if (base >= sav.buf.length) break;
+    out += `<span class="off">${hex(base, 6)}</span>  `;
+    let ascii = '';
+    for (let i = 0; i < per; i++){
+      const off = base + i;
+      if (off >= sav.buf.length){ out += '   '; ascii += ' '; continue; }
+      const v = sav.buf[off];
+      out += `<span class="b ${sav.mods[off] !== undefined ? 'mod' : ''}" data-off="${off}">${hex(v, 2)}</span> `;
+      ascii += (v >= 32 && v < 127) ? String.fromCharCode(v) : '.';
+    }
+    out += ` <span class="asc">${esc(ascii)}</span>\n`;
+  }
+  box.innerHTML = out;
+}
+function renderRes(){
+  const body = $('resBody'), box = $('resBox'), stat = $('searchStat');
+  if (!body) return;
+  if (!sav.cands){ box.classList.add('hide'); stat.textContent = '尚未搜索'; return; }
+  const n = sav.cands.length;
+  stat.textContent = n === 0
+    ? '没有找到匹配的偏移，换个位宽或字节序再试'
+    : `找到 ${n} 处匹配` + (n > 200 ? '（仅显示前 200 条，建议回游戏改变数值后再做一次「结果内筛选」）' : '');
+  if (n === 0){ box.classList.add('hide'); return; }
+  box.classList.remove('hide');
+  body.innerHTML = sav.cands.slice(0, 200).map(off => {
+    const v = readInt(sav.buf, off, sav.width, sav.endian);
+    return `<tr><td class="mono">0x${hex(off, 6)}</td><td class="mono">${v}</td>
+      <td><input type="number" data-w="${off}" value="${v}" min="0"></td>
+      <td><button class="sm p" data-write="${off}">写入</button>
+          <button class="sm" data-goto="${off}">定位</button></td></tr>`;
+  }).join('');
+}
+function updModStat(){
+  const el = $('modStat'); if (el) el.textContent = '已修改 ' + Object.keys(sav.mods).length + ' 字节';
+}
+function loadSave(file){
+  const r = new FileReader();
+  r.onload = () => {
+    sav.orig = new Uint8Array(r.result);
+    sav.buf = new Uint8Array(sav.orig);
+    sav.name = file.name; sav.cands = null; sav.mods = {}; sav.page = 0;
+    const info = $('fileInfo');
+    info.classList.remove('hide');
+    info.innerHTML = `文件：<b>${esc(file.name)}</b>　大小：<b>${sav.buf.length.toLocaleString()}</b> 字节　
+      类型：<b>${esc(file.name.split('.').pop().toUpperCase())}</b>`;
+    renderHex(); renderRes(); updModStat();
+    toast('存档已载入（仅本地处理）');
+  };
+  r.readAsArrayBuffer(file);
+}
+function bindSave(){
+  const drop = $('drop'), input = $('saveFile');
+  drop.onclick = () => input.click();
+  input.onchange = e => { if (e.target.files[0]) loadSave(e.target.files[0]); e.target.value = ''; };
+  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault(); drop.classList.add('hot');
+  }));
+  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => {
+    e.preventDefault(); drop.classList.remove('hot');
+  }));
+  drop.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0]; if (f) loadSave(f);
+  });
+
+  $('segWidth').onclick = e => {
+    const t = e.target.closest('[data-w]'); if (!t) return;
+    sav.width = Number(t.dataset.w);
+    [...$('segWidth').children].forEach(s => s.classList.toggle('on', s === t));
+  };
+  $('segEndian').onclick = e => {
+    const t = e.target.closest('[data-e]'); if (!t) return;
+    sav.endian = t.dataset.e;
+    [...$('segEndian').children].forEach(s => s.classList.toggle('on', s === t));
+  };
+
+  $('btnSearch').onclick = () => {
+    if (!sav.buf){ toast('请先载入存档文件'); return; }
+    const v = Number($('sVal').value);
+    sav.cands = searchValue(sav.buf, v, sav.width, sav.endian, null);
+    renderRes();
+  };
+  $('btnFilter').onclick = () => {
+    if (!sav.buf){ toast('请先载入存档文件'); return; }
+    if (!sav.cands){ toast('请先做一次首次搜索'); return; }
+    const v = Number($('sVal').value);
+    sav.cands = searchValue(sav.buf, v, sav.width, sav.endian, sav.cands);
+    renderRes();
+  };
+  $('btnResetSearch').onclick = () => { sav.cands = null; renderRes(); };
+
+  $('resBody').onclick = e => {
+    const w = e.target.closest('[data-write]');
+    if (w){
+      const off = Number(w.dataset.write);
+      const inp = $('resBody').querySelector(`[data-w="${off}"]`);
+      const val = Number(inp.value);
+      for (let k = 0; k < sav.width; k++){
+        const o = off + k;
+        if (sav.mods[o] === undefined) sav.mods[o] = sav.orig[o];
+      }
+      writeInt(sav.buf, off, sav.width, sav.endian, val);
+      renderRes(); renderHex(); updModStat();
+      toast('已写入 0x' + hex(off, 6));
+      return;
+    }
+    const g = e.target.closest('[data-goto]');
+    if (g){
+      const off = Number(g.dataset.goto);
+      sav.page = Math.floor(off / 256);
+      $('hexJump').value = hex(off, 4);
+      renderHex();
+      document.getElementById('hexView').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  $('btnJump').onclick = () => {
+    if (!sav.buf) return;
+    const off = parseInt($('hexJump').value, 16);
+    if (isNaN(off)){ toast('请输入十六进制偏移，如 1A40'); return; }
+    sav.page = Math.max(0, Math.floor(off / 256)); renderHex();
+  };
+  $('btnPrev').onclick = () => { if (sav.page > 0){ sav.page--; renderHex(); } };
+  $('btnNext').onclick = () => {
+    if (!sav.buf) return;
+    if ((sav.page + 1) * 256 < sav.buf.length){ sav.page++; renderHex(); }
+  };
+  $('hexView').onclick = e => {
+    const t = e.target.closest('[data-off]'); if (!t || !sav.buf) return;
+    const off = Number(t.dataset.off);
+    const cur0 = sav.buf[off];
+    const s = prompt('偏移 0x' + hex(off, 6) + ' 当前值 ' + cur0 + '（十进制 0-255），输入新值：', String(cur0));
+    if (s === null) return;
+    const v = clamp(s, 0, 255);
+    if (sav.mods[off] === undefined) sav.mods[off] = sav.orig[off];
+    sav.buf[off] = v;
+    renderHex(); renderRes(); updModStat();
+  };
+
+  $('btnDownload').onclick = () => {
+    if (!sav.buf){ toast('请先载入存档文件'); return; }
+    const blob = new Blob([sav.buf], { type: 'application/octet-stream' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = sav.name.replace(/(\.[^.]+)?$/, '_modified$1');
+    a.click(); URL.revokeObjectURL(a.href);
+    toast('已导出修改后的存档');
+  };
+  $('btnUndo').onclick = () => {
+    if (!sav.orig) return;
+    sav.buf = new Uint8Array(sav.orig); sav.mods = {};
+    renderHex(); renderRes(); updModStat();
+    toast('已撤销全部修改');
+  };
+}
+
+/* ---------------- 模式切换与启动 ---------------- */
+function bindMode(){
+  document.querySelector('.modebar').addEventListener('click', e => {
+    const t = e.target.closest('[data-mode]'); if (!t) return;
+    [...document.querySelectorAll('.modebar .tab')].forEach(x => x.classList.toggle('on', x === t));
+    const editor = t.dataset.mode === 'editor';
+    $('modeEditor').classList.toggle('hide', !editor);
+    $('modeSave').classList.toggle('hide', editor);
+  });
+}
+
+initData();
+if (hasDOM){
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (saved) importPlan(saved);
+  } catch (e) { /* 忽略损坏的本机数据 */ }
+  renderAll();
+  bindEditor();
+  bindSave();
+  bindMode();
+}
+
+/* 暴露给无头测试 */
+if (typeof window !== 'undefined'){
+  window.FFTUNER = { GAMES, PARTY_FIELDS, state, clamp, readInt, writeInt, searchValue,
+    setStat, maxAll, resetChar, lv99, randBoost, powerOf, exportPlan, importPlan, defaultsOf, initData };
+}
+</script>
+</body>
+</html>

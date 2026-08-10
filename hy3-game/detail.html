@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>游戏详情 —— HY3 游戏合集</title>
+<meta name="title" content="游戏详情 —— HY3 游戏合集">
+<meta name="description" content="HY3 游戏合集 · 游戏详情与玩法说明">
+<meta name="site" content="HY3 游戏合集">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/share/share.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="index.html">
+      <span class="logo">🎮</span>
+      <span>HY3 游戏合集<br><small>原创复刻 · 打开即玩</small></span>
+    </a>
+    <span class="spacer"></span>
+    <a class="btn" href="index.html">← 返回列表</a>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="crumb"><a href="index.html">首页</a> <span>/</span> <a href="index.html" id="crumbCat">分类</a> <span>/</span> <span id="crumbName">游戏</span></div>
+  <div id="content"></div>
+</main>
+
+<footer class="foot-site">
+  <div class="wrap">
+    <div>本站所有游戏均为原创代码实现的玩法复刻，不含原作图片、音频或源码。</div>
+    <div class="social-share ss-sm" id="footShare"
+         data-sites="weibo,qq,qzone,wechat,douban,copy"></div>
+  </div>
+</footer>
+
+<script src="assets/games.js"></script>
+<script src="assets/share/share.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function param(name) {
+    var m = new RegExp('[?&]' + name + '=([^&#]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+  }
+
+  var id = param('id');
+  var g = window.gameById ? gameById(id) : null;
+  var box = document.getElementById('content');
+
+  if (!g) {
+    box.innerHTML = '<div class="panel"><h2>没有找到这个游戏</h2>' +
+      '<p>链接里的 <code>id</code> 参数无效或已失效。</p>' +
+      '<p><a class="btn primary" href="index.html">← 回到游戏列表</a></p></div>';
+    return;
+  }
+
+  /* ---------- 页面元信息（分享组件会读取这些默认值） ---------- */
+  var pageTitle = g.name + ' —— HY3 游戏合集';
+  document.title = pageTitle;
+  setMeta('title', pageTitle);
+  setMeta('description', g.brief);
+
+  function setMeta(name, content) {
+    var el = document.querySelector('meta[name="' + name + '"]');
+    if (!el) { el = document.createElement('meta'); el.setAttribute('name', name); document.head.appendChild(el); }
+    el.setAttribute('content', content);
+  }
+
+  document.getElementById('crumbName').textContent = g.name;
+  var cc = document.getElementById('crumbCat');
+  cc.textContent = g.cat;
+  cc.href = 'index.html';
+
+  /* ---------- 构建详情 ---------- */
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  var grad = 'linear-gradient(135deg,' + g.grad[0] + ',' + g.grad[1] + ')';
+
+  // 头部
+  var head = el('div', 'dt-head');
+  var cover = el('div', 'dt-cover', g.emoji);
+  cover.style.background = grad;
+  var meta = el('div', 'dt-meta');
+  meta.appendChild(el('h1', null, esc(g.name)));
+  meta.appendChild(el('p', 'sub', esc(g.brief)));
+  var facts = el('div', 'facts');
+  [g.cat, '来源：' + g.from, '上线 ' + g.date, '单文件 HTML5', '零依赖'].forEach(function (t) {
+    facts.appendChild(el('span', null, esc(t)));
+  });
+  meta.appendChild(facts);
+  var acts = el('div', 'dt-actions');
+  var playBtn = el('a', 'btn primary', '▶ 开始游戏');
+  playBtn.href = g.file; playBtn.target = '_blank'; playBtn.rel = 'noopener';
+  var dl = el('a', 'btn', '⬇ 下载单文件');
+  dl.href = g.file; dl.setAttribute('download', g.file);
+  var back = el('a', 'btn', '← 全部游戏');
+  back.href = 'index.html';
+  acts.appendChild(playBtn); acts.appendChild(dl); acts.appendChild(back);
+  meta.appendChild(acts);
+  head.appendChild(cover); head.appendChild(meta);
+  box.appendChild(head);
+
+  // 分享条（详情页专属：分享的是当前这一页）
+  var shareBar = el('div', 'share-bar');
+  shareBar.appendChild(el('span', 'lbl', '把《' + esc(g.name) + '》分享给朋友：'));
+  var share = el('div', 'social-share');
+  share.setAttribute('data-sites', 'weibo,qq,qzone,wechat,tencent,douban,diandian,linkedin,facebook,twitter,copy');
+  share.setAttribute('data-url', location.href);
+  share.setAttribute('data-title', pageTitle);
+  share.setAttribute('data-description', g.brief);
+  share.setAttribute('data-source', 'HY3 游戏合集');
+  share.setAttribute('data-wechat-qrcode-title', '微信扫一扫：分享《' + g.name + '》');
+  share.setAttribute('data-wechat-qrcode-helper', '<p>微信里点“发现”，扫一下二维码</p><p>即可把这个游戏分享至朋友圈。</p>');
+  shareBar.appendChild(share);
+  shareBar.appendChild(el('span', 'hint', '微信图标悬停可出二维码'));
+  box.appendChild(shareBar);
+
+  // 试玩舞台
+  var stage = el('div', 'stage');
+  var bar = el('div', 'stage-bar');
+  bar.appendChild(el('div', 'dots', '<i></i><i></i><i></i>'));
+  bar.appendChild(el('span', null, esc(g.file)));
+  bar.appendChild(el('span', 'grow'));
+  var fsBtn = el('a', 'btn', '⛶ 全屏');
+  var newBtn = el('a', 'btn', '↗ 新窗口打开');
+  newBtn.href = g.file; newBtn.target = '_blank'; newBtn.rel = 'noopener';
+  var reBtn = el('a', 'btn', '⟳ 重新开始');
+  bar.appendChild(fsBtn); bar.appendChild(reBtn); bar.appendChild(newBtn);
+  stage.appendChild(bar);
+
+  var frameBox = el('div', 'frame-box');
+  var poster = el('div', 'poster');
+  poster.appendChild(el('div', 'big', g.emoji));
+  poster.appendChild(el('a', 'btn primary', '▶ 点此载入游戏'));
+  poster.appendChild(el('div', 'txt', '在本页直接试玩，也可点右上角新窗口打开'));
+  frameBox.appendChild(poster);
+  stage.appendChild(frameBox);
+  box.appendChild(stage);
+
+  var iframe = null;
+  function loadGame() {
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('title', g.name);
+      iframe.src = g.file;
+      frameBox.appendChild(iframe);
+    } else {
+      iframe.src = iframe.src;
+    }
+    poster.classList.add('hide');
+  }
+  poster.addEventListener('click', loadGame);
+  reBtn.addEventListener('click', function (e) { e.preventDefault(); loadGame(); });
+  fsBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (!iframe) loadGame();
+    var t = frameBox;
+    if (t.requestFullscreen) t.requestFullscreen();
+    else if (t.webkitRequestFullscreen) t.webkitRequestFullscreen();
+  });
+
+  // 两栏内容
+  var cols = el('div', 'cols');
+  var mainCol = el('div', 'maincol');
+  var sideCol = el('div', 'side');
+
+  var p1 = el('div', 'panel');
+  p1.appendChild(el('h2', null, '游戏简介'));
+  p1.appendChild(el('p', null, esc(g.desc)));
+  mainCol.appendChild(p1);
+
+  var p2 = el('div', 'panel');
+  p2.appendChild(el('h2', null, '玩法规则'));
+  var ol = el('ol');
+  g.how.forEach(function (t) { ol.appendChild(el('li', null, esc(t))); });
+  p2.appendChild(ol);
+  mainCol.appendChild(p2);
+
+  var p3 = el('div', 'panel');
+  p3.appendChild(el('h2', null, '操作说明'));
+  var tb = el('table', 'keytable');
+  g.keys.forEach(function (kv) {
+    var tr = el('tr');
+    tr.appendChild(el('td', null, '<span class="kbd">' + esc(kv[0]) + '</span>'));
+    tr.appendChild(el('td', null, esc(kv[1])));
+    tb.appendChild(tr);
+  });
+  p3.appendChild(tb);
+  if (g.tips) {
+    p3.appendChild(el('div', 'tipbox', '💡 <b>小技巧：</b>' + esc(g.tips)));
+  }
+  mainCol.appendChild(p3);
+
+  // 侧栏：相关推荐
+  var s1 = el('div', 'panel');
+  s1.appendChild(el('h2', null, '同类推荐'));
+  var rel = GAMES.filter(function (x) { return x.id !== g.id && x.cat === g.cat; });
+  if (rel.length < 4) {
+    GAMES.forEach(function (x) { if (x.id !== g.id && rel.indexOf(x) === -1 && rel.length < 5) rel.push(x); });
+  }
+  rel.slice(0, 5).forEach(function (x) {
+    var a = el('a', 'mini');
+    a.href = 'detail.html?id=' + encodeURIComponent(x.id);
+    var ic = el('div', 'ic', x.emoji);
+    ic.style.background = 'linear-gradient(135deg,' + x.grad[0] + ',' + x.grad[1] + ')';
+    var tx = el('div');
+    tx.appendChild(el('div', 't', esc(x.name)));
+    tx.appendChild(el('div', 'd', esc(x.cat)));
+    a.appendChild(ic); a.appendChild(tx);
+    s1.appendChild(a);
+  });
+  sideCol.appendChild(s1);
+
+  // 侧栏：再分享一次（方形样式，验证多组件共存）
+  var s2 = el('div', 'panel');
+  s2.appendChild(el('h2', null, '分享这一页'));
+  var share2 = el('div', 'social-share ss-square');
+  share2.setAttribute('data-sites', 'weibo,qzone,wechat,copy');
+  share2.setAttribute('data-url', location.href);
+  share2.setAttribute('data-title', pageTitle);
+  share2.setAttribute('data-description', g.brief);
+  share2.setAttribute('data-weibo-title', '我在玩《' + g.name + '》：' + g.brief);
+  s2.appendChild(share2);
+  s2.appendChild(el('div', 'notice', '「复制链接」会把当前页地址写入剪贴板；微信图标会在本地生成二维码，不请求任何外部服务。'));
+  sideCol.appendChild(s2);
+
+  var s3 = el('div', 'panel');
+  s3.appendChild(el('h2', null, '关于本作'));
+  s3.appendChild(el('div', 'notice',
+    '参考来源：' + esc(g.from) + '。本作为<strong>原创代码实现的玩法复刻</strong>——图形由 Canvas 手绘、音效由 WebAudio 合成、逻辑自行编写，' +
+    '不包含原作的图片、音频或源码。单文件 HTML，可离线运行。'));
+  sideCol.appendChild(s3);
+
+  cols.appendChild(mainCol);
+  cols.appendChild(sideCol);
+  box.appendChild(cols);
+
+  // 初始化本页所有分享组件
+  if (window.socialShare) socialShare('.social-share:not([data-share-done])');
+})();
+</script>
+</body>
+</html>

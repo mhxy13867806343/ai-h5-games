@@ -1,0 +1,181 @@
+/*!
+ * share.css —— 配套 share.js 的样式（自研实现，零依赖）
+ * License: MIT
+ */
+
+.social-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0;
+}
+
+.social-share .social-share-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #fff;
+  background: #6b7280;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .14);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.social-share .social-share-icon .ssi-glyph {
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  transform: translateY(.5px);
+}
+
+.social-share .social-share-icon:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .35);
+}
+
+.social-share .social-share-icon:active { transform: translateY(0); }
+
+/* 品牌配色 */
+.social-share .icon-weibo    { background: #e6162d; }
+.social-share .icon-qq       { background: #56b6e7; }
+.social-share .icon-qzone    { background: #fdbe3d; color: #4a3200; }
+.social-share .icon-wechat   { background: #7bc549; }
+.social-share .icon-tencent  { background: #4676a8; }
+.social-share .icon-douban   { background: #33b045; }
+.social-share .icon-diandian { background: #307dca; }
+.social-share .icon-linkedin { background: #0077b5; }
+.social-share .icon-facebook { background: #44619d; }
+.social-share .icon-twitter  { background: #16181c; }
+.social-share .icon-google   { background: #db4437; }
+.social-share .icon-copy     { background: #5b6472; }
+
+.social-share .icon-linkedin .ssi-glyph { font-size: 13px; }
+.social-share .icon-facebook .ssi-glyph { font-size: 17px; font-family: Georgia, "Times New Roman", serif; }
+.social-share .icon-twitter  .ssi-glyph { font-size: 14px; }
+.social-share .icon-qzone    .ssi-glyph { font-size: 16px; }
+.social-share .icon-copy     .ssi-glyph { font-size: 15px; }
+
+/* 尺寸变体 */
+.social-share.ss-sm .social-share-icon { width: 26px; height: 26px; }
+.social-share.ss-sm .social-share-icon .ssi-glyph { font-size: 12px; }
+.social-share.ss-lg .social-share-icon { width: 42px; height: 42px; }
+.social-share.ss-lg .social-share-icon .ssi-glyph { font-size: 18px; }
+
+/* 方形变体 */
+.social-share.ss-square .social-share-icon { border-radius: 10px; }
+
+/* 微信二维码弹层 */
+.social-share .social-share-wechat-box {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  transform: translateX(-50%) translateY(6px);
+  width: 210px;
+  padding: 12px 12px 10px;
+  background: #fff;
+  color: #1f2937;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  z-index: 9999;
+}
+
+.social-share .social-share-icon.has-qr:hover .social-share-wechat-box,
+.social-share .social-share-icon.is-open .social-share-wechat-box {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.social-share .social-share-wechat-box::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-top-color: #fff;
+}
+
+.social-share .social-share-wechat-box .ssw-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.social-share .social-share-wechat-box .ssw-qr {
+  display: flex;
+  justify-content: center;
+  min-height: 132px;
+  align-items: center;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.social-share .social-share-wechat-box .ssw-qr canvas {
+  display: block;
+  border-radius: 6px;
+}
+
+.social-share .social-share-wechat-box .ssw-help {
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+.social-share .social-share-wechat-box .ssw-help p { margin: 0; }
+
+.social-share .social-share-wechat-box .ssw-close {
+  position: absolute;
+  top: 4px;
+  right: 9px;
+  font-size: 17px;
+  line-height: 1;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.social-share .social-share-wechat-box .ssw-close:hover { color: #ef4444; }
+
+/* 复制提示 */
+.social-share-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 46px;
+  transform: translateX(-50%) translateY(10px);
+  padding: 9px 18px;
+  background: rgba(17, 24, 39, .94);
+  color: #fff;
+  font-size: 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+  opacity: 0;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.social-share-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 640px) {
+  .social-share .social-share-icon { width: 30px; height: 30px; }
+  .social-share .social-share-wechat-box { width: 186px; }
+}
