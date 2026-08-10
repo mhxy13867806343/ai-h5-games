@@ -265,48 +265,56 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/jszip.min.js"></script>
     <script src="js/code-viewer-downloader.js"></script>
-    <script>
-        // Games Catalog Data
+        // Games Catalog Data by Folders
         const GAMES_DATA = [
+            // antigravity-game
             {
-                id: 'metal-slug-2', name: '合金弹头 2', url: 'metal-slug-2.html', icon: '💥', tag: '横版动作射击', desc: 'SNK 经典射击...',
-                htmlUrl: 'metal-slug-2.html', cssUrl: 'metal-slug-2/style.css', jsUrl: 'metal-slug-2/game.js'
+                id: 'metal-slug-2', name: '合金弹头 2', url: 'metal-slug-2.html', icon: '💥', tag: '📂 antigravity-game · 动作射击', desc: 'SNK 经典射击...',
+                htmlUrl: 'metal-slug-2.html', cssUrl: 'metal-slug-2/style.css', jsUrl: 'metal-slug-2/game.js', folder: 'antigravity-game'
             },
             {
-                id: 'dou-di-zhu', name: '斗地主经典版', url: 'dou-di-zhu.html', icon: '🎴', tag: '经典棋牌对战', desc: '三人经典斗地主...',
-                htmlUrl: 'dou-di-zhu.html', cssUrl: 'dou-di-zhu/style.css', jsUrl: 'dou-di-zhu/game.js'
+                id: 'fruit-ninja', name: '水果忍者', url: 'fruit-ninja.html', icon: '🍉', tag: '📂 antigravity-game · 敏捷解压', desc: '炫彩光刃...',
+                htmlUrl: 'fruit-ninja.html', cssUrl: 'fruit-ninja/style.css', jsUrl: 'fruit-ninja/game.js', folder: 'antigravity-game'
             },
             {
-                id: 'ninja-bomb', name: '忍者拆炸弹', url: 'ninja-bomb.html', icon: '🥷', tag: '敏捷动作拆弹', desc: '暗部忍者拆弹...',
-                htmlUrl: 'ninja-bomb.html', cssUrl: 'ninja-bomb/style.css', jsUrl: 'ninja-bomb/game.js'
+                id: 'golden-sun', name: '黄金太阳', url: 'golden-sun.html', icon: '☀️', tag: '📂 antigravity-game · GBA JRPG', desc: '精神力解谜...',
+                htmlUrl: 'golden-sun.html', cssUrl: 'golden-sun/style.css', jsUrl: 'golden-sun/game.js', folder: 'antigravity-game'
             },
             {
-                id: 'happy-farm', name: '开心农场', url: 'happy-farm.html', icon: '👨‍🌾', tag: '模拟经营农场', desc: '田园耕作...',
-                htmlUrl: 'happy-farm.html', cssUrl: 'happy-farm/style.css', jsUrl: 'happy-farm/game.js'
+                id: 'ff-editor', name: 'FF1-6 属性修改器', url: 'ff-editor.html', icon: '💎', tag: '📂 antigravity-game · JRPG工具', desc: '全员 99 级...',
+                htmlUrl: 'ff-editor.html', cssUrl: 'ff-editor/style.css', jsUrl: 'ff-editor/editor.js', folder: 'antigravity-game'
+            },
+
+            // hy3-game
+            {
+                id: 'dou-di-zhu', name: '斗地主经典版', url: 'dou-di-zhu.html', icon: '🎴', tag: '📂 hy3-game · 棋牌对战', desc: '三人经典斗地主...',
+                htmlUrl: 'dou-di-zhu.html', cssUrl: 'dou-di-zhu/style.css', jsUrl: 'dou-di-zhu/game.js', folder: 'hy3-game'
             },
             {
-                id: 'samurai-shodown', name: '真侍魂：武士道列传', url: 'samurai-shodown.html', icon: '⚔️', tag: '动作 RPG 传记', desc: '侍魂传世 RPG...',
-                htmlUrl: 'samurai-shodown.html', cssUrl: 'samurai-shodown/style.css', jsUrl: 'samurai-shodown/game.js'
+                id: 'ninja-bomb', name: '忍者拆炸弹', url: 'ninja-bomb.html', icon: '🥷', tag: '📂 hy3-game · 动作拆弹', desc: '暗部忍者拆弹...',
+                htmlUrl: 'ninja-bomb.html', cssUrl: 'ninja-bomb/style.css', jsUrl: 'ninja-bomb/game.js', folder: 'hy3-game'
             },
             {
-                id: 'cao-cao-chuan', name: '三国志：曹操传', url: 'cao-cao-chuan.html', icon: '🚩', tag: '策略战棋 SLG', desc: '光荣战棋 SLG...',
-                htmlUrl: 'cao-cao-chuan.html', cssUrl: 'cao-cao-chuan/style.css', jsUrl: 'cao-cao-chuan/game.js'
+                id: 'happy-farm', name: '开心农场', url: 'happy-farm.html', icon: '👨‍🌾', tag: '📂 hy3-game · 模拟经营', desc: '田园耕作...',
+                htmlUrl: 'happy-farm.html', cssUrl: 'happy-farm/style.css', jsUrl: 'happy-farm/game.js', folder: 'hy3-game'
             },
             {
-                id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', url: 'spiral-bubble-2.html', icon: '🔮', tag: '敏捷 3D 消除', desc: '六边形蜂巢...',
-                htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js'
+                id: 'samurai-shodown', name: '真侍魂：武士道列传', url: 'samurai-shodown.html', icon: '⚔️', tag: '📂 hy3-game · 动作 RPG', desc: '侍魂传世 RPG...',
+                htmlUrl: 'samurai-shodown.html', cssUrl: 'samurai-shodown/style.css', jsUrl: 'samurai-shodown/game.js', folder: 'hy3-game'
             },
             {
-                id: 'fruit-ninja', name: '水果忍者', url: 'fruit-ninja.html', icon: '🍉', tag: '敏捷切水果', desc: '炫彩光刃...',
-                htmlUrl: 'fruit-ninja.html', cssUrl: 'fruit-ninja/style.css', jsUrl: 'fruit-ninja/game.js'
+                id: 'cao-cao-chuan', name: '三国志：曹操传', url: 'cao-cao-chuan.html', icon: '🚩', tag: '📂 hy3-game · 策略 SLG', desc: '光荣战棋 SLG...',
+                htmlUrl: 'cao-cao-chuan.html', cssUrl: 'cao-cao-chuan/style.css', jsUrl: 'cao-cao-chuan/game.js', folder: 'hy3-game'
             },
             {
-                id: 'golden-sun', name: '黄金太阳', url: 'golden-sun.html', icon: '☀️', tag: 'GBA JRPG 经典', desc: '精神力解谜...',
-                htmlUrl: 'golden-sun.html', cssUrl: 'golden-sun/style.css', jsUrl: 'golden-sun/game.js'
+                id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', url: 'spiral-bubble-2.html', icon: '🔮', tag: '📂 hy3-game · 3D 消除', desc: '六边形蜂巢...',
+                htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js', folder: 'hy3-game'
             },
+
+            // traeWork-game
             {
-                id: 'ff-editor', name: 'FF1-6 属性修改器', url: 'ff-editor.html', icon: '💎', tag: 'JRPG 工具修改', desc: '全员 99 级...',
-                htmlUrl: 'ff-editor.html', cssUrl: 'ff-editor/style.css', jsUrl: 'ff-editor/editor.js'
+                id: 'minesweeper', name: '经典扫雷', url: 'traeWork-game/minesweeper.html', icon: '💣', tag: '📂 traeWork-game · 经典益智', desc: '扫雷数字推导...',
+                htmlUrl: 'traeWork-game/minesweeper.html', folder: 'traeWork-game'
             }
         ];
 

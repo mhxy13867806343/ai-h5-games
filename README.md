@@ -6,18 +6,19 @@
 
 在线游戏大厅入口：**[https://mhxy13867806343.github.io/ai-h5-games/](https://mhxy13867806343.github.io/ai-h5-games/)**
 
-| # | 游戏名称 | 游戏类型 | 在线预览试玩链接 (Live Preview) |
-|---|---------|---------|--------------------------------|
-| 1 | **合金弹头 2** (Metal Slug 2) | 横版动作射击 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/metal-slug-2.html) |
-| 2 | **斗地主经典版** (Dou Di Zhu) | 经典棋牌对战 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/dou-di-zhu.html) |
-| 3 | **忍者拆炸弹** (Ninja Bomb Defusal) | 敏捷动作拆弹 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/ninja-bomb.html) |
-| 4 | **开心农场** (Happy Farm H5) | 模拟经营农场 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/happy-farm.html) |
-| 5 | **真侍魂：武士道列传** (Samurai Shodown RPG) | 动作 RPG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/samurai-shodown.html) |
-| 6 | **三国志：曹操传** (Legend of Cao Cao SLG) | 策略战棋 SLG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/cao-cao-chuan.html) |
-| 7 | **螺旋泡泡柱 2** (Spiral Bubble 2) | 敏捷 3D 消除 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/spiral-bubble-2/spiral-bubble-2.html) |
-| 8 | **水果忍者** (Fruit Ninja) | 敏捷切水果 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/fruit-ninja.html) |
-| 9 | **黄金太阳** (Golden Sun) | GBA JRPG 经典 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/golden-sun.html) |
-| 10 | **最终幻想 1-6 属性修改器** (FF1-6 Trainer) | JRPG 存档工具 | [在线试用](https://mhxy13867806343.github.io/ai-h5-games/ff-editor.html) |
+| # | 游戏名称 | 源码文件夹来源 | 游戏类型 | 在线试玩链接 (Live Preview) |
+|---|---------|---------------|---------|----------------------------|
+| 1 | **合金弹头 2** (Metal Slug 2) | `antigravity-game` | 横版动作射击 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/metal-slug-2.html) |
+| 2 | **水果忍者** (Fruit Ninja) | `antigravity-game` | 敏捷切水果 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/fruit-ninja.html) |
+| 3 | **黄金太阳** (Golden Sun) | `antigravity-game` | GBA JRPG 经典 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/golden-sun.html) |
+| 4 | **FF1-6 属性修改器** (FF1-6 Trainer) | `antigravity-game` | JRPG 存档工具 | [在线试用](https://mhxy13867806343.github.io/ai-h5-games/ff-editor.html) |
+| 5 | **斗地主经典版** (Dou Di Zhu) | `hy3-game` | 经典棋牌对战 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/dou-di-zhu.html) |
+| 6 | **忍者拆炸弹** (Ninja Bomb Defusal) | `hy3-game` | 敏捷动作拆弹 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/ninja-bomb.html) |
+| 7 | **开心农场** (Happy Farm H5) | `hy3-game` | 模拟经营农场 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/happy-farm.html) |
+| 8 | **真侍魂：武士道列传** (Samurai Shodown) | `hy3-game` | 动作 RPG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/samurai-shodown.html) |
+| 9 | **三国志：曹操传** (Cao Cao Chuan) | `hy3-game` | 策略战棋 SLG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/cao-cao-chuan.html) |
+| 10 | **螺旋泡泡柱 2** (Spiral Bubble 2) | `hy3-game` | 敏捷 3D 消除 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/spiral-bubble-2.html) |
+| 11 | **经典扫雷** (Minesweeper) | `traeWork-game` | 经典益智解谜 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/traeWork-game/minesweeper.html) |
 
 ---
 
