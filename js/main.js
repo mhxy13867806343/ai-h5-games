@@ -1,8 +1,9 @@
 /* ============================================================
-   AI H5 游戏大厅 (main.html) - 外部独立 JS 交互逻辑
+   AI H5 游戏大厅 (main.html) - Vue 3 响应式驱动主逻辑
    ============================================================ */
 
-// Games Catalog Data by Folders
+const { createApp, ref, computed, onMounted } = Vue;
+
 const GAMES_DATA = [
     // antigravity-game 专区
     {
@@ -33,19 +34,19 @@ const GAMES_DATA = [
     },
     {
         id: 'happy-farm', name: '开心农场', url: 'happy-farm.html', icon: '👨‍🌾', tag: '📂 hy3-game · 模拟经营', desc: '田园耕作...',
-        htmlUrl: 'happy-farm.html', cssUrl: 'happy-farm/style.css', jsUrl: 'happy-farm/game.js', folder: 'hy3-game'
+        htmlUrl: 'happy-farm.html', cssUrl: 'happy-farm/style.css', jsUrl: 'happy-farm/game.js', folder: 'happy-farm'
     },
     {
         id: 'samurai-shodown', name: '真侍魂：武士道列传', url: 'samurai-shodown.html', icon: '⚔️', tag: '📂 hy3-game · 动作 RPG', desc: '侍魂传世 RPG...',
-        htmlUrl: 'samurai-shodown.html', cssUrl: 'samurai-shodown/style.css', jsUrl: 'samurai-shodown/game.js', folder: 'hy3-game'
+        htmlUrl: 'samurai-shodown.html', cssUrl: 'samurai-shodown/style.css', jsUrl: 'samurai-shodown/game.js', folder: 'samurai-shodown'
     },
     {
         id: 'cao-cao-chuan', name: '三国志：曹操传', url: 'cao-cao-chuan.html', icon: '🚩', tag: '📂 hy3-game · 策略 SLG', desc: '光荣战棋 SLG...',
-        htmlUrl: 'cao-cao-chuan.html', cssUrl: 'cao-cao-chuan/style.css', jsUrl: 'cao-cao-chuan/game.js', folder: 'hy3-game'
+        htmlUrl: 'cao-cao-chuan.html', cssUrl: 'cao-cao-chuan/style.css', jsUrl: 'cao-cao-chuan/game.js', folder: 'cao-cao-chuan'
     },
     {
         id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', url: 'spiral-bubble-2.html', icon: '🔮', tag: '📂 hy3-game · 3D 消除', desc: '六边形蜂巢...',
-        htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js', folder: 'hy3-game'
+        htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js', folder: 'spiral-bubble-2'
     },
 
     // traeWork-game 专区
@@ -55,120 +56,124 @@ const GAMES_DATA = [
     }
 ];
 
-let currentGame = GAMES_DATA[0];
+const layoutModes = [
+    { mode: 'grid', label: '🎛️ 1. 经典网格模式' },
+    { mode: 'list', label: '📜 2. 极简列表模式' },
+    { mode: 'hero', label: '👑 3. 巨幕大卡模式' },
+    { mode: 'compact', label: '📱 4. 紧凑小卡模式' },
+    { mode: 'category', label: '🗂️ 5. 分类大厅模式' }
+];
 
-$(document).ready(function () {
-    // Render Game List Items
-    renderGameList(GAMES_DATA);
+const app = createApp({
+    setup() {
+        const games = ref(GAMES_DATA);
+        const searchQuery = ref('');
+        const currentGame = ref(GAMES_DATA[0]);
+        const showLayoutMenu = ref(false);
+        const notificationMsg = ref('');
+        const notificationShow = ref(false);
 
-    // Check URL Hash to load specific game on launch
-    const hash = window.location.hash.replace('#', '');
-    if (hash) {
-        const target = GAMES_DATA.find(g => g.id === hash);
-        if (target) selectGame(target);
-    }
-
-    // Search Filter Listener (jQuery keyup)
-    $('#search-input').on('keyup', function () {
-        const query = $(this).val().toLowerCase();
-        const filtered = GAMES_DATA.filter(g =>
-            g.name.toLowerCase().includes(query) ||
-            g.tag.toLowerCase().includes(query) ||
-            g.desc.toLowerCase().includes(query)
-        );
-        renderGameList(filtered);
-    });
-
-    // Action Buttons
-    $('#btn-share-game').on('click', function () {
-        if (window.ShareHelper) {
-            ShareHelper.open(currentGame);
-        } else {
-            alert(`快来玩《${currentGame.name}》！\n${window.location.origin}/${currentGame.url}`);
-        }
-    });
-
-    $('#btn-view-code').on('click', function () {
-        if (window.CodeViewerDownloader) {
-            CodeViewerDownloader.open(currentGame);
-        }
-    });
-
-    $('#btn-download-zip').on('click', function () {
-        if (window.CodeViewerDownloader) {
-            CodeViewerDownloader.downloadZip(currentGame);
-        }
-    });
-
-    $('#btn-reload').on('click', function () {
-        const $iframe = $('#game-iframe');
-        $iframe.attr('src', $iframe.attr('src'));
-        showNotification('刷新游戏成功');
-    });
-
-    $('#btn-open-tab').on('click', function () {
-        window.open(currentGame.url, '_blank');
-    });
-
-    $('#btn-fullscreen').on('click', function () {
-        const iframe = document.getElementById('game-iframe');
-        if (iframe.requestFullscreen) iframe.requestFullscreen();
-        else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
-    });
-});
-
-function renderGameList(list) {
-    const $container = $('#game-list');
-    $container.empty();
-
-    if (list.length === 0) {
-        $container.html('<div style="text-align:center; padding:20px; color:#94a3b8; font-size:13px;">未找到匹配游戏</div>');
-        return;
-    }
-
-    list.forEach(game => {
-        const isActive = game.id === currentGame.id ? 'active' : '';
-        const $item = $(`
-            <div class="game-item ${isActive}" data-id="${game.id}">
-                <div class="icon">${game.icon}</div>
-                <div class="info">
-                    <div class="title">${game.name}</div>
-                    <div class="tag">${game.tag}</div>
-                </div>
-            </div>
-        `);
-
-        $item.on('click', function () {
-            selectGame(game);
+        // Filtered games based on search input v-model
+        const filteredGames = computed(() => {
+            const query = searchQuery.value.trim().toLowerCase();
+            if (!query) return games.value;
+            return games.value.filter(g =>
+                g.name.toLowerCase().includes(query) ||
+                g.tag.toLowerCase().includes(query) ||
+                g.desc.toLowerCase().includes(query)
+            );
         });
 
-        $container.append($item);
-    });
-}
+        // Event Handler Methods
+        function selectGame(game) {
+            currentGame.value = game;
+            window.location.hash = game.id;
+            showNotification(`已切换至《${game.name}》`);
+        }
 
-function selectGame(game) {
-    currentGame = game;
+        function setLayoutMode(mode) {
+            localStorage.setItem('h5_layout_mode', mode);
+            showLayoutMenu.value = false;
+            window.location.href = 'index.html';
+        }
 
-    // Update UI Active States
-    $('.game-item').removeClass('active');
-    $(`.game-item[data-id="${game.id}"]`).addClass('active');
+        function toggleLayoutMenu() {
+            showLayoutMenu.value = !showLayoutMenu.value;
+        }
 
-    // Update Top Bar Header
-    $('#current-title').html(`<span>${game.icon}</span> ${game.name}`);
+        function shareGame() {
+            if (window.ShareHelper) {
+                ShareHelper.open(currentGame.value);
+            }
+        }
 
-    // Load iframe
-    $('#game-iframe').attr('src', game.url);
+        function viewCode() {
+            if (window.CodeViewerDownloader) {
+                CodeViewerDownloader.open(currentGame.value);
+            }
+        }
 
-    // Update URL hash
-    window.location.hash = game.id;
+        function downloadZip() {
+            if (window.CodeViewerDownloader) {
+                CodeViewerDownloader.downloadZip(currentGame.value);
+            }
+        }
 
-    showNotification(`已切换至《${game.name}》`);
-}
+        function reloadGame() {
+            const iframe = document.getElementById('game-iframe');
+            if (iframe) {
+                iframe.src = iframe.src;
+                showNotification('刷新游戏成功');
+            }
+        }
 
-function showNotification(msg) {
-    const $notif = $('#notif');
-    $notif.text(msg).addClass('show');
-    setTimeout(() => {
-        $notif.removeClass('show');
-    }, 2000);
-}
+        function openNewTab() {
+            window.open(currentGame.value.url, '_blank');
+        }
+
+        function toggleFullscreen() {
+            const iframe = document.getElementById('game-iframe');
+            if (!iframe) return;
+            if (iframe.requestFullscreen) iframe.requestFullscreen();
+            else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+        }
+
+        function showNotification(msg) {
+            notificationMsg.value = msg;
+            notificationShow.value = true;
+            setTimeout(() => {
+                notificationShow.value = false;
+            }, 2000);
+        }
+
+        onMounted(() => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                const target = games.value.find(g => g.id === hash);
+                if (target) currentGame.value = target;
+            }
+        });
+
+        return {
+            games,
+            searchQuery,
+            currentGame,
+            showLayoutMenu,
+            notificationMsg,
+            notificationShow,
+            filteredGames,
+            layoutModes,
+            selectGame,
+            setLayoutMode,
+            toggleLayoutMenu,
+            shareGame,
+            viewCode,
+            downloadZip,
+            reloadGame,
+            openNewTab,
+            toggleFullscreen
+        };
+    }
+});
+
+app.mount('#app');
