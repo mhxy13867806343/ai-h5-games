@@ -1,0 +1,1129 @@
+[
+  {
+    "slug": "tom-clancy-s-splinter-cell-pandora-tomorrow",
+    "name": "细胞分裂 2：明日潘多拉",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/06/cover/g-1766779-g20LeX.jpg_rect200",
+    "rating": 93,
+    "name_en": "Splinter Cell: Pandora Tomorrow / Splinter Cell 2 / SCPT Splinter Cell 2 / SCPT / SCPT / Splinter Cell 2"
+  },
+  {
+    "slug": "yu-gi-oh-duel-links",
+    "name": "游戏王 决斗连盟",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/01/cover/1515555913CNvZ.jpg_rect200",
+    "rating": 81,
+    "name_en": "Yu-Gi-Oh! Dungeondice Monsters"
+  },
+  {
+    "slug": "baldur-s-gate-dark-alliance",
+    "name": "博德之门：黑暗联盟",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/05/cover/g-0406677-uwZCoG.jpg_rect200",
+    "rating": 87
+  },
+  {
+    "slug": "lego-star-wars-ii-the-original-trilogy",
+    "name": "乐高星球大战 2：原版三部曲",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-8009839-GjfpnH.jpg_rect200",
+    "rating": 77
+  },
+  {
+    "slug": "final-fantasy--1",
+    "name": "最终幻想 (太空战士)",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/coayud.jpg",
+    "rating": null
+  },
+  {
+    "slug": "pokemon-firered-version",
+    "name": "口袋妖怪 火红",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2026/02/cover/g-1637824-aePOs9.jpg_rect200",
+    "rating": 81,
+    "name_en": "宝可梦 火红 / Pokémon Rosso Fuoco / Pokémon Rojo Fuego / Pokémon Rouge Feu / Pokemon FireRed / Pokémon Feuerrot / Pokémon FireRed / Pocket Monsters FireRed / Pokémon Fire Red"
+  },
+  {
+    "slug": "mario-luigi-superstar-saga",
+    "name": "马力欧与路易吉 RPG：超级巨星传奇",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4182630-keYdDe.jpg_rect200",
+    "rating": 90,
+    "name_en": "Mario & Luigi RPG / Mario and Luigi: Superstar Saga / Mario and Luigi RPG / 马力欧与路易吉RPG / 마루알 1"
+  },
+  {
+    "slug": "midnight-club-street-racing",
+    "name": "湾岸午夜俱乐部：街头赛车",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/07/cover/1530885006osZX.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "star-wars-episode-ii-attack-of-the-clones",
+    "name": "星球大战前传 II：克隆人的进攻",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/05/cover/g-1175692-0MNUPi.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "star-wars-the-new-droid-army",
+    "name": "星球大战前传：新帝国军队",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/ed95a704i0ysdpivo7fa.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "star-wars-episode-i-jedi-power-battles",
+    "name": "星球大战前传 1：绝地力量之战",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2025/01/cover/g-7684812-cBMuSt.jpg_rect200",
+    "rating": null,
+    "name_en": "Star Wars Episode I: Jedi Power Battles / Star Wars: Episode 1 - Jedi Power Battles / JPB / Star Wars: Jedi Power Battles / JPBStar Wars: Episode 1 - Jedi Power Battles"
+  },
+  {
+    "slug": "star-wars-flight-of-the-falcon",
+    "name": "Star Wars: Flight of the Falcon",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/ordom2psdgvwwyknt1um.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "star-wars-trilogy-apprentice-of-the-force",
+    "name": "星球大战三部曲：学徒的原力",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/sqitzympbdqrfnihuqep.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "happy-feet",
+    "name": "快乐的大脚",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/08/cover/g-9506850-J2AfL9.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "shrek-the-third",
+    "name": "史瑞克 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-8825683-3ZubHZ.jpg_rect200",
+    "rating": 70
+  },
+  {
+    "slug": "bionicle-the-game",
+    "name": "生化战士",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/02/cover/g-5730397-Sfk6ou.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "cartoon-network-block-party",
+    "name": "Cartoon Network: Block Party",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/det6ssocozvlscpzxzce.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "combat-choro-q-advance-daisakusen",
+    "name": "Combat Choro Q: Advance Daisakusen",
+    "cover": "https://assets.indienova.com/assets/images/default/gamedb-logo-thumb.png",
+    "rating": null
+  },
+  {
+    "slug": "shrek-superslam",
+    "name": "怪物史莱克：超级冲击",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co2d2u.jpg",
+    "rating": null
+  },
+  {
+    "slug": "hello-kitty-happy-party-pals",
+    "name": "Hello Kitty: Happy Party Pals",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/k5km1s2xduqhumtojxmm.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "hugo-the-evil-mirror",
+    "name": "雨果：邪恶的镜子",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/e45ccruozeh0dv1srrc0.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "spongebob-squarepants-supersponge",
+    "name": "SpongeBob SquarePants: SuperSponge",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/kpdmrbiam8njxejq8rpb.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "tom-clancy-s-rainbow-six-rogue-spear",
+    "name": "彩虹六号：雷霆战将",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/08/cover/igvjoyldgrwhwfjgx1pv.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "sonic-forces-speed-battle",
+    "name": "索尼克力量：速度之战",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/07/cover/g-8828849-6uYy2q.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "comix-zone",
+    "name": "漫画地带™",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/03/cover/g-6517441-Rw1p0K.jpg_rect200",
+    "rating": null,
+    "name_en": "コミックスゾーン / Comix Zone Classic"
+  },
+  {
+    "slug": "the-powerpuff-girls-him-and-seek",
+    "name": "喷气女孩 Him 和 Seek",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co5qbm.jpg",
+    "rating": null
+  },
+  {
+    "slug": "barbie-horse-adventures-blue-ribbon-race",
+    "name": "Barbie Horse Adventures: Blue Ribbon Race",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/oeekodpo682ptvacrfv0.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "dogz",
+    "name": "狗狗故事",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/11/cover/g-4143716-ezDc0c.jpg_rect200",
+    "rating": 48
+  },
+  {
+    "slug": "nicktoons-racing",
+    "name": "尼克通赛车",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/ssic5pfdr49kfk6fpkuw.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "medabots-ax-rokusho-version",
+    "name": "金属机器人大战 AX：六书版",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co685n.jpg",
+    "rating": null
+  },
+  {
+    "slug": "shining-soul-ii",
+    "name": "光明之魂 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-6787094-hYSKqE.jpg_rect200",
+    "rating": 74
+  },
+  {
+    "slug": "dr-muto",
+    "name": "疯狂博士",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/02/cover/g-4234961-FzdZnr.jpg_rect200",
+    "rating": 70
+  },
+  {
+    "slug": "dk-king-of-swing",
+    "name": "摇摆森喜刚",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/isbdmi26l8dgcqlwnwku.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "bratz-the-movie",
+    "name": "贝兹娃娃：大电影",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/kidesxwapzls8gvqjhqh.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "r-type-iii-the-third-lightning",
+    "name": "异形战机 3：第三道闪电",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/12/cover/g-7054728-89LLJb.jpg_rect200",
+    "rating": 46
+  },
+  {
+    "slug": "zoids-legacy",
+    "name": "机兽新世纪：祖传之物",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-8106300-HSiwBe.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "the-muppets-on-with-the-show",
+    "name": "The Muppets: On with the Show!",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co2d0w.jpg",
+    "rating": null
+  },
+  {
+    "slug": "jet-grind-radio",
+    "name": "喷射小子：街头涂鸦",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/09/cover/1536390292Nydd.jpg_rect200",
+    "rating": 75,
+    "name_en": "JSR / JGR / Jet Set Radio / De La Jet Set Radio"
+  },
+  {
+    "slug": "rock-n-roll-racing",
+    "name": "乐与怒赛车",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-0735091-VK32ay.jpg_rect200",
+    "rating": 80
+  },
+  {
+    "slug": "mary-kate-and-ashley-sweet-16-licensed-to-drive",
+    "name": "双生姐妹奥尔森：甜蜜16岁 持证上路",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-7633595-yXSm2m.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "mario-kart-super-circuit",
+    "name": "马力欧卡丁车：超级赛道",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4182465-k7UVbl.jpg_rect200",
+    "rating": 93
+  },
+  {
+    "slug": "sword-of-mana",
+    "name": "新约圣剑传说",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/08/cover/g-9368210-YvFWj6.jpg_rect200",
+    "rating": 72
+  },
+  {
+    "slug": "sonic-advance-3",
+    "name": "索尼克 A 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-0385930-oAGstT.jpg_rect200",
+    "rating": 79
+  },
+  {
+    "slug": "hey-arnold-the-movie",
+    "name": "嘿阿诺得! 电影",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/v6gboxnnm7na43lxzg0d.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "payback",
+    "name": "报复",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/sfocxkipmbzem3wnvqda.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "titeuf-mega-compet",
+    "name": "Titeuf: Méga-Compet'",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/06/cover/cas4hklpoih1ikv4snt1.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "dig-dug",
+    "name": "充气人",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-6270248-oLO6OH.jpg_rect200",
+    "rating": null,
+    "name_en": "打空气 / 打气人 / ディグダグ"
+  },
+  {
+    "slug": "rocket-power-beach-bandits",
+    "name": "急速动力：沙滩强盗",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/jwj3lvszszoiq1zwv9ss.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "over-the-hedge",
+    "name": "篱笆墙外",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/02/cover/g-6260670-AJgqpA.jpg_rect200",
+    "rating": 71
+  },
+  {
+    "slug": "xxx",
+    "name": "极限特工",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co4k9e.jpg",
+    "rating": null
+  },
+  {
+    "slug": "circle-of-blood",
+    "name": "断剑：圣堂武士之迷",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-6575203-3qga92.jpg_rect200",
+    "rating": 80,
+    "name_en": "断剑：圣殿骑士的阴影 / Les Chevaliers de Baphomet / Baphomets Fluch / Broken Sword 1 / Broken Sword: Il Segreto dei Templari / Broken Sword: La Leyenda de los Templarios / Broken Sword: The Shadow of the Templars"
+  },
+  {
+    "slug": "mega-man-zero",
+    "name": "洛克人 Zero",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/hiqps5bskd78js7bedjn.jpg_rect200",
+    "rating": 82,
+    "name_en": "ロックマンゼロ / Rockman Zero / Rokkuman Zero / Megaman Zero / Mega Man 0"
+  },
+  {
+    "slug": "buffy-the-vampire-slayer-wrath-of-the-darkhul-king",
+    "name": "吸血鬼猎人巴菲：黑暗之王的愤怒",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/08/cover/g-8502597-DZ7yWm.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "digimon-racing",
+    "name": "数码暴龙赛车",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/w4x2l8xbvkjwxf9xsgtx.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "spyro-season-of-ice",
+    "name": "小龙斯派罗：冰冻的季节",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/10/cover/g-4565284-FKwTCi.jpg_rect200",
+    "rating": null,
+    "name_en": "Spyro Advance"
+  },
+  {
+    "slug": "desert-strike-return-to-the-gulf",
+    "name": "沙漠风暴：重返海湾",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-0734999-46Jd7S.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "mario-pinball-land",
+    "name": "马力欧弹珠球",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/cguwnznftnlwndoc4w1r.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "hot-wheels-world-race",
+    "name": "Hot Wheels World Race",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co6is1.jpg",
+    "rating": null
+  },
+  {
+    "slug": "medabots-metabee",
+    "name": "徽章战士：蓝蜂版",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/04/cover/m0lht4tegd7iu9pumeto.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "pac-man-world",
+    "name": "吃豆人世界",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/12/cover/g-0909833-jReLZl.jpg_rect200",
+    "rating": null,
+    "name_en": "Pac-Man World: 20th Anniversary / Pac-Man World 20th Anniversary"
+  },
+  {
+    "slug": "scooby-doo-and-the-cyber-chase",
+    "name": "史诺比鬼屋历险",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/sgsa1ybvor9fmjht95m5.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "sonic-advance",
+    "name": "索尼克 Advance",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/12/cover/g-5700013-7rbdyg.jpg_rect200",
+    "rating": 87
+  },
+  {
+    "slug": "need-for-speed-porsche-unleashed",
+    "name": "极品飞车：保时捷之旅",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/02/cover/g-2100956-VGjd2l.jpg_rect200",
+    "rating": 78
+  },
+  {
+    "slug": "james-bond-007-everything-or-nothing",
+    "name": "詹姆斯邦德 007：谁与争锋",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/02/cover/g-1169099-BC3Gha.jpg_rect200",
+    "rating": 84
+  },
+  {
+    "slug": "double-dragon",
+    "name": "双截龙",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-5756248-dDblg4.jpg_rect200",
+    "rating": 74,
+    "name_en": "Двоен дракон / DD / Double Dragon (1987)"
+  },
+  {
+    "slug": "ms-pac-man",
+    "name": "吃豆小姐",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/06/cover/g-4324024-Sy5vzb.jpg_rect200",
+    "rating": null,
+    "name_en": "Super Pac-Man / Pac-Woman"
+  },
+  {
+    "slug": "disneys-lilo-and-stitch",
+    "name": "星际宝贝",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/fzwqxq60gtsqpvy80tjq.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "the-magical-quest-starring-mickey-mouse",
+    "name": "The Magical Quest Starring Mickey Mouse",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/08/cover/n4mhlaimi5v6iyyranie.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "bomberman",
+    "name": "炸弹人",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/12/cover/g-7748570-u5hFvi.jpg_rect200",
+    "rating": null,
+    "name_en": "Бомбермен / Bomber Man"
+  },
+  {
+    "slug": "oddworld-munch-s-oddysee",
+    "name": "奇异世界：蒙克历险记",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/07/cover/g-2825064-TGR27I.jpg_rect200",
+    "rating": 80,
+    "name_en": "Oddworld : L'Odyssée de Munch / Munch's Oddysee"
+  },
+  {
+    "slug": "medal-of-honor-underground",
+    "name": "荣誉勋章：地下抵抗",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/tl806tjnypsh2jjjwwga.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "robots",
+    "name": "机器人历险记",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-8932129-a7T3k9.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "casper--1",
+    "name": "小精灵",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co55oq.jpg",
+    "rating": null
+  },
+  {
+    "slug": "cars",
+    "name": "汽车总动员",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-0740444-neaYoq.jpg_rect200",
+    "rating": null,
+    "name_en": "Disney Pixar Cars"
+  },
+  {
+    "slug": "f1-2002",
+    "name": "F1 方程式赛车 2002",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/06/cover/k493vujnfsmdyxvgdx5e.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "medarot-g-kuwagata-version",
+    "name": "金属机器人 G：锹型虫版",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co4fcm.jpg",
+    "rating": null
+  },
+  {
+    "slug": "kid-klown-in-crazy-chase",
+    "name": "Kid Klown in Crazy Chase",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/08/cover/hfzpofqyoxjj7l8c6pyx.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "sonic-battle",
+    "name": "索尼克战斗",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/11/cover/g-5011949-J54dmm.jpg_rect200",
+    "rating": 69
+  },
+  {
+    "slug": "disneys-atlantis-the-lost-empire",
+    "name": "亚特兰蒂斯 失落的帝国",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/06/cover/g-3042623-r5Fr8W.jpg_rect200",
+    "rating": null,
+    "name_en": "Atlantis: The Lost Empire / Atlantis: Das Geheimnis der verlorenen Stadt / Disney Atlantis: El Imperio Perdido / Disneys Atlantis: Das Geheimnis der verlorenen Stadt / Disneyn Atlantis: Kadonnut Kaupunki / Disney Atlantide: L'Empire Perdu / Disney Atlântida: O Continente Perdido / Disney's Atlantis L'Impero Perduto / Disney's Atlantis: De Verzonken Stad / Disneys Atlantis: Det Forsvundne Rige / Disneys Atlantis: En Försvunnen Värld / Atlantide, l'empire perdu"
+  },
+  {
+    "slug": "spongebob-squarepants-creature-from-the-krusty-krab",
+    "name": "海绵宝宝历险记：来自香酥蟹堡店的生物",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/10/cover/g-0860908-nJbIfe.jpg_rect200",
+    "rating": 74
+  },
+  {
+    "slug": "the-great-circus-mystery-starring-mickey-and-minnie",
+    "name": "米奇与米妮的神秘大马戏团大冒险",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/09/cover/g-2111490-I0NjvU.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "rayman-raving-rabbids",
+    "name": "雷曼 4：疯狂兔子™",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/10/cover/g-6425213-yyU1CX.jpg_rect200",
+    "rating": null,
+    "name_en": "Rayman contre les Lapins Crétins / Rayman: Raving Rabbids"
+  },
+  {
+    "slug": "monster-house",
+    "name": "怪兽小屋",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/07/cover/g-4373314-BdA5jS.jpg_rect200",
+    "rating": 69
+  },
+  {
+    "slug": "golf",
+    "name": "高尔夫",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/04/cover/g-9024793-rqchzO.jpg_rect200",
+    "rating": null,
+    "name_en": "Computer Golf"
+  },
+  {
+    "slug": "tony-hawk-s-pro-skater-4",
+    "name": "托尼・霍克职业滑板 4",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/10/cover/g-1242907-lYlC83.jpg_rect200",
+    "rating": 94
+  },
+  {
+    "slug": "lunar-legend",
+    "name": "银河之星：露娜传奇",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/11/cover/g-4787753-QTmMGK.jpg_rect200",
+    "rating": 79
+  },
+  {
+    "slug": "mario-vs-donkey-kong",
+    "name": "马力欧 vs 森喜刚",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-9343181-q3Qquh.jpg_rect200",
+    "rating": 81,
+    "name_en": "マリオVSドンキーコング / 马力欧 vs 大金刚 / MvsDK / 马力欧对大金刚"
+  },
+  {
+    "slug": "defender-of-the-crown",
+    "name": "王冠的守护者",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/09/cover/g-2182993-zym66w.jpg_rect200",
+    "rating": null,
+    "name_en": "保皇騎士 / DOTC / Robin Hood: Defender of the Crown / Conquering England / Defender of the Crown: Obrońca Korony"
+  },
+  {
+    "slug": "shonen-jumps-one-piece",
+    "name": "Shonen Jump's One Piece",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co6r8r.jpg",
+    "rating": null
+  },
+  {
+    "slug": "driv3r",
+    "name": "车神 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/06/cover/1530334352tUTL.jpg_rect200",
+    "rating": 57,
+    "name_en": "极道车魂 3 / 极道无间 3 / DRIV3R / Driver 3"
+  },
+  {
+    "slug": "castlevania-circle-of-the-moon",
+    "name": "恶魔城：月之轮回",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4026207-V7Hwtg.jpg_rect200",
+    "rating": 91,
+    "name_en": "Circle of the Moon / Akumajou Dracula: Circle of the Moon / Devil's Castle Dracula: Circle of the Moon"
+  },
+  {
+    "slug": "ssx-3",
+    "name": "疾速滑雪 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-9718395-EOy5n0.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "tony-hawk-s-downhill-jam",
+    "name": "托尼霍克极限滑板：下坡",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-8092454-8L9oXu.jpg_rect200",
+    "rating": 76
+  },
+  {
+    "slug": "pawapuro-kun-pocket-5",
+    "name": "Pawapuro-kun Pocket 5",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co96c7.jpg",
+    "rating": null
+  },
+  {
+    "slug": "texas-hold-em-poker",
+    "name": "德克萨斯扑克牌",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/zuunc5ruqhly3hngy7hc.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "madagascar",
+    "name": "马达加斯加",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-9343272-qcOpp9.jpg_rect200",
+    "rating": 73
+  },
+  {
+    "slug": "scooby-doo-unmasked",
+    "name": "史酷比：原形毕露",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-9103459-KQaS2A.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "phoenix-wright-ace-attorney-trials-and-tribulations",
+    "name": "逆转裁判 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/10/cover/1540112621g769.jpg_rect200",
+    "rating": 81,
+    "name_en": "Ace Attorney − Trials and Tribulations / Gyakuten Saiban 3 / Turnabout Trial 3 / Phoenix Wright 3 / Ace Attorney 3 / PWAA: T&T"
+  },
+  {
+    "slug": "bratz-babyz",
+    "name": "Bratz Babyz",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/hrrvrdig8hjl7ggplze5.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "the-chronicles-of-narnia-the-lion-the-witch-and-the-wardrobe",
+    "name": "纳尼亚传奇：狮子、女巫和衣橱",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/02/cover/g-5907989-OPkLz8.jpg_rect200",
+    "rating": null,
+    "name_en": "Хроники Нарнии: Лев, Колдунья и Волшебный Шкаф / Die Chroniken von Narnia: Der König von Narnia / Le Monde de Narnia : Le Lion, la Sorcière blanche et l'Armoire magique"
+  },
+  {
+    "slug": "alexandra-ledermann",
+    "name": "Alexandra Ledermann",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co5qgu.jpg",
+    "rating": null
+  },
+  {
+    "slug": "pitfall-the-mayan-adventure",
+    "name": "玛雅历险记",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/02/cover/g-3468751-uBu3ZR.jpg_rect200",
+    "rating": null,
+    "name_en": "Pitfall"
+  },
+  {
+    "slug": "mega-man-zero-2",
+    "name": "洛克人 Zero 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/pwzuifbuerxh9l9bebny.jpg_rect200",
+    "rating": 81,
+    "name_en": "Rockman Zero 2 / Rokkuman Zero Tsuu / Megaman Zero 2 / MMZ2"
+  },
+  {
+    "slug": "wing-commander-prophecy",
+    "name": "银河飞将：神谕",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/kazbt6ru2hpmf2tsqxuy.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "tony-hawk-s-pro-skater-3",
+    "name": "托尼・霍克职业滑板 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/10/cover/g-1465408-xT6WO1.jpg_rect200",
+    "rating": 97
+  },
+  {
+    "slug": "yggdra-union-we-ll-never-fight-alone",
+    "name": "圣剑同盟",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/01/cover/g-8888687-pLd9t1.jpg_rect200",
+    "rating": 73
+  },
+  {
+    "slug": "barbie-horse-adventures-wild-horse-rescue",
+    "name": "芭比骑术冒险：野马救援",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/08/cover/g-1658685-YIad4K.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "avatar-the-last-airbender",
+    "name": "降世神通：最后的气宗",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/10/cover/g-0377327-MdZZN8.jpg_rect200",
+    "rating": 64,
+    "name_en": "Avater: The Legend of Aang / Avatar, le dernier maître de l'air"
+  },
+  {
+    "slug": "mr-driller-a-fushigi-na-pacteria",
+    "name": "Mr. Driller A: Fushigi na Pacteria",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co5v2y.jpg",
+    "rating": null
+  },
+  {
+    "slug": "nancy-drew-message-in-a-haunted-mansion",
+    "name": "南希·朱尔：鬼屋里的讯息",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/05/cover/g-3564307-zH0Wjx.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "my-animal-centre-in-africa",
+    "name": "我的非洲动物中心",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/qxtos0glyo1udnevdqpd.jpg",
+    "rating": null
+  },
+  {
+    "slug": "disney-s-aladdin",
+    "name": "阿拉丁",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/11/cover/g-5868999-Cq1grs.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "barbie-as-the-island-princess",
+    "name": "小岛公主芭比",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/09/cover/g-3315422-QqRLvm.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "breath-of-fire-ii",
+    "name": "龙战士 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/08/cover/g-8411893-aXDLf1.jpg_rect200",
+    "rating": 81
+  },
+  {
+    "slug": "dreamworks-shark-tale",
+    "name": "鲨鱼黑帮",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/02/cover/g-6262432-K5O22A.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "mr-nutz",
+    "name": "松鼠先生",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/10/cover/g-5189254-Q4rMC8.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "yu-gi-oh-the-eternal-duelist-soul",
+    "name": "游戏王 - 永恒斗士之魂",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/pj2v67s6wnzsmotkcpip.jpg_rect200",
+    "rating": 81,
+    "name_en": "Yu-Gi-Oh! Duel Monsters 5 / Yu-Gi-Oh! Duel Monsters 5: Expert 1"
+  },
+  {
+    "slug": "disney-sports-basketball",
+    "name": "迪斯尼全明星体育系列－篮球",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/hwgyx5ijuhdframpev8h.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "alien-hominid",
+    "name": "外星原始人",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/09/cover/g-4071896-to9SNZ.jpg_rect200",
+    "rating": 78
+  },
+  {
+    "slug": "ultimate-mortal-kombat-3",
+    "name": "终极真人快打 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/10/cover/1539063099mvJo.jpg_rect200",
+    "rating": 70,
+    "name_en": "Ultimate MK3 / UMK3 / Ultimate MK3 / UMK3"
+  },
+  {
+    "slug": "breath-of-fire",
+    "name": "龙战士",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/12/cover/g-5543129-Rv1FCW.jpg_rect200",
+    "rating": 79,
+    "name_en": "ブレス オブ ファイア / 火焰气息 / BOF / Breath of Fire: The Dragon Warrior / Breath of Fire: Ryuu no Senshi"
+  },
+  {
+    "slug": "barbie-and-the-magic-of-pegasus",
+    "name": "Barbie and the Magic of Pegasus",
+    "cover": "https://images.igdb.com/igdb/image/upload/t_thumb/co20zd.jpg",
+    "rating": null
+  },
+  {
+    "slug": "wing-commander",
+    "name": "银河飞将",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2026/02/cover/g-Tl9F-42883uSqebef.jpg_rect200",
+    "rating": null,
+    "name_en": "ウイングコマンダー / Wing Commander: The 3-D Space Combat Simulator / Squadron / WC1 / Wing Commander: Der 3D-Raumkampf-Simulator / Wingleader"
+  },
+  {
+    "slug": "advance-wars-2-black-hole-rising",
+    "name": "高级战争 2：黑洞扩大",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4210422-6JNYVJ.jpg_rect200",
+    "rating": 89,
+    "name_en": "aw2 bhr"
+  },
+  {
+    "slug": "shining-force-resurrection-of-the-dark-dragon",
+    "name": "光明与黑暗：黑龙复活",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/06/cover/g-1150388-NTZD8q.jpg_rect200",
+    "rating": 77
+  },
+  {
+    "slug": "ghost-rider",
+    "name": "恶灵骑士",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/08/cover/g-6711506-CMCMSc.jpg_rect200",
+    "rating": 54
+  },
+  {
+    "slug": "teenage-mutant-ninja-turtles--1",
+    "name": "忍者神龟",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/11/cover/g-4143241-QqhIeO.jpg_rect200",
+    "rating": 57
+  },
+  {
+    "slug": "the-legend-of-spyro-the-eternal-night",
+    "name": "斯派罗传说：无尽之夜",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-9310484-RPh7Cf.jpg_rect200",
+    "rating": 80
+  },
+  {
+    "slug": "tak-and-the-power-of-juju",
+    "name": "塔克与威力符咒",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-0067240-n15ChS.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "rayman-3-hoodlum-havoc",
+    "name": "雷曼 3：暴徒大破坏",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/11/cover/1542775276u8L0.jpg_rect200",
+    "rating": 77
+  },
+  {
+    "slug": "ssx-tricky",
+    "name": "疾风滑雪",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/11/cover/g-2588001-xS4Fed.jpg_rect200",
+    "rating": 92
+  },
+  {
+    "slug": "bratz-forever-diamondz",
+    "name": "贝兹娃娃：永久的钻石",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/09/cover/1537038457gCbj.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "mega-man-zero-3",
+    "name": "洛克人 Zero 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-9317371-RACmOC.jpg_rect200",
+    "rating": 77
+  },
+  {
+    "slug": "asterix-and-obelix-kick-buttix",
+    "name": "幻想新国度",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/06/cover/g-1687884-uwYaGD.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "fifa-soccer-06",
+    "name": "FIFA 足球 2006",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/08/cover/mcfmv81pq6z3jfycrhru.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "hamtaro-rainbow-rescue",
+    "name": "哈姆太郎：彩虹救援",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/05/cover/g-9473072-nMtMvF.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "ed-edd-n-eddy-the-mis-edventures",
+    "name": "捣蛋三傻：混乱大冒险",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/02/cover/g-6336733-vDN6GI.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "sitting-ducks",
+    "name": "反斗鸭",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-9364252-wCbYC7.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "dragon-ball-z-the-legacy-of-goku-ii",
+    "name": "龙珠 Z：悟空的遗产 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/06/cover/g-3262250-vHzD8K.jpg_rect200",
+    "rating": 75
+  },
+  {
+    "slug": "tony-hawk-s-underground-2",
+    "name": "托尼霍克之地下滑板 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-9314177-TwWK76.jpg_rect200",
+    "rating": 85,
+    "name_en": "Tony Hawk's Underground 2 / THUG 2 / THUG 2"
+  },
+  {
+    "slug": "minority-report-everybody-runs",
+    "name": "少数派报告",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/03/cover/g-7889295-TkSERC.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "the-sims-bustin-out",
+    "name": "模拟人生：纯属意外",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/12/cover/g-5530776-fx4bW8.jpg_rect200",
+    "rating": 81
+  },
+  {
+    "slug": "yu-gi-oh-reshef-of-destruction",
+    "name": "游戏王：破坏的邪神",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4089781-XVrrgO.jpg_rect200",
+    "rating": 61
+  },
+  {
+    "slug": "tony-hawk-s-underground",
+    "name": "托尼霍克之地下滑板",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/08/cover/oswq52vp6cvuh1tgg1e3.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "super-mario-bros-the-lost-levels",
+    "name": "超级马力欧兄弟 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/05/cover/g-1932050-yx0e5z.jpg_rect200",
+    "rating": null,
+    "name_en": "超级马里奥兄弟 2 / 超级马里奥兄弟：失落的关卡 / 超级马力欧兄弟：失落的关卡 / Super Mario Bros. 2 / Super Mario Brothers 2 / Super Mario Bros. For Super Players / SMB:TLL"
+  },
+  {
+    "slug": "games-explosion",
+    "name": "Games Explosion",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/04/cover/pjykzbcng93pzgtizjgm.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "cars-mater-national-championship",
+    "name": "汽车总动员：全国汽车大赛",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/12/cover/g-0419021-EmTCvg.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "street-fighter-alpha-3",
+    "name": "少年街霸 Alpha 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/07/cover/g-5127332-MWrXpu.jpg_rect200",
+    "rating": 93,
+    "name_en": "Street Fighter Zero 3 / SFA3"
+  },
+  {
+    "slug": "sonic-the-hedgehog-spinball",
+    "name": "音速小子弹珠台™",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/08/cover/q1nqzyif9gwygk46s6fo.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "kirby-nightmare-in-dream-land",
+    "name": "星之卡比 梦之泉",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/11/cover/g-6401524-RHZYOC.jpg_rect200",
+    "rating": 81
+  },
+  {
+    "slug": "rhythm-tengoku",
+    "name": "节奏天国",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2026/01/cover/g-9394466-UlqOVg.jpg_rect200",
+    "rating": null,
+    "name_en": "Rhythm Heaven GBA / Rhythm Tengoku / Rhythm Heaven Silver / 리듬 세상 GBA / 리듬세상 GBA / 리듬천국"
+  },
+  {
+    "slug": "the-incredibles-rise-of-the-underminer",
+    "name": "超人总动员：地心恶魔复活",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/02/cover/g-6248533-DaqURq.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "contra-iii-the-alien-wars",
+    "name": "魂斗罗 3：异形战争",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/02/cover/g-2120742-dPSjFB.jpg_rect200",
+    "rating": null,
+    "name_en": "魂斗羅スピリッツ / 魂斗罗精神 / Contra 3: The Alien Wars / Contra Spirits / Contra III / Contra 3"
+  },
+  {
+    "slug": "gauntlet-dark-legacy",
+    "name": "圣镒传说：暗黑遗产",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-6403588-2gCDhY.jpg_rect200",
+    "rating": 73,
+    "name_en": "Gauntlet Dark Legacy / Gauntlet: Dark Legacy / Gauntlet Legends: Dark Legacy"
+  },
+  {
+    "slug": "prince-of-persia-the-sands-of-time",
+    "name": "波斯王子®：时之砂",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2018/11/cover/1541798461Zewv.jpg_rect200",
+    "rating": 92,
+    "name_en": "Prince of Persia: Las Arenas del Tiempo / PoPSoT / Prince of Persia: Le Sabbie del Tempo / Prince of Persia: Les Sables du Temps / PoP: SoT / Princ Persii: Peski Vremeni / Prince of Persia: Písky času / Prince of Persia: Piaski Czasu / Bosi Wangzi: Shi zhi Sha / Prince of Persia - The Sands of Time / POP - The Sands of Time / POP: The Sands of Time"
+  },
+  {
+    "slug": "ultimate-spider-man",
+    "name": "终极蜘蛛侠",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-8644044-OFUdZ8.jpg_rect200",
+    "rating": 78
+  },
+  {
+    "slug": "tom-clancy-s-splinter-cell",
+    "name": "细胞分裂®",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/02/cover/g-1591730-UqhO7b.jpg_rect200",
+    "rating": 91,
+    "name_en": "纵横谍海 / Splinter Cell 1 / SC1 / Splinter Cell / Splinter Cell 1 / SC1"
+  },
+  {
+    "slug": "street-racing-syndicate",
+    "name": "街头赛车联盟",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-9774724-9GBnA1.jpg_rect200",
+    "rating": 66,
+    "name_en": "SRS"
+  },
+  {
+    "slug": "sonic-advance-2",
+    "name": "索尼克 A 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/12/cover/g-6389789-FM2dgs.jpg_rect200",
+    "rating": 83
+  },
+  {
+    "slug": "the-legend-of-spyro-a-new-beginning",
+    "name": "斯派罗传说：新的开始",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/04/cover/g-0310508-6aN5rr.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "golden-sun-the-lost-age",
+    "name": "黄金太阳：失落的时代",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-6260878-6nvLEa.jpg_rect200",
+    "rating": 86,
+    "name_en": "黄金太阳 2 / Golden Sun II: La Edad Perdida / Ougon no Taiyou: Ushinawareshi Toki / Golden Sun 2 / Golden Sun: L'Âge perdu / Golden Sun 2 / Golden Sun: L'era Perduta"
+  },
+  {
+    "slug": "densetsu-no-starfy-2",
+    "name": "传说的斯塔非 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4182353-i17CF5.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "metroid",
+    "name": "银河战士",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/08/cover/g-6799817-PFFl3v.jpg_rect200",
+    "rating": null,
+    "name_en": "Метроид"
+  },
+  {
+    "slug": "spider-man-3",
+    "name": "蜘蛛侠 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/03/cover/g-6593458-60pelZ.jpg_rect200",
+    "rating": 62
+  },
+  {
+    "slug": "spider-man-2",
+    "name": "蜘蛛侠 2",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/03/cover/g-5275080-r6uM8R.jpg_rect200",
+    "rating": null,
+    "name_en": "The Amazing Spider-Man 2 / Spider-Man 2: The Game / 蜘蛛侠2"
+  },
+  {
+    "slug": "deal-or-no-deal",
+    "name": "一掷千金",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/09/cover/g-4406279-ulhwZm.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "star-wars-episode-iii-revenge-of-the-sith",
+    "name": "星球大战 前传 3：西斯的复仇",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/04/cover/g-7963998-cPfjv7.jpg_rect200",
+    "rating": 73
+  },
+  {
+    "slug": "final-fantasy-vi-advance",
+    "name": "最终幻想 VI Advance",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/11/cover/g-4159736-0S1n3r.jpg_rect200",
+    "rating": 92
+  },
+  {
+    "slug": "castlevania",
+    "name": "恶魔城",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/01/cover/1547219560s2yn.jpg_rect200",
+    "rating": null,
+    "name_en": "Akumajou Dracula / Devil's Castle Dracula / Касълвания"
+  },
+  {
+    "slug": "the-lost-vikings",
+    "name": "失落的维京人",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/02/cover/g-4322357-nud0H1.jpg_rect200",
+    "rating": 75,
+    "name_en": "הויקינגים / Baikingu no Daimeiwaku / Big Trouble of the Vikings"
+  },
+  {
+    "slug": "ice-age-2-the-meltdown",
+    "name": "冰河世纪 2：消融",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2022/10/cover/g-5643573-OsuzpU.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "final-fantasy-tactics-advance",
+    "name": "最终幻想战略版 Advance",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/09/cover/g-7708255-wuBEiH.jpg_rect200",
+    "rating": 87,
+    "name_en": "FFTA"
+  },
+  {
+    "slug": "final-fight",
+    "name": "快打旋风",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2019/12/cover/g-6391071-lsjyvU.jpg_rect200",
+    "rating": null,
+    "name_en": "ファイナルファイト / Street Fighter '89 / Street Fighter: The Final Fight"
+  },
+  {
+    "slug": "crash-bandicoot-2-n-tranced",
+    "name": "古惑狼 2 ：N - 变身",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/l6ppgtte0c2mkrf6s70y.jpg_rect200",
+    "rating": 75
+  },
+  {
+    "slug": "tales-of-phantasia",
+    "name": "幻想传说",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2021/07/cover/g-6503654-w67n9d.jpg_rect200",
+    "rating": 76,
+    "name_en": "TOP / Teiruzu obu Fantajia"
+  },
+  {
+    "slug": "tomato-adventure",
+    "name": "番茄酱王国大冒险",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4187410-Hl0mok.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "kingdom-hearts-chain-of-memories",
+    "name": "王国之心：记忆之链",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2017/07/cover/ebp4id101icdiiuzjnxu.jpg_rect200",
+    "rating": 76,
+    "name_en": "KH: CoM / Chain of Memories"
+  },
+  {
+    "slug": "the-hobbit",
+    "name": "哈比人历险记",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2023/04/cover/g-0307203-ADWRRp.jpg_rect200",
+    "rating": null
+  },
+  {
+    "slug": "yoshis-island-super-mario-advance-3",
+    "name": "超级马力欧 Advance 3",
+    "cover": "https://hive.indienova.com/ranch/gamedb/2020/03/cover/g-4183682-D6SVOf.jpg_rect200",
+    "rating": 91,
+    "name_en": "超级马里奥 Advance 3：耀西岛 + 马里奥兄弟 / Super Mario Advance 3 / 耀西岛 / 요시 아일랜드: 슈퍼 마리오 어드밴스 3"
+  }
+]

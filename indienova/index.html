@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>游戏库 - 平台：Game Boy Advance (GBA) | indienova GameDB 游戏库</title>
+<meta name="description" content="indienova 独立游戏社区 GameDB 游戏库 - Game Boy Advance (GBA) 平台游戏列表">
+<link rel="stylesheet" href="indienova.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232b2b2b'/%3E%3Cpath d='M8 8h6a4 4 0 010 8h-2v8H8V8zm4 4v0h2a1 1 0 100-2h-2v2z' fill='%23ff5a2e'/%3E%3Cpath d='M19 8h5v16h-5V8zm0 6h3v2h-3v-2z' fill='%23ff5a2e'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- 顶部条 -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="/">首页</a>
+    <span class="topbar-sep"></span>
+    <a href="/">登录／注册</a>
+    <span class="topbar-sep"></span>
+    <a href="/" class="lang">🇬🇧 English <span class="caret">▾</span></a>
+  </div>
+</div>
+
+<!-- INDIENOVA 头部 -->
+<header class="brand-header">
+  <div class="brand-inner">
+    <button class="icon-btn" type="button" aria-label="菜单">☰</button>
+    <a href="/" class="brand-logo">
+      <span class="brand-icon">🎮</span>
+      <span class="brand-text"><span class="brand-indie">INDIE</span><span class="brand-nova">NOVA</span></span>
+    </a>
+    <button class="icon-btn" type="button" aria-label="搜索">🔍</button>
+  </div>
+</header>
+
+<!-- GAMEDB 子导航 -->
+<nav class="gamedb-nav">
+  <div class="gamedb-inner">
+    <a href="/indienova/" class="gamedb-logo">
+      <span class="gd-icon">🎮</span>
+      <span class="gd-text">GAMEDB</span>
+      <span class="gd-cn">游戏库</span>
+      <span class="gd-beta">beta</span>
+    </a>
+    <button class="icon-btn" type="button" aria-label="菜单">☰</button>
+  </div>
+</nav>
+
+<!-- 标题区 -->
+<section class="page-title" style="background-image:linear-gradient(135deg, #0a1f4a 0%, #1a3a8a 50%, #0a1f4a 100%);">
+  <div class="page-title-inner">
+    <h1 class="page-h1">游戏平台：<span class="hl">Game Boy Advance (GBA)</span></h1>
+    <h2 class="page-h2">GAME PLATFORM: GAME BOY ADVANCE</h2>
+  </div>
+</section>
+
+<!-- 排序 + 搜索 -->
+<div class="control-bar">
+  <div class="control-inner">
+    <div class="sort-tabs">
+      <a href="?sort=updated" class="sort-tab active">按最近更新排列</a>
+      <a href="?sort=release" class="sort-tab">按发行时间排列</a>
+      <a href="?sort=rating" class="sort-tab">按媒体评分排列</a>
+      <a href="?sort=user_rating" class="sort-tab">按会员评分排列</a>
+    </div>
+    <div class="search-box">
+      <input type="text" id="quickSearch" placeholder="搜索游戏">
+      <button type="button" aria-label="搜索">🔍</button>
+    </div>
+  </div>
+</div>
+
+<!-- 游戏列表 -->
+<main class="main">
+  <div class="main-inner">
+    <div class="game-grid" id="gameGrid">
+      <!-- JS 渲染 -->
+    </div>
+    <div class="pagination" id="pagination"></div>
+    <div class="page-hint">为减轻系统负担，最多显示页数做了一定限制</div>
+  </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-col">
+      <h4>关于</h4>
+      <p class="footer-tagline">由喜爱 <strong>独立游戏</strong> ，追求游戏乐趣的我们建立于 2013 年。</p>
+      <p class="footer-server">ServerID: NOVA-L1</p>
+    </div>
+    <div class="footer-col">
+      <h4>关注我们</h4>
+      <div class="qr-box">
+        <div class="qr-img">[微信公众号二维码]</div>
+        <p>扫描二维码关注微信公众号</p>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>容易错过的内容</h4>
+      <ul class="footer-list">
+        <li><a href="/">会员开发的游戏</a></li>
+        <li><a href="/">游戏开发资源大全</a></li>
+        <li><a href="/">推荐的 Steam 游戏</a></li>
+        <li><a href="/">必买的 Steam 游戏</a></li>
+        <li><a href="/">会员日志／DevLog</a></li>
+        <li><a href="/">游戏开发素材</a></li>
+        <li><a href="/">游戏古登堡计划</a></li>
+        <li><a href="/">向 indienova 投稿</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>快速联系我们</h4>
+      <p>您可以 <a href="/">注册／登录</a> 后再发送信息，以便我们直接通过站内私信快速联系您。</p>
+      <form class="contact-form" onsubmit="event.preventDefault();alert('已发送（演示）');">
+        <input type="text" placeholder="您的名字">
+        <input type="email" placeholder="邮件地址">
+        <textarea placeholder="信息"></textarea>
+        <button type="submit">发送信息</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-links">
+      <a href="/">隐私声明</a>
+      <a href="/">常见问题</a>
+      <a href="/">关于我们</a>
+      <a href="/">联系我们</a>
+    </div>
+    <div class="footer-copy">
+      <p><a href="/">京 ICP 备 16052096 号</a> <a href="/">京公网安备 11010702001852号</a> 增值电信业务经营许可证： <a href="/">京 B2-20160196</a></p>
+      <p>烽火连城（北京）科技有限公司</p>
+      <p>版权所有 © 2013, <span id="curYear"></span> indienova 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<!-- 数据 -->
+<script src="gba_games.js"></script>
+<script src="indienova.js"></script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">游戏详情 - indienova GameDB 游戏库</title>
+<link rel="stylesheet" href="indienova.css">
+<link rel="stylesheet" href="game.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232b2b2b'/%3E%3Cpath d='M8 8h6a4 4 0 010 8h-2v8H8V8zm4 4v0h2a1 1 0 100-2h-2v2z' fill='%23ff5a2e'/%3E%3Cpath d='M19 8h5v16h-5V8zm0 6h3v2h-3v-2z' fill='%23ff5a2e'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- 顶部条 -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html">首页</a>
+    <span class="topbar-sep"></span>
+    <a href="index.html">登录／注册</a>
+    <span class="topbar-sep"></span>
+    <a href="index.html" class="lang">🇬🇧 English <span class="caret">▾</span></a>
+  </div>
+</div>
+
+<!-- INDIENOVA 头部 -->
+<header class="brand-header">
+  <div class="brand-inner">
+    <button class="icon-btn" type="button" aria-label="菜单">☰</button>
+    <a href="index.html" class="brand-logo">
+      <span class="brand-icon">🎮</span>
+      <span class="brand-text"><span class="brand-indie">INDIE</span><span class="brand-nova">NOVA</span></span>
+    </a>
+    <button class="icon-btn" type="button" aria-label="搜索">🔍</button>
+  </div>
+</header>
+
+<!-- GAMEDB 子导航 -->
+<nav class="gamedb-nav">
+  <div class="gamedb-inner">
+    <a href="index.html" class="gamedb-logo">
+      <span class="gd-icon">🎮</span>
+      <span class="gd-text">GAMEDB</span>
+      <span class="gd-cn">游戏库</span>
+      <span class="gd-beta">beta</span>
+    </a>
+    <button class="icon-btn" type="button" aria-label="菜单">☰</button>
+  </div>
+</nav>
+
+<!-- 面包屑 -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html">首页</a>
+    <span class="sep">›</span>
+    <a href="index.html">GAMEDB</a>
+    <span class="sep">›</span>
+    <a href="index.html">Game Boy Advance (GBA)</a>
+    <span class="sep">›</span>
+    <span id="bcName">游戏详情</span>
+  </div>
+</div>
+
+<!-- 详情主体 -->
+<main class="detail-main">
+  <div class="detail-inner">
+
+    <!-- 标题区 -->
+    <section class="detail-header">
+      <div class="detail-cover">
+        <img id="coverImg" src="covers/_placeholder.png" alt="">
+      </div>
+      <div class="detail-info">
+        <h1 class="detail-title" id="detailTitle">游戏名</h1>
+        <h2 class="detail-title-en" id="detailTitleEn">English Name</h2>
+        <div class="detail-meta">
+          <div class="meta-item"><span class="label">平台</span><span class="value">Game Boy Advance (GBA)</span></div>
+          <div class="meta-item" id="metaRating" hidden><span class="label">媒体评分</span><span class="value rating">--</span></div>
+          <div class="meta-item" id="metaRelease" hidden><span class="label">发行时间</span><span class="value">--</span></div>
+          <div class="meta-item" id="metaDeveloper" hidden><span class="label">开发商</span><span class="value">--</span></div>
+          <div class="meta-item" id="metaPublisher" hidden><span class="label">发行商</span><span class="value">--</span></div>
+          <div class="meta-item" id="metaGenres" hidden><span class="label">类型</span><span class="value">--</span></div>
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-primary" id="playBtn" type="button">▶ 在线试玩</button>
+          <button class="btn btn-outline" id="favoriteBtn" type="button">★ 收藏游戏</button>
+          <button class="btn btn-outline" id="shareBtn" type="button">🔗 分享</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 试玩区 -->
+    <section class="play-section" id="playSection" hidden>
+      <div class="play-section-header">
+        <h3>在线试玩 - GBA 浏览器模拟器 (mGBA)</h3>
+        <div class="play-controls">
+          <label class="file-label">
+            📁 上传 ROM
+            <input type="file" id="romFile" accept=".gba,.zip,.7z">
+          </label>
+          <button class="control-btn" id="fullscreenBtn" type="button">全屏</button>
+          <button class="control-btn" id="resetBtn" type="button">重置</button>
+          <button class="control-btn" id="closePlayBtn" type="button">✕ 关闭</button>
+        </div>
+      </div>
+      <div class="play-body" id="playBody">
+        <div class="play-placeholder" id="playPlaceholder">
+          <span class="icon">🎮</span>
+          <div>请上传 GBA ROM 文件 (.gba) 开始游戏</div>
+          <div class="hint">支持原版 GBA 格式，最大 32MB。</div>
+        </div>
+        <div id="game" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 介绍 -->
+    <section class="detail-section" id="descSection" hidden>
+      <h3 class="section-title">游戏介绍</h3>
+      <div class="section-body" id="descBody"></div>
+    </section>
+
+    <!-- 评论区 -->
+    <section class="detail-section">
+      <h3 class="section-title">玩家评论 <span class="count" id="commentCount">( 0 条 )</span></h3>
+      <div class="comment-form">
+        <textarea placeholder="说点什么吧... 文明发言，理性评论"></textarea>
+        <div class="form-actions">
+          <span>支持 Ctrl+Enter 快捷发表</span>
+          <button type="button" class="btn btn-primary" onclick="alert('评论功能即将上线！')">发表评论</button>
+        </div>
+      </div>
+      <div class="comment-list" id="commentList">
+        <div class="comment-empty">暂无评论，快来抢沙发 ✨</div>
+      </div>
+    </section>
+
+    <!-- 相关推荐 -->
+    <section class="detail-section">
+      <h3 class="section-title">相关推荐</h3>
+      <div class="related-grid" id="relatedGrid"></div>
+    </section>
+
+    <!-- 返回 -->
+    <div class="back-bar">
+      <a href="index.html" class="back-link">‹ 返回 GBA 游戏列表</a>
+    </div>
+
+  </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-col">
+      <h4>关于</h4>
+      <p class="footer-tagline">由喜爱 <strong>独立游戏</strong> ，追求游戏乐趣的我们建立于 2013 年。</p>
+      <p class="footer-server">ServerID: NOVA-L1</p>
+    </div>
+    <div class="footer-col">
+      <h4>关注我们</h4>
+      <div class="qr-box">
+        <div class="qr-img">[微信公众号二维码]</div>
+        <p>扫描二维码关注微信公众号</p>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>容易错过的内容</h4>
+      <ul class="footer-list">
+        <li><a href="index.html">会员开发的游戏</a></li>
+        <li><a href="index.html">游戏开发资源大全</a></li>
+        <li><a href="index.html">推荐的 Steam 游戏</a></li>
+        <li><a href="index.html">必买的 Steam 游戏</a></li>
+        <li><a href="index.html">会员日志／DevLog</a></li>
+        <li><a href="index.html">游戏开发素材</a></li>
+        <li><a href="index.html">游戏古登堡计划</a></li>
+        <li><a href="index.html">向 indienova 投稿</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>快速联系我们</h4>
+      <p>您可以 <a href="index.html">注册／登录</a> 后再发送信息，以便我们直接通过站内私信快速联系您。</p>
+      <form class="contact-form" onsubmit="event.preventDefault();alert('已发送（演示）');">
+        <input type="text" placeholder="您的名字">
+        <input type="email" placeholder="邮件地址">
+        <textarea placeholder="信息"></textarea>
+        <button type="submit">发送信息</button>
+      </form>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-links">
+      <a href="index.html">隐私声明</a>
+      <a href="index.html">常见问题</a>
+      <a href="index.html">关于我们</a>
+      <a href="index.html">联系我们</a>
+    </div>
+    <div class="footer-copy">
+      <p><a href="index.html">京 ICP 备 16052096 号</a> <a href="index.html">京公网安备 11010702001852号</a> 增值电信业务经营许可证： <a href="index.html">京 B2-20160196</a></p>
+      <p>烽火连城（北京）科技有限公司</p>
+      <p>版权所有 © 2013, <span id="curYear"></span> indienova 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<script src="gba_games.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

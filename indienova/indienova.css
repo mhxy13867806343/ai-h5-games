@@ -1,0 +1,422 @@
+/* indienova GameDB - 1:1 复刻样式 */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background: #f5f5f5;
+}
+a { color: inherit; text-decoration: none; transition: color .2s; }
+a:hover { color: #ff5a2e; }
+img { max-width: 100%; display: block; border: 0; }
+ul, ol { list-style: none; }
+button { font: inherit; cursor: pointer; }
+
+/* === 顶部条 === */
+.topbar {
+  background: #2b2b2b;
+  height: 36px;
+  line-height: 36px;
+  color: #ccc;
+  font-size: 13px;
+}
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+}
+.topbar a { color: #ccc; }
+.topbar a:hover { color: #fff; }
+.topbar .lang { display: inline-flex; align-items: center; gap: 4px; }
+.topbar .caret { font-size: 10px; }
+.topbar-sep {
+  width: 1px;
+  height: 14px;
+  background: #444;
+  display: inline-block;
+}
+
+/* === INDIENOVA 头部 === */
+.brand-header {
+  background: #2b2b2b;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 18px 0;
+}
+.brand-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: relative;
+}
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #ff5a2e;
+  color: #fff;
+  font-size: 22px;
+  border-radius: 6px;
+}
+.brand-text {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.brand-indie { color: #ff5a2e; }
+.brand-nova { color: #fff; }
+.icon-btn {
+  background: none;
+  border: 0;
+  color: #ddd;
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 4px;
+}
+.icon-btn:hover { background: rgba(255,255,255,.05); color: #fff; }
+
+/* === GAMEDB 导航 === */
+.gamedb-nav {
+  background: #383838;
+  color: #fff;
+  border-bottom: 1px solid #2a2a2a;
+}
+.gamedb-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+.gamedb-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+.gd-icon { font-size: 22px; }
+.gd-text { font-size: 22px; font-weight: 600; letter-spacing: 1px; }
+.gd-cn { color: #ccc; font-size: 16px; }
+.gd-beta {
+  font-size: 10px;
+  background: #ff5a2e;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 2px;
+  margin-left: 2px;
+  text-transform: uppercase;
+  vertical-align: super;
+}
+
+/* === 页面标题 === */
+.page-title {
+  background: linear-gradient(135deg, #0a1f4a 0%, #1a3a8a 50%, #0a1f4a 100%);
+  color: #fff;
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+}
+.page-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,.05), transparent 50%);
+}
+.page-title-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  position: relative;
+}
+.page-h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.page-h1 .hl { color: #ff5a2e; }
+.page-h2 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #b8c5e0;
+  letter-spacing: 1px;
+}
+
+/* === 控制条 === */
+.control-bar {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+.control-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sort-tabs {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.sort-tab {
+  padding: 8px 16px;
+  color: #666;
+  font-size: 14px;
+  border-right: 1px solid #e5e5e5;
+}
+.sort-tab:last-child { border-right: 0; }
+.sort-tab:hover { color: #ff5a2e; }
+.sort-tab.active { color: #ff5a2e; font-weight: 600; }
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+.search-box input {
+  border: 0;
+  padding: 7px 10px;
+  font-size: 13px;
+  outline: none;
+  width: 200px;
+  background: transparent;
+}
+.search-box button {
+  border: 0;
+  background: #f5f5f5;
+  padding: 7px 10px;
+  color: #888;
+}
+
+/* === 游戏列表 === */
+.main { padding: 24px 0 60px; }
+.main-inner { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px 12px;
+}
+@media (max-width: 1000px) { .game-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 768px)  { .game-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 480px)  { .game-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.game-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all .25s;
+  display: flex;
+  flex-direction: column;
+}
+.game-card:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,.1);
+  border-color: #ff5a2e;
+  transform: translateY(-2px);
+}
+.game-cover-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #222;
+  overflow: hidden;
+}
+.game-cover-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .3s;
+}
+.game-card:hover .game-cover-wrap img { transform: scale(1.05); }
+.game-cover-wrap .rating {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0,0,0,.75);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+}
+.game-cover-wrap .rating.mc-good  { color: #6c5; }
+.game-cover-wrap .rating.mc-mid   { color: #fa3; }
+.game-cover-wrap .rating.mc-bad   { color: #f55; }
+.game-meta {
+  padding: 8px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.game-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.game-name-en {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* === 分页 === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 36px 0 8px;
+}
+.pagination a, .pagination span {
+  display: inline-block;
+  min-width: 36px;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #555;
+  border-radius: 3px;
+  font-size: 14px;
+  transition: all .2s;
+}
+.pagination a:hover {
+  background: #ff5a2e;
+  border-color: #ff5a2e;
+  color: #fff;
+}
+.pagination .active {
+  background: #ff5a2e;
+  border-color: #ff5a2e;
+  color: #fff;
+}
+.page-hint {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+/* === 页脚 === */
+.footer {
+  background: #2b2b2b;
+  color: #ccc;
+  padding: 40px 0 0;
+  font-size: 13px;
+  margin-top: 60px;
+}
+.footer-top {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px 30px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr 1.4fr;
+  gap: 30px;
+}
+@media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; } }
+.footer h4 {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.footer-tagline { color: #aaa; line-height: 1.7; }
+.footer-tagline strong { color: #ff5a2e; }
+.footer-server { color: #777; font-size: 12px; margin-top: 6px; }
+.qr-box { text-align: center; }
+.qr-img {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 8px;
+  background: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  border-radius: 4px;
+}
+.qr-box p { color: #aaa; font-size: 12px; }
+.footer-list li { padding: 4px 0; color: #aaa; }
+.footer-list a { color: #aaa; }
+.footer-list a:hover { color: #ff5a2e; }
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.contact-form input,
+.contact-form textarea {
+  background: #1a1a1a;
+  border: 1px solid #444;
+  color: #ddd;
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 3px;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+.contact-form input:focus,
+.contact-form textarea:focus { border-color: #ff5a2e; }
+.contact-form button {
+  background: #ff5a2e;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+.contact-form button:hover { background: #e94e23; }
+.footer-bottom {
+  border-top: 1px solid #1a1a1a;
+  padding: 16px 0;
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+}
+.footer-links { display: flex; gap: 18px; justify-content: center; margin-bottom: 6px; }
+.footer-links a { color: #aaa; }
+.footer-links a:hover { color: #ff5a2e; }
+.footer-copy p { margin: 3px 0; }
+.footer-copy a { color: #aaa; }
+.footer-copy a:hover { color: #ff5a2e; }
