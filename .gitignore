@@ -15,3 +15,13 @@ __pycache__/
 .vscode/
 .idea/
 *.swp
+
+# NES 游戏 ROM 与详情抓取缓存(体积较大,且含版权素材)
+nes-games/roms/
+nes-games/.fetched/
+nes-games/__pycache__/
+nes-games/*.pyc
+nes-games/STATE.md
+nes-games/detail-test.html
+nes-games/games-final.json
+nes-games/games.json

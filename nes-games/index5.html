@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>红白机（FC / NES）游戏大全 - 240款免费在线玩 - 复古游戏中文网</title>
+<meta name="description" content="免费在线游玩经典红白机（FC / NES）游戏，无下载，浏览器直接畅玩，支持PC和手机，重温童年回忆。">
+<link rel="stylesheet" href="style.css">
+<style>
+.list-page { max-width: 1280px; margin: 0 auto; padding: 20px; }
+.header { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
+.header h1 { font-size: 24px; margin-bottom: 8px; }
+.header .stats { color: var(--muted); font-size: 14px; display: flex; gap: 16px; flex-wrap: wrap; }
+.search-bar { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.search-bar input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-size: 14px; outline: none; }
+.search-bar input:focus { border-color: var(--brand); }
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; margin-bottom: 24px; }
+.game-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; text-decoration: none; color: var(--text); transition: all 0.2s; display: flex; flex-direction: column; }
+.game-card:hover { transform: translateY(-4px); border-color: var(--brand); box-shadow: 0 8px 24px rgba(59,130,246,0.2); }
+.game-card .cover { aspect-ratio: 1; background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.game-card .cover img { width: 100%; height: 100%; object-fit: cover; }
+.game-card .title { padding: 10px 12px; font-size: 13px; font-weight: 500; line-height: 1.4; min-height: 56px; display: flex; align-items: center; }
+.game-card .tag { font-size: 11px; background: var(--brand); color: #fff; padding: 2px 8px; border-radius: 10px; display: inline-block; margin: 0 12px 10px; }
+.pagination { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 20px 0; }
+.pagination a { background: var(--panel); color: var(--text); border: 1px solid var(--border); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; min-width: 40px; text-align: center; transition: all 0.2s; }
+.pagination a:hover { background: var(--panel-2); border-color: var(--brand); }
+.pagination a.active { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border-color: transparent; color: #fff; font-weight: 600; }
+.pagination a.disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="logo">🎮 复古游戏中文网</a>
+    <a href="index.html">首页</a>
+    <a href="index.html">游戏列表</a>
+    <a href="../index.html">所有游戏</a>
+    <span class="spacer"></span>
+    <span class="platform-tag">FC / NES</span>
+  </div>
+</nav>
+<div class="list-page">
+  <div class="header">
+    <h1>🎮 红白机（FC / NES）游戏大全</h1>
+    <div class="stats">
+      <span>📚 共 <b style="color:var(--brand)">240</b> 款游戏</span>
+      <span>🆓 完全免费</span>
+      <span>💻 浏览器即玩</span>
+      <span>📱 支持手机</span>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <span style="color:var(--muted)">🔍</span>
+    <input type="text" id="search" placeholder="搜索游戏名称...">
+  </div>
+
+  <div class="game-grid" id="grid">
+    <a href="games/忍者神龟2（中文版）-2.html" class="game-card" data-title="忍者神龟2（中文版）">
+      <div class="cover"><img src="covers/c1a3ec936e.jpg" alt="忍者神龟2（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">忍者神龟2（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/火焰之纹章外传-阿鲁姆.html" class="game-card" data-title="火焰之纹章外传-阿鲁姆">
+      <div class="cover"><img src="covers/640537cbe1.png" alt="火焰之纹章外传-阿鲁姆" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">火焰之纹章外传-阿鲁姆</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/兔宝宝大冒险（汉化版）.html" class="game-card" data-title="兔宝宝大冒险（汉化版）">
+      <div class="cover"><img src="covers/754012bed2.png" alt="兔宝宝大冒险（汉化版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">兔宝宝大冒险（汉化版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/马里奥双人改版.html" class="game-card" data-title="马里奥双人改版">
+      <div class="cover"><img src="covers/cbee685992.jpg" alt="马里奥双人改版" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">马里奥双人改版</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/超级玛丽-疯狂的路易基.html" class="game-card" data-title="超级玛丽 疯狂的路易基">
+      <div class="cover"><img src="covers/8b96ab372b.png" alt="超级玛丽 疯狂的路易基" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">超级玛丽 疯狂的路易基</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/吞食天地2-后蜀之终章（中文版）.html" class="game-card" data-title="吞食天地2 后蜀之终章（中文版）">
+      <div class="cover"><img src="covers/8fb46ea998.jpg" alt="吞食天地2 后蜀之终章（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">吞食天地2 后蜀之终章（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/魂斗罗：精神（无限生命版）-2.html" class="game-card" data-title="魂斗罗：精神（无限生命版）">
+      <div class="cover"><img src="covers/9bea847097.png" alt="魂斗罗：精神（无限生命版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">魂斗罗：精神（无限生命版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/吞食天地2-诸葛孔明传-兵力特技版1.83（中文版）.html" class="game-card" data-title="吞食天地2 诸葛孔明传 兵力特技版1.83（中文版）">
+      <div class="cover"><img src="covers/0cb8ebc026.jpg" alt="吞食天地2 诸葛孔明传 兵力特技版1.83（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">吞食天地2 诸葛孔明传 兵力特技版1.83（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/吞食天地2-刘备玄德传-典藏版（中文版）.html" class="game-card" data-title="吞食天地2 刘备玄德传 典藏版（中文版）">
+      <div class="cover"><img src="covers/f66a26db57.jpg" alt="吞食天地2 刘备玄德传 典藏版（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">吞食天地2 刘备玄德传 典藏版（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/魂斗罗-hack-(汉化多模式版).html" class="game-card" data-title="魂斗罗 hack (汉化多模式版)">
+      <div class="cover"><img src="covers/0e67be1237.jpg" alt="魂斗罗 hack (汉化多模式版)" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">魂斗罗 hack (汉化多模式版)</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/火焰之纹章-修复版（中文版）.html" class="game-card" data-title="火焰之纹章 修复版（中文版）">
+      <div class="cover"><img src="covers/a2d21c4863.webp" alt="火焰之纹章 修复版（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">火焰之纹章 修复版（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/魂斗罗力量（汉化版）.html" class="game-card" data-title="魂斗罗力量（汉化版）">
+      <div class="cover"><img src="covers/3051a9a507.png" alt="魂斗罗力量（汉化版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">魂斗罗力量（汉化版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/超级马里奥-魂斗罗版（日版）.html" class="game-card" data-title="超级马里奥 魂斗罗版（日版）">
+      <div class="cover"><img src="covers/22b0d5dc02.jpg" alt="超级马里奥 魂斗罗版（日版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">超级马里奥 魂斗罗版（日版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/愤怒的小鸟（汉化版）.html" class="game-card" data-title="愤怒的小鸟（汉化版）">
+      <div class="cover"><img src="covers/77fe027b45.png" alt="愤怒的小鸟（汉化版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">愤怒的小鸟（汉化版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/SD快打旋风-恶搞版（中文版）.html" class="game-card" data-title="SD快打旋风 恶搞版（中文版）">
+      <div class="cover"><img src="covers/7eec410e94.jpg" alt="SD快打旋风 恶搞版（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">SD快打旋风 恶搞版（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/吞食天地2：东吴英烈传.html" class="game-card" data-title="吞食天地2：东吴英烈传">
+      <div class="cover"><img src="covers/9ffe16d22e.jpg" alt="吞食天地2：东吴英烈传" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">吞食天地2：东吴英烈传</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/马戏团（日版）.html" class="game-card" data-title="马戏团（日版）">
+      <div class="cover"><img src="covers/ed7da9918b.jpg" alt="马戏团（日版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">马戏团（日版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/雪人兄弟-hack（汉化版）.html" class="game-card" data-title="雪人兄弟 hack（汉化版）">
+      <div class="cover"><img src="covers/e0abc437e5.jpg" alt="雪人兄弟 hack（汉化版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">雪人兄弟 hack（汉化版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/三国志3-江山美人-英雄起源全新版（中文版）.html" class="game-card" data-title="三国志3 江山美人 英雄起源全新版（中文版）">
+      <div class="cover"><img src="covers/5fbea3923f.jpg" alt="三国志3 江山美人 英雄起源全新版（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">三国志3 江山美人 英雄起源全新版（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/洛克人2（中文版）.html" class="game-card" data-title="洛克人2（中文版）">
+      <div class="cover"><img src="covers/cd15cba5ff.jpg" alt="洛克人2（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">洛克人2（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/F1赛车（汉化版）.html" class="game-card" data-title="F1赛车（汉化版）">
+      <div class="cover"><img src="covers/e2eced7cc0.png" alt="F1赛车（汉化版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">F1赛车（汉化版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/忍者神龟（日版）.html" class="game-card" data-title="忍者神龟（日版）">
+      <div class="cover"><img src="covers/1a90eddc00.png" alt="忍者神龟（日版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">忍者神龟（日版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/双截龙3疾风蕉忍传-魔改版（中文版）.html" class="game-card" data-title="双截龙3疾风蕉忍传 魔改版（中文版）">
+      <div class="cover"><img src="covers/e22d933ebe.jpg" alt="双截龙3疾风蕉忍传 魔改版（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">双截龙3疾风蕉忍传 魔改版（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/重装机兵1.9（中文版）.html" class="game-card" data-title="重装机兵1.9（中文版）">
+      <div class="cover"><img src="covers/33178bec44.png" alt="重装机兵1.9（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">重装机兵1.9（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/热血硬派（日版）.html" class="game-card" data-title="热血硬派（日版）">
+      <div class="cover"><img src="covers/a21f3d22a2.png" alt="热血硬派（日版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">热血硬派（日版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/高桥名人的冒险岛4-hack（汉化版）.html" class="game-card" data-title="高桥名人的冒险岛4 hack（汉化版）">
+      <div class="cover"><img src="covers/f65a9c8ffb.jpg" alt="高桥名人的冒险岛4 hack（汉化版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">高桥名人的冒险岛4 hack（汉化版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/人间兵器（中文版）.html" class="game-card" data-title="人间兵器（中文版）">
+      <div class="cover"><img src="covers/370f1229d7.jpg" alt="人间兵器（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">人间兵器（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/勇者斗恶龙4（中文版）.html" class="game-card" data-title="勇者斗恶龙4（中文版）">
+      <div class="cover"><img src="covers/21710dd882.jpg" alt="勇者斗恶龙4（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">勇者斗恶龙4（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/勇者斗恶龙2（中文版）.html" class="game-card" data-title="勇者斗恶龙2（中文版）">
+      <div class="cover"><img src="covers/76ccc08936.png" alt="勇者斗恶龙2（中文版）" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">勇者斗恶龙2（中文版）</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+    <a href="games/忍者龙剑传2-hack-(中文版).html" class="game-card" data-title="忍者龙剑传2 hack (中文版)">
+      <div class="cover"><img src="covers/c191ae76b7.png" alt="忍者龙剑传2 hack (中文版)" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\"color:var(--muted);font-size:40px\">🎮</div>'"></div>
+      <div class="title">忍者龙剑传2 hack (中文版)</div>
+      <div><span class="tag">FC</span></div>
+    </a>
+  </div>
+
+  <div class="pagination">
+    <a href="index4.html" class="">‹ 上一页</a>
+    <a href="index.html" class="">1</a>
+    <a href="index2.html" class="">2</a>
+    <a href="index3.html" class="">3</a>
+    <a href="index4.html" class="">4</a>
+    <a href="index5.html" class="active">5</a>
+    <a href="index6.html" class="">6</a>
+    <a href="index7.html" class="">7</a>
+    <a href="index8.html" class="">8</a>
+    <a href="index6.html" class="">下一页 ›</a>
+  </div>
+</div>
+
+<footer style="background:#0b1020;border-top:1px solid var(--border);color:var(--muted);text-align:center;padding:24px 20px;font-size:13px">
+  <div>© 2026 复古游戏中文网 · 致力于为您提供经典的怀旧游戏体验</div>
+</footer>
+
+<script>
+document.getElementById("search").addEventListener("input", (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll(".game-card").forEach(card => {
+    const t = card.dataset.title.toLowerCase();
+    card.style.display = t.includes(q) ? "" : "none";
+  });
+});
+</script>
+</body>
+</html>
