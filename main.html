@@ -224,6 +224,16 @@
             <span>💥</span> 合金弹头 2
         </div>
         <div class="nav-actions">
+            <div style="position:relative; display:inline-block;">
+                <button class="action-btn" id="btn-layout-menu" onclick="$('#layout-menu').toggle();">🎨 切换布局模式 ▾</button>
+                <div id="layout-menu" style="display:none; position:absolute; top:100%; right:0; margin-top:6px; background:#1f2937; border:1px solid #374151; border-radius:8px; padding:6px; z-index:1000; min-width:160px; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+                    <a href="index.html" onclick="localStorage.setItem('h5_layout_mode', 'grid')" style="display:block; padding:8px 12px; color:#fff; text-decoration:none; font-size:13px; border-radius:4px;">🎛️ 1. 经典网格模式</a>
+                    <a href="index.html" onclick="localStorage.setItem('h5_layout_mode', 'list')" style="display:block; padding:8px 12px; color:#fff; text-decoration:none; font-size:13px; border-radius:4px;">📜 2. 极简列表模式</a>
+                    <a href="index.html" onclick="localStorage.setItem('h5_layout_mode', 'hero')" style="display:block; padding:8px 12px; color:#fff; text-decoration:none; font-size:13px; border-radius:4px;">👑 3. 巨幕大卡模式</a>
+                    <a href="index.html" onclick="localStorage.setItem('h5_layout_mode', 'compact')" style="display:block; padding:8px 12px; color:#fff; text-decoration:none; font-size:13px; border-radius:4px;">📱 4. 紧凑小卡模式</a>
+                    <a href="index.html" onclick="localStorage.setItem('h5_layout_mode', 'category')" style="display:block; padding:8px 12px; color:#fff; text-decoration:none; font-size:13px; border-radius:4px;">🗂️ 5. 分类大厅模式</a>
+                </div>
+            </div>
             <button class="action-btn" id="btn-view-code">📄 查看/复制源码</button>
             <button class="action-btn" id="btn-download-zip">💾 打包下载 (.zip)</button>
             <button class="action-btn" id="btn-reload">🔄 刷新游戏</button>
