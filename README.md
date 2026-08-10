@@ -19,6 +19,7 @@
 | 9 | **三国志：曹操传** (Cao Cao Chuan) | `hy3-game` | 策略战棋 SLG | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/cao-cao-chuan.html) |
 | 10 | **螺旋泡泡柱 2** (Spiral Bubble 2) | `hy3-game` | 敏捷 3D 消除 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/spiral-bubble-2.html) |
 | 11 | **经典扫雷** (Minesweeper) | `traeWork-game` | 经典益智解谜 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/traeWork-game/minesweeper.html) |
+| 12 | **口袋妖怪：黑暗升起（秩序毁灭）** (Pokemon Dark Rising: Order Destroyed) | `traeWork-game` | GBA 同人改版页 1:1 复刻 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/pokemon-dark-rising/pokemon-dark-rising.html) |
 
 ---
 
