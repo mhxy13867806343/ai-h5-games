@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真侍魂 - 武士道列传 - 在线玩丨瑾龙游戏</title>
+    <meta name="description" content="真侍魂 - 武士道列传 HTML5在线版 - 经典侍魂RPG化续作，包含刀械保养、流派修行、怒气爆发与多结局武士道抉择！">
+    <link rel="stylesheet" href="samurai-shodown/style.css">
+</head>
+<body>
+    <div class="site-header">
+        <div class="header-content">
+            <div class="logo">瑾龙游戏</div>
+            <div class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">街机游戏</a>
+                <a href="#">动作RPG</a>
+                <a href="#">侍魂专区</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="game-wrapper">
+            <div class="game-header">
+                <h1>真侍魂：武士道列传 (Samurai Shodown: Bushido Retsuden)</h1>
+                <div class="game-stats">
+                    <span>⭐ 评分: 9.9</span>
+                    <span>🔥 人气: 2,180,950</span>
+                </div>
+            </div>
+            
+            <div class="canvas-container" id="canvas-container">
+                <div id="loading-screen" class="overlay active">
+                    <div class="loading-title">SAMURAI SHODOWN</div>
+                    <div class="loading-subtitle">真侍魂：武士道列传</div>
+                    <div class="loading-text">加载中... 0%</div>
+                    <div class="loading-bar"><div class="progress"></div></div>
+                </div>
+                <canvas id="game-canvas" width="900" height="650"></canvas>
+            </div>
+
+            <div class="game-info">
+                <div class="controls-panel">
+                    <h3>操作指南</h3>
+                    <div class="controls-grid">
+                        <div class="control-item">
+                            <span class="key">WASD / 方向键</span>
+                            <span class="desc">角色移动 / 菜单选择</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">J / Z</span>
+                            <span class="desc">轻斩 / 确认 / 斩击</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">K / X</span>
+                            <span class="desc">重斩 / 招架</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">L / C</span>
+                            <span class="desc">奥义必杀 / 怒气爆发</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">I / Shift</span>
+                            <span class="desc">刀械保养 (磨刀)</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">Enter / Esc</span>
+                            <span class="desc">暂停 / 角色状态</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button id="btn-fullscreen" class="btn">全屏游戏</button>
+                    <button id="btn-restart" class="btn">重新开始</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-description">
+            <h2>游戏介绍</h2>
+            <p>《真侍魂：武士道列传》是经典的侍魂系列RPG化巨作。游戏完美还原了霸王丸、橘右京、娜可露露等经典剑豪的传奇剧情！玩家将在江户时代的大地上游历修行，体验特色的“刀械保养与锋利度”系统，在试合对决中积蓄“怒气爆发”施展天霸封神斩与燕返，通过武士道抉择影响故事走向，最终击败罗将神水姬封印魔界！</p>
+            <div class="game-tags">
+                <span class="tag">侍魂</span>
+                <span class="tag">动作RPG</span>
+                <span class="tag">武士道</span>
+                <span class="tag">霸王丸</span>
+                <span class="tag">街机</span>
+                <span class="tag">经典复刻</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="samurai-shodown/game.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const game = new SamuraiGame();
+            game.init();
+            
+            document.getElementById('btn-fullscreen').addEventListener('click', () => {
+                const container = document.getElementById('canvas-container');
+                if (container.requestFullscreen) container.requestFullscreen();
+                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+            });
+            
+            document.getElementById('btn-restart').addEventListener('click', () => {
+                game.restart();
+            });
+        });
+    </script>
+</body>
+</html>
