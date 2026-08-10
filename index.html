@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI H5 游戏大厅 · 在线复刻、悬停实时预览与随机布局大厅</title>
+  <title>AI H5 游戏大厅 · 在线复刻、离线打包与多布局体验</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -89,11 +89,6 @@
       color: #000;
       box-shadow: 0 0 15px rgba(255, 183, 3, 0.4);
     }
-    .layout-btn.toggle-on {
-      background: #10b981;
-      border-color: #10b981;
-      color: #fff;
-    }
 
     /* ---- Category Filter Tabs ---- */
     .category-bar {
@@ -124,7 +119,7 @@
       transition: all 0.3s ease;
     }
 
-    /* ===== LAYOUT MODES ===== */
+    /* ===== 5 LAYOUT MODES ===== */
 
     /* Mode 1: 🎛️ Standard Grid Mode (3 Columns) */
     .grid.mode-grid {
@@ -182,12 +177,8 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       grid-auto-flow: dense;
     }
-    .grid.mode-random .card.span-wide {
-      grid-column: span 2;
-    }
-    .grid.mode-random .card.span-tall {
-      grid-row: span 2;
-    }
+    .grid.mode-random .card.span-wide { grid-column: span 2; }
+    .grid.mode-random .card.span-tall { grid-row: span 2; }
 
     /* Card Styling */
     .card {
@@ -219,7 +210,7 @@
     }
     .card:hover::before { opacity: 1; }
 
-    /* ===== HOVER LIVE INTERACTIVE PREVIEW OVERLAY ===== */
+    /* ===== CLICK PREVIEW OVERLAY LAYER ===== */
     .card-preview-overlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -230,17 +221,17 @@
       flex-direction: column;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.35s ease;
+      transition: opacity 0.25s ease;
       z-index: 100;
       box-shadow: 0 15px 40px rgba(0,0,0,0.9);
       border: 2px solid #ffb703;
     }
-    .card.hover-active .card-preview-overlay {
+    .card.preview-active .card-preview-overlay {
       opacity: 1;
       pointer-events: auto;
     }
     .preview-header {
-      height: 32px;
+      height: 36px;
       background: #1e293b;
       display: flex;
       align-items: center;
@@ -250,6 +241,40 @@
       color: #ffb703;
       font-weight: bold;
       border-bottom: 1px solid #334155;
+    }
+    .preview-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-play-btn {
+      background: #ffb703;
+      color: #000;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .preview-play-btn:hover {
+      background: #fb8500;
+      color: #fff;
+    }
+    .preview-close-btn {
+      background: rgba(239, 68, 68, 0.25);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .preview-close-btn:hover {
+      background: #ef4444;
+      color: #fff;
     }
     .preview-body {
       flex: 1;
@@ -261,15 +286,6 @@
       width: 100%;
       height: 100%;
       border: none;
-    }
-    .preview-close-btn {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid #ef4444;
-      color: #ef4444;
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-size: 11px;
-      cursor: pointer;
     }
 
     .card .tag {
@@ -317,6 +333,11 @@
       align-items: center;
       gap: 6px;
       text-decoration: none;
+      transition: all 0.2s;
+    }
+    .card .play:hover {
+      color: #fb8500;
+      transform: translateX(4px);
     }
     .card-actions {
       display: flex;
@@ -346,6 +367,15 @@
       color: #000;
       border-color: #ffb703;
     }
+    .card-btn.preview-btn {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+    }
+    .card-btn.preview-btn:hover {
+      background: #38bdf8;
+      color: #000;
+    }
     .footer {
       margin-top: 60px;
       padding-top: 24px;
@@ -360,11 +390,11 @@
   <div class="wrap" id="main-wrap">
     <div class="header-box">
       <h1>🎮 AI H5 游戏大厅</h1>
-      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 支持 🎲 随机布局、👁️ 鼠标悬停实时小窗预览、源码查看与 Zip 打包下载</div>
+      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 点击【👁️ 预览】按钮窗口试玩、一键进入游戏与 Zip 源码打包</div>
 
       <!-- Layout Switcher & Options Bar -->
       <div class="layout-bar">
-        <span class="layout-title">🎨 布局与预览：</span>
+        <span class="layout-title">🎨 布局模式：</span>
         <div class="layout-group">
           <button class="layout-btn active" data-layout="grid" onclick="switchLayout('grid')">🎛️ 经典网格</button>
           <button class="layout-btn" data-layout="list" onclick="switchLayout('list')">📜 极简列表</button>
@@ -372,7 +402,6 @@
           <button class="layout-btn" data-layout="compact" onclick="switchLayout('compact')">📱 紧凑小卡</button>
           <button class="layout-btn" data-layout="category" onclick="switchLayout('category')">🗂️ 分类大厅</button>
           <button class="layout-btn" data-layout="random" onclick="switchLayout('random')">🎲 随机打乱布局</button>
-          <button class="layout-btn toggle-on" id="btn-toggle-hover" onclick="toggleHoverPreview()">👁️ 悬停实时小窗预览：已开启</button>
           <a href="main.html" class="layout-btn" style="background:rgba(56,189,248,0.2); border-color:#38bdf8; color:#38bdf8;">🖥️ 侧边栏双栏玩家</a>
         </div>
       </div>
@@ -401,16 +430,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="metal-slug-2.html">在线试玩 →</a>
+          <a class="play" href="metal-slug-2.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《合金弹头 2》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《合金弹头 2》</span>
+            <div class="preview-actions">
+              <a href="metal-slug-2.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -427,16 +460,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="dou-di-zhu.html">在线试玩 →</a>
+          <a class="play" href="dou-di-zhu.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《斗地主经典版》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《斗地主经典版》</span>
+            <div class="preview-actions">
+              <a href="dou-di-zhu.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -453,16 +490,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="ninja-bomb.html">在线试玩 →</a>
+          <a class="play" href="ninja-bomb.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《忍者拆炸弹》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《忍者拆炸弹》</span>
+            <div class="preview-actions">
+              <a href="ninja-bomb.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -479,16 +520,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="happy-farm.html">在线试玩 →</a>
+          <a class="play" href="happy-farm.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《开心农场》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《开心农场》</span>
+            <div class="preview-actions">
+              <a href="happy-farm.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -505,16 +550,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="samurai-shodown.html">在线试玩 →</a>
+          <a class="play" href="samurai-shodown.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《真侍魂》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《真侍魂》</span>
+            <div class="preview-actions">
+              <a href="samurai-shodown.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -531,16 +580,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="cao-cao-chuan.html">在线试玩 →</a>
+          <a class="play" href="cao-cao-chuan.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《曹操传》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《曹操传》</span>
+            <div class="preview-actions">
+              <a href="cao-cao-chuan.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -557,16 +610,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="spiral-bubble-2.html">在线试玩 →</a>
+          <a class="play" href="spiral-bubble-2.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《螺旋泡泡柱 2》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《螺旋泡泡柱 2》</span>
+            <div class="preview-actions">
+              <a href="spiral-bubble-2.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -583,16 +640,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="fruit-ninja.html">在线试玩 →</a>
+          <a class="play" href="fruit-ninja.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《水果忍者》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《水果忍者》</span>
+            <div class="preview-actions">
+              <a href="fruit-ninja.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -609,16 +670,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="golden-sun.html">在线试玩 →</a>
+          <a class="play" href="golden-sun.html">直接玩 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《黄金太阳》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《黄金太阳》</span>
+            <div class="preview-actions">
+              <a href="golden-sun.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -635,16 +700,20 @@
           </div>
         </div>
         <div class="card-right">
-          <a class="play" href="ff-editor.html">在线试用 →</a>
+          <a class="play" href="ff-editor.html">直接用 →</a>
           <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
             <button class="card-btn" onclick="openCodeModal('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">💾 下载</button>
           </div>
         </div>
         <div class="card-preview-overlay">
           <div class="preview-header">
-            <span>🎮 在线实时小窗试玩 · 《FF1-6 修改器》</span>
-            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+            <span>🎮 试玩预览 · 《FF1-6 修改器》</span>
+            <div class="preview-actions">
+              <a href="ff-editor.html" class="preview-play-btn">🎮 点击进入使用</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
           </div>
           <div class="preview-body"></div>
         </div>
@@ -652,15 +721,13 @@
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持 🎲 随机打乱布局、👁️ 悬停实时小窗预览、代码查看与 Zip 打包下载
+      AI H5 Games 在线复刻大厅 · 点击【👁️ 预览】按钮弹窗试玩、一键进入游戏与 Zip 源码打包下载
     </div>
   </div>
 
   <script src="js/jszip.min.js"></script>
   <script src="js/code-viewer-downloader.js"></script>
   <script>
-    let isHoverPreviewEnabled = true;
-
     // Layout Switching Logic
     function switchLayout(mode) {
       const container = document.getElementById('cards-container');
@@ -724,19 +791,6 @@
       localStorage.setItem('h5_layout_mode', mode);
     }
 
-    // Toggle Hover Preview Enable / Disable
-    function toggleHoverPreview() {
-      isHoverPreviewEnabled = !isHoverPreviewEnabled;
-      const btn = document.getElementById('btn-toggle-hover');
-      if (isHoverPreviewEnabled) {
-        btn.textContent = '👁️ 悬停实时小窗预览：已开启';
-        btn.className = 'layout-btn toggle-on';
-      } else {
-        btn.textContent = '🙈 悬停实时小窗预览：已关闭';
-        btn.className = 'layout-btn';
-      }
-    }
-
     // Category Filter Logic
     function filterCategory(cat) {
       const cards = document.querySelectorAll('.card');
@@ -756,49 +810,30 @@
       });
     }
 
-    // Setup Mouse Hover Live Interactive Iframe Preview
-    function setupHoverPreviews() {
-      const cards = document.querySelectorAll('.card');
+    // Open Game Mini Preview Layer on Click "👁️ 预览"
+    function openGamePreview(btn) {
+      const card = btn.closest('.card');
+      if (!card) return;
 
-      cards.forEach(card => {
-        let hoverTimer = null;
+      const url = card.dataset.url;
+      const previewBody = card.querySelector('.preview-body');
 
-        card.addEventListener('mouseenter', () => {
-          if (!isHoverPreviewEnabled) return;
-
-          hoverTimer = setTimeout(() => {
-            const url = card.dataset.url;
-            const previewBody = card.querySelector('.preview-body');
-
-            if (url && previewBody && !previewBody.querySelector('iframe')) {
-              const iframe = document.createElement('iframe');
-              iframe.className = 'preview-iframe';
-              iframe.src = url;
-              previewBody.appendChild(iframe);
-            }
-            card.classList.add('hover-active');
-          }, 350); // 350ms hover delay threshold
-        });
-
-        card.addEventListener('mouseleave', () => {
-          if (hoverTimer) clearTimeout(hoverTimer);
-          card.classList.remove('hover-active');
-
-          // Clean up iframe to save resources
-          setTimeout(() => {
-            if (!card.classList.contains('hover-active')) {
-              const previewBody = card.querySelector('.preview-body');
-              if (previewBody) previewBody.innerHTML = '';
-            }
-          }, 300);
-        });
-      });
+      if (url && previewBody) {
+        if (!previewBody.querySelector('iframe')) {
+          const iframe = document.createElement('iframe');
+          iframe.className = 'preview-iframe';
+          iframe.src = url;
+          previewBody.appendChild(iframe);
+        }
+        card.classList.add('preview-active');
+      }
     }
 
+    // Close Game Mini Preview Layer
     function closePreview(btn) {
       const card = btn.closest('.card');
       if (card) {
-        card.classList.remove('hover-active');
+        card.classList.remove('preview-active');
         const previewBody = card.querySelector('.preview-body');
         if (previewBody) previewBody.innerHTML = '';
       }
@@ -808,7 +843,6 @@
     window.addEventListener('DOMContentLoaded', () => {
       const savedMode = localStorage.getItem('h5_layout_mode') || 'grid';
       switchLayout(savedMode);
-      setupHoverPreviews();
     });
 
     function openCodeModal(id, name, htmlUrl, cssUrl, jsUrl) {
