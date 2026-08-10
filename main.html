@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI H5 游戏全功能在线大厅 - main.html</title>
+    <meta name="description" content="AI H5 游戏大厅 - 支持多款 4399 / 网页游戏一键无缝切换在线预览播放器">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #ffb703;
+            --primary-dark: #fb8500;
+            --bg-dark: #0f1117;
+            --bg-sidebar: #161922;
+            --bg-card: #1f2330;
+            --text: #f1faee;
+            --text-dim: #94a3b8;
+            --border: #2e3545;
+            --active-glow: rgba(255, 183, 3, 0.25);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .top-navbar {
+            height: 54px;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        .brand span {
+            font-size: 22px;
+        }
+        .current-game-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .action-btn:hover {
+            background: rgba(255, 183, 3, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* App Main Body */
+        .app-body {
+            flex: 1;
+            display: flex;
+            height: calc(100vh - 54px);
+            overflow: hidden;
+        }
+
+        /* Left Sidebar Game Menu */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+        }
+        .search-box {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .search-input {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+        .game-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .game-item {
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .game-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--border);
+        }
+        .game-item.active {
+            background: var(--active-glow);
+            border-color: var(--primary);
+        }
+        .game-item .icon {
+            font-size: 26px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .game-item .info {
+            flex: 1;
+            overflow: hidden;
+        }
+        .game-item .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .game-item.active .title {
+            color: var(--primary);
+        }
+        .game-item .tag {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* Right Game Viewport */
+        .viewport-area {
+            flex: 1;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #game-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+        
+        /* Floating Quick Switch Notification */
+        .notification {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(15, 17, 23, 0.85);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .notification.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-navbar">
+        <div class="brand">
+            <span>🎮</span> AI H5 游戏大厅 (main.html)
+        </div>
+        <div class="current-game-title" id="current-title">
+            <span>💥</span> 合金弹头 2
+        </div>
+        <div class="nav-actions">
+            <button class="action-btn" id="btn-reload">🔄 刷新游戏</button>
+            <button class="action-btn" id="btn-open-tab">🔗 独立新标签打开</button>
+            <button class="action-btn" id="btn-fullscreen">🖥️ 全屏大屏</button>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <div class="app-body">
+        <!-- Left Game Sidebar -->
+        <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" id="search-input" class="search-input" placeholder="🔍 搜索复刻游戏..." />
+            </div>
+            <div class="game-list" id="game-list">
+                <!-- Dynamically populated by jQuery -->
+            </div>
+        </aside>
+
+        <!-- Right Game Viewport -->
+        <main class="viewport-area">
+            <iframe id="game-iframe" src="metal-slug-2.html" allowfullscreen></iframe>
+            <div class="notification" id="notif">已切换游戏！</div>
+        </main>
+    </div>
+
+    <!-- Local jQuery Library -->
+    <script src="js/jquery.min.js"></script>
+    <script>
+        // Games Catalog Data
+        const GAMES_DATA = [
+            {
+                id: 'metal-slug-2',
+                name: '合金弹头 2',
+                url: 'metal-slug-2.html',
+                icon: '💥',
+                tag: '横版动作射击',
+                desc: 'SNK 经典射击，8方向瞄准、下蹲跳跃与 6 大武器库'
+            },
+            {
+                id: 'dou-di-zhu',
+                name: '斗地主经典版',
+                url: 'dou-di-zhu.html',
+                icon: '🎴',
+                tag: '经典棋牌对战',
+                desc: '三人经典斗地主，牌型判定、叫地主与智能 AI 对手'
+            },
+            {
+                id: 'ninja-bomb',
+                name: '忍者拆炸弹',
+                url: 'ninja-bomb.html',
+                icon: '🥷',
+                tag: '敏捷动作拆弹',
+                desc: '暗部忍者拆弹，剪线解密、结印与尾兽弹 BOSS 战'
+            },
+            {
+                id: 'happy-farm',
+                name: '开心农场',
+                url: 'happy-farm.html',
+                icon: '👨‍🌾',
+                tag: '模拟经营农场',
+                desc: '田园耕作、养殖奶牛母鸡、加工食品与卡车订单'
+            },
+            {
+                id: 'samurai-shodown',
+                name: '真侍魂：武士道列传',
+                url: 'samurai-shodown.html',
+                icon: '⚔️',
+                tag: '动作 RPG 传记',
+                desc: '侍魂传世 RPG，霸王丸/橘右京参战、磨刀与怒气奥义'
+            },
+            {
+                id: 'cao-cao-chuan',
+                name: '三国志：曹操传',
+                url: 'cao-cao-chuan.html',
+                icon: '🚩',
+                tag: '策略战棋 SLG',
+                desc: '光荣战棋 SLG，魏国五大名将、地形防守与火攻水计'
+            },
+            {
+                id: 'spiral-bubble-2',
+                name: '螺旋泡泡柱 2',
+                url: 'spiral-bubble-2/spiral-bubble-2.html',
+                icon: '🔮',
+                tag: '敏捷 3D 消除',
+                desc: '六边形蜂巢网格 + 3D 透视消除'
+            }
+        ];
+
+        let currentGame = GAMES_DATA[0];
+
+        $(document).ready(function () {
+            // Render Game List Items
+            renderGameList(GAMES_DATA);
+
+            // Check URL Hash to load specific game on load
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                const target = GAMES_DATA.find(g => g.id === hash);
+                if (target) selectGame(target);
+            }
+
+            // Search Filter Listener (jQuery keyup)
+            $('#search-input').on('keyup', function () {
+                const query = $(this).val().toLowerCase();
+                const filtered = GAMES_DATA.filter(g =>
+                    g.name.toLowerCase().includes(query) ||
+                    g.tag.toLowerCase().includes(query) ||
+                    g.desc.toLowerCase().includes(query)
+                );
+                renderGameList(filtered);
+            });
+
+            // Action Buttons
+            $('#btn-reload').on('click', function () {
+                const $iframe = $('#game-iframe');
+                $iframe.attr('src', $iframe.attr('src'));
+                showNotification('刷新游戏成功');
+            });
+
+            $('#btn-open-tab').on('click', function () {
+                window.open(currentGame.url, '_blank');
+            });
+
+            $('#btn-fullscreen').on('click', function () {
+                const iframe = document.getElementById('game-iframe');
+                if (iframe.requestFullscreen) iframe.requestFullscreen();
+                else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+            });
+        });
+
+        function renderGameList(list) {
+            const $container = $('#game-list');
+            $container.empty();
+
+            if (list.length === 0) {
+                $container.html('<div style="text-align:center; padding:20px; color:#94a3b8; font-size:13px;">未找到匹配游戏</div>');
+                return;
+            }
+
+            list.forEach(game => {
+                const isActive = game.id === currentGame.id ? 'active' : '';
+                const $item = $(`
+                    <div class="game-item ${isActive}" data-id="${game.id}">
+                        <div class="icon">${game.icon}</div>
+                        <div class="info">
+                            <div class="title">${game.name}</div>
+                            <div class="tag">${game.tag}</div>
+                        </div>
+                    </div>
+                `);
+
+                $item.on('click', function () {
+                    selectGame(game);
+                });
+
+                $container.append($item);
+            });
+        }
+
+        function selectGame(game) {
+            currentGame = game;
+
+            // Update UI Active States
+            $('.game-item').removeClass('active');
+            $(`.game-item[data-id="${game.id}"]`).addClass('active');
+
+            // Update Top Bar Header
+            $('#current-title').html(`<span>${game.icon}</span> ${game.name}`);
+
+            // Load iframe
+            $('#game-iframe').attr('src', game.url);
+
+            // Update URL hash
+            window.location.hash = game.id;
+
+            showNotification(`已切换至《${game.name}》`);
+        }
+
+        function showNotification(msg) {
+            const $notif = $('#notif');
+            $notif.text(msg).addClass('show');
+            setTimeout(() => {
+                $notif.removeClass('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
