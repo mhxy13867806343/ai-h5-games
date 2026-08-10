@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI H5 游戏大厅 · 多文件夹来源复刻与全打包大厅</title>
+  <title>AI H5 游戏大厅 · 在线复刻、一键分享与全量打包</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -325,15 +325,17 @@
     .card .meta span { background: rgba(255, 255, 255, 0.06); padding: 3px 8px; border-radius: 4px; }
     .card .play { color: #ffb703; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; text-decoration: none; transition: all 0.2s; }
     .card .play:hover { color: #fb8500; transform: translateX(4px); }
-    .card-actions { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); z-index: 2; }
+    .card-actions { display: flex; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); z-index: 2; flex-wrap: wrap; }
     .card-btn {
-      padding: 5px 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 5px 10px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 6px; color: #e2e8f0; font-size: 12px; font-weight: 600; cursor: pointer;
       text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;
     }
     .card-btn:hover { background: #ffb703; color: #000; border-color: #ffb703; }
     .card-btn.preview-btn { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8; }
     .card-btn.preview-btn:hover { background: #38bdf8; color: #000; }
+    .card-btn.share-btn { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #10b981; }
+    .card-btn.share-btn:hover { background: #10b981; color: #fff; }
     .footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: #78716c; font-size: 13px; text-align: center; }
   </style>
 </head>
@@ -341,7 +343,7 @@
   <div class="wrap" id="main-wrap">
     <div class="header-box">
       <h1>🎮 AI H5 游戏大厅</h1>
-      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 支持按 3 大源码文件夹分类展示、弹窗预览与全量打包</div>
+      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 支持一键 🔗 微信/网页分享、源码查看与 Zip 打包下载</div>
 
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
@@ -354,13 +356,14 @@
 
       <!-- Layout Switcher Bar -->
       <div class="layout-bar">
-        <span class="layout-title">🎨 布局切换：</span>
+        <span class="layout-title">🎨 布局与功能：</span>
         <div class="layout-group">
           <button class="layout-btn active" data-layout="grid" onclick="switchLayout('grid')">🎛️ 经典网格</button>
           <button class="layout-btn" data-layout="list" onclick="switchLayout('list')">📜 极简列表</button>
           <button class="layout-btn" data-layout="hero" onclick="switchLayout('hero')">👑 巨幕大卡</button>
           <button class="layout-btn" data-layout="compact" onclick="switchLayout('compact')">📱 紧凑小卡</button>
           <button class="layout-btn" data-layout="random" onclick="switchLayout('random')">🎲 随机打乱布局</button>
+          <button class="layout-btn" style="background:rgba(16,185,129,0.2); border-color:#10b981; color:#10b981;" onclick="openHallShare()">🔗 一键分享大厅</button>
           <a href="main.html" class="layout-btn" style="background:rgba(56,189,248,0.2); border-color:#38bdf8; color:#38bdf8;">🖥️ 侧边栏双栏玩家</a>
         </div>
       </div>
@@ -387,6 +390,7 @@
           <a class="play" href="metal-slug-2.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">💾 下载</button>
           </div>
@@ -420,6 +424,7 @@
           <a class="play" href="fruit-ninja.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">💾 下载</button>
           </div>
@@ -453,6 +458,7 @@
           <a class="play" href="golden-sun.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">💾 下载</button>
           </div>
@@ -486,6 +492,7 @@
           <a class="play" href="ff-editor.html">直接用 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">💾 下载</button>
           </div>
@@ -521,6 +528,7 @@
           <a class="play" href="dou-di-zhu.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">💾 下载</button>
           </div>
@@ -554,6 +562,7 @@
           <a class="play" href="ninja-bomb.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">💾 下载</button>
           </div>
@@ -587,6 +596,7 @@
           <a class="play" href="happy-farm.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">💾 下载</button>
           </div>
@@ -620,6 +630,7 @@
           <a class="play" href="samurai-shodown.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">💾 下载</button>
           </div>
@@ -653,6 +664,7 @@
           <a class="play" href="cao-cao-chuan.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">💾 下载</button>
           </div>
@@ -686,6 +698,7 @@
           <a class="play" href="spiral-bubble-2.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">💾 下载</button>
           </div>
@@ -721,6 +734,7 @@
           <a class="play" href="traeWork-game/minesweeper.html">直接玩 →</a>
           <div class="card-actions">
             <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
             <button class="card-btn" onclick="openCodeModal('minesweeper', '经典扫雷', 'traeWork-game/minesweeper.html')">📄 源码</button>
             <button class="card-btn" onclick="downloadZip('minesweeper', '经典扫雷', 'traeWork-game/minesweeper.html')">💾 下载</button>
           </div>
@@ -740,7 +754,7 @@
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game 3 大源码文件夹分类筛选与打包
+      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game 3 大源码文件夹分类筛选与一键分享
     </div>
   </div>
 
@@ -805,14 +819,32 @@
       localStorage.setItem('h5_layout_mode', mode);
     }
 
-    // Open Game Mini Preview Layer on Click "👁️ 预览"
+    // Open Share Modal for Card
+    function openShareModal(btn) {
+      const card = btn.closest('.card');
+      if (!card) return;
+      ShareHelper.open({
+        id: card.dataset.url,
+        name: card.dataset.name,
+        url: card.dataset.url
+      });
+    }
+
+    // Open Share Modal for Entire Hall
+    function openHallShare() {
+      ShareHelper.open({
+        id: 'hall',
+        name: 'AI H5 网页游戏复刻大厅',
+        url: 'index.html'
+      });
+    }
+
+    // Open Game Mini Preview Layer
     function openGamePreview(btn) {
       const card = btn.closest('.card');
       if (!card) return;
-
       const url = card.dataset.url;
       const previewBody = card.querySelector('.preview-body');
-
       if (url && previewBody) {
         if (!previewBody.querySelector('iframe')) {
           const iframe = document.createElement('iframe');

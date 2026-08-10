@@ -20,12 +20,13 @@
     <div class="site-header">
         <div style="display:flex; align-items:center; gap:20px;">
             <a class="logo" href="index.html">🎮 AI H5 游戏大厅</a>
-            <div style="display:flex; gap:10px;">
-                <a href="index.html" style="padding:6px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; color:#fff; font-size:13px; font-weight:bold; text-decoration:none;">🏠 返回首页大厅</a>
-                <a href="main.html#spiral-bubble-2" style="padding:6px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; color:#fff; font-size:13px; font-weight:bold; text-decoration:none;">📱 切换大厅视图</a>
-                <button onclick="CodeViewerDownloader.open({ id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js', folder: 'spiral-bubble-2' })" style="padding:6px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; color:#fff; font-size:13px; font-weight:bold; cursor:pointer;">📄 查看/复制源码</button>
-                <button onclick="CodeViewerDownloader.downloadZip({ id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js' })" style="padding:6px 14px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; color:#fff; font-size:13px; font-weight:bold; cursor:pointer;">💾 打包下载 (.zip)</button>
-                <button onclick="window.history.back()" style="padding:6px 14px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); border-radius:20px; color:#fff; font-size:13px; font-weight:bold; cursor:pointer;">⬅️ 返回上一页</button>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">🏠 返回首页大厅</a>
+                <a href="main.html#spiral-bubble-2" class="nav-btn">📱 切换大厅视图</a>
+                <button onclick="ShareHelper.open({ name: '螺旋泡泡柱 2', url: 'spiral-bubble-2.html' })" class="nav-btn">🔗 一键分享</button>
+                <button onclick="CodeViewerDownloader.open({ id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js', folder: 'spiral-bubble-2' })" class="nav-btn">📄 查看/复制源码</button>
+                <button onclick="CodeViewerDownloader.downloadZip({ id: 'spiral-bubble-2', name: '螺旋泡泡柱 2', htmlUrl: 'spiral-bubble-2/spiral-bubble-2.html', cssUrl: 'spiral-bubble-2/spiral-bubble-2.css', jsUrl: 'spiral-bubble-2/spiral-bubble-2.js' })" class="nav-btn">💾 打包下载 (.zip)</button>
+                <button onclick="window.history.back()" class="nav-btn back-btn">⬅️ 返回上一页</button>
             </div>
         </div>
     </div>

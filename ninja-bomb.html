@@ -15,6 +15,7 @@
                 <div class="nav-buttons">
                     <a href="index.html" class="nav-btn">🏠 返回首页大厅</a>
                     <a href="main.html#ninja-bomb" class="nav-btn">📱 切换大厅视图</a>
+                    <button onclick="ShareHelper.open({ name: '忍者拆炸弹', url: 'ninja-bomb.html' })" class="nav-btn">🔗 一键分享</button>
                     <button onclick="CodeViewerDownloader.open({ id: 'ninja-bomb', name: '忍者拆炸弹', htmlUrl: 'ninja-bomb.html', cssUrl: 'ninja-bomb/style.css', jsUrl: 'ninja-bomb/game.js', folder: 'ninja-bomb' })" class="nav-btn">📄 查看/复制源码</button>
                     <button onclick="CodeViewerDownloader.downloadZip({ id: 'ninja-bomb', name: '忍者拆炸弹', htmlUrl: 'ninja-bomb.html', cssUrl: 'ninja-bomb/style.css', jsUrl: 'ninja-bomb/game.js' })" class="nav-btn">💾 打包下载 (.zip)</button>
                     <button onclick="window.history.back()" class="nav-btn back-btn">⬅️ 返回上一页</button>
