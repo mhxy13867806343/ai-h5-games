@@ -95,24 +95,11 @@
         </div>
     </div>
 
-    <script src="js/jszip.min.js"></script>
-    <script src="js/code-viewer-downloader.js"></script>
+    <!-- 外部 JavaScript 导入 -->
     <script src="ninja-bomb/game.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const game = new NinjaBombGame();
-            game.init();
-            
-            document.getElementById('btn-fullscreen').addEventListener('click', () => {
-                const container = document.getElementById('canvas-container');
-                if (container.requestFullscreen) container.requestFullscreen();
-                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
-            });
-            
-            document.getElementById('btn-restart').addEventListener('click', () => {
-                game.restart();
-            });
-        });
-    </script>
+    <script src="ninja-bomb/main.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/code-viewer-downloader.js?v=3"></script>
 </body>
 </html>

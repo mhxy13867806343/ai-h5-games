@@ -214,14 +214,11 @@
     <!-- Hidden file input for import -->
     <input type="file" id="file-import" accept=".json,.sav,.txt" style="display:none;" />
 
-    <script src="js/jszip.min.js"></script>
-    <script src="js/code-viewer-downloader.js"></script>
+    <!-- 外部 JavaScript 导入 -->
     <script src="ff-editor/editor.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const editor = new FFEditor();
-            editor.init();
-        });
-    </script>
+    <script src="ff-editor/main.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/code-viewer-downloader.js?v=3"></script>
 </body>
 </html>
