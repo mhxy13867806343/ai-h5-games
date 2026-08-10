@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI H5 游戏大厅 · 在线复刻、源码下载与多布局体验</title>
+  <title>AI H5 游戏大厅 · 在线复刻、悬停实时预览与随机布局大厅</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -89,6 +89,11 @@
       color: #000;
       box-shadow: 0 0 15px rgba(255, 183, 3, 0.4);
     }
+    .layout-btn.toggle-on {
+      background: #10b981;
+      border-color: #10b981;
+      color: #fff;
+    }
 
     /* ---- Category Filter Tabs ---- */
     .category-bar {
@@ -119,7 +124,7 @@
       transition: all 0.3s ease;
     }
 
-    /* ===== 5 LAYOUT MODES ===== */
+    /* ===== LAYOUT MODES ===== */
 
     /* Mode 1: 🎛️ Standard Grid Mode (3 Columns) */
     .grid.mode-grid {
@@ -172,6 +177,18 @@
     .grid.mode-compact .card h2 { font-size: 17px; }
     .grid.mode-compact .card p { font-size: 12px; margin-bottom: 12px; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
 
+    /* Mode 5: 🎲 Random Bento Grid Mode */
+    .grid.mode-random {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-auto-flow: dense;
+    }
+    .grid.mode-random .card.span-wide {
+      grid-column: span 2;
+    }
+    .grid.mode-random .card.span-tall {
+      grid-row: span 2;
+    }
+
     /* Card Styling */
     .card {
       background: rgba(255, 255, 255, 0.04);
@@ -201,6 +218,59 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     }
     .card:hover::before { opacity: 1; }
+
+    /* ===== HOVER LIVE INTERACTIVE PREVIEW OVERLAY ===== */
+    .card-preview-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #0f172a;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      z-index: 100;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
+      border: 2px solid #ffb703;
+    }
+    .card.hover-active .card-preview-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .preview-header {
+      height: 32px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 12px;
+      color: #ffb703;
+      font-weight: bold;
+      border-bottom: 1px solid #334155;
+    }
+    .preview-body {
+      flex: 1;
+      position: relative;
+      background: #000;
+      overflow: hidden;
+    }
+    .preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .preview-close-btn {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
 
     .card .tag {
       display: inline-block;
@@ -246,6 +316,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      text-decoration: none;
     }
     .card-actions {
       display: flex;
@@ -289,22 +360,24 @@
   <div class="wrap" id="main-wrap">
     <div class="header-box">
       <h1>🎮 AI H5 游戏大厅</h1>
-      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 支持 5 种布局切换、源码查看复制与全量打包下载</div>
+      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 支持 🎲 随机布局、👁️ 鼠标悬停实时小窗预览、源码查看与 Zip 打包下载</div>
 
-      <!-- 5 Layout Modes Switcher -->
+      <!-- Layout Switcher & Options Bar -->
       <div class="layout-bar">
-        <span class="layout-title">🎨 布局切换：</span>
+        <span class="layout-title">🎨 布局与预览：</span>
         <div class="layout-group">
           <button class="layout-btn active" data-layout="grid" onclick="switchLayout('grid')">🎛️ 经典网格</button>
           <button class="layout-btn" data-layout="list" onclick="switchLayout('list')">📜 极简列表</button>
           <button class="layout-btn" data-layout="hero" onclick="switchLayout('hero')">👑 巨幕大卡</button>
           <button class="layout-btn" data-layout="compact" onclick="switchLayout('compact')">📱 紧凑小卡</button>
           <button class="layout-btn" data-layout="category" onclick="switchLayout('category')">🗂️ 分类大厅</button>
+          <button class="layout-btn" data-layout="random" onclick="switchLayout('random')">🎲 随机打乱布局</button>
+          <button class="layout-btn toggle-on" id="btn-toggle-hover" onclick="toggleHoverPreview()">👁️ 悬停实时小窗预览：已开启</button>
           <a href="main.html" class="layout-btn" style="background:rgba(56,189,248,0.2); border-color:#38bdf8; color:#38bdf8;">🖥️ 侧边栏双栏玩家</a>
         </div>
       </div>
 
-      <!-- Category Filter Tabs (Visible when layout is category or all) -->
+      <!-- Category Filter Tabs -->
       <div class="category-bar" id="category-bar" style="display:none;">
         <button class="cat-btn active" onclick="filterCategory('all')">🔥 全部游戏 (10)</button>
         <button class="cat-btn" onclick="filterCategory('action')">💥 街机动作 (3)</button>
@@ -318,7 +391,7 @@
     <!-- Cards Grid -->
     <div class="grid mode-grid" id="cards-container">
       <!-- 合金弹头2 -->
-      <div class="card" data-cat="action">
+      <div class="card" data-cat="action" data-url="metal-slug-2.html" data-name="合金弹头 2">
         <div class="card-main">
           <div>
             <span class="tag">横版射击</span>
@@ -334,10 +407,17 @@
             <button class="card-btn" onclick="downloadZip('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《合金弹头 2》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 斗地主经典版 -->
-      <div class="card" data-cat="card">
+      <div class="card" data-cat="card" data-url="dou-di-zhu.html" data-name="斗地主经典版">
         <div class="card-main">
           <div>
             <span class="tag">棋牌对战</span>
@@ -353,10 +433,17 @@
             <button class="card-btn" onclick="downloadZip('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《斗地主经典版》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 忍者拆炸弹 -->
-      <div class="card" data-cat="action">
+      <div class="card" data-cat="action" data-url="ninja-bomb.html" data-name="忍者拆炸弹">
         <div class="card-main">
           <div>
             <span class="tag">敏捷解谜</span>
@@ -372,10 +459,17 @@
             <button class="card-btn" onclick="downloadZip('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《忍者拆炸弹》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 开心农场 -->
-      <div class="card" data-cat="sim">
+      <div class="card" data-cat="sim" data-url="happy-farm.html" data-name="开心农场">
         <div class="card-main">
           <div>
             <span class="tag">模拟经营</span>
@@ -391,10 +485,17 @@
             <button class="card-btn" onclick="downloadZip('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《开心农场》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 真侍魂：武士道列传 -->
-      <div class="card" data-cat="rpg">
+      <div class="card" data-cat="rpg" data-url="samurai-shodown.html" data-name="真侍魂：武士道列传">
         <div class="card-main">
           <div>
             <span class="tag">动作 RPG</span>
@@ -410,10 +511,17 @@
             <button class="card-btn" onclick="downloadZip('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《真侍魂》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 三国志：曹操传 -->
-      <div class="card" data-cat="rpg">
+      <div class="card" data-cat="rpg" data-url="cao-cao-chuan.html" data-name="三国志：曹操传">
         <div class="card-main">
           <div>
             <span class="tag">策略 SLG</span>
@@ -429,10 +537,17 @@
             <button class="card-btn" onclick="downloadZip('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《曹操传》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 螺旋泡泡柱2 -->
-      <div class="card" data-cat="casual">
+      <div class="card" data-cat="casual" data-url="spiral-bubble-2.html" data-name="螺旋泡泡柱 2">
         <div class="card-main">
           <div>
             <span class="tag">敏捷消除</span>
@@ -448,10 +563,17 @@
             <button class="card-btn" onclick="downloadZip('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《螺旋泡泡柱 2》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 水果忍者 -->
-      <div class="card" data-cat="casual">
+      <div class="card" data-cat="casual" data-url="fruit-ninja.html" data-name="水果忍者">
         <div class="card-main">
           <div>
             <span class="tag">敏捷解压</span>
@@ -467,10 +589,17 @@
             <button class="card-btn" onclick="downloadZip('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《水果忍者》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- 黄金太阳 -->
-      <div class="card" data-cat="rpg">
+      <div class="card" data-cat="rpg" data-url="golden-sun.html" data-name="黄金太阳">
         <div class="card-main">
           <div>
             <span class="tag">GBA JRPG</span>
@@ -486,10 +615,17 @@
             <button class="card-btn" onclick="downloadZip('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《黄金太阳》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
 
       <!-- FF1-6 修改器 -->
-      <div class="card" data-cat="rpg">
+      <div class="card" data-cat="rpg" data-url="ff-editor.html" data-name="FF1-6 修改器">
         <div class="card-main">
           <div>
             <span class="tag">JRPG 工具</span>
@@ -505,23 +641,60 @@
             <button class="card-btn" onclick="downloadZip('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">💾 下载</button>
           </div>
         </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 在线实时小窗试玩 · 《FF1-6 修改器》</span>
+            <button class="preview-close-btn" onclick="closePreview(this)">关闭</button>
+          </div>
+          <div class="preview-body"></div>
+        </div>
       </div>
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持 5 种布局自由切换、纯前端代码查看与全量 Zip 打包下载
+      AI H5 Games 在线复刻大厅 · 支持 🎲 随机打乱布局、👁️ 悬停实时小窗预览、代码查看与 Zip 打包下载
     </div>
   </div>
 
   <script src="js/jszip.min.js"></script>
   <script src="js/code-viewer-downloader.js"></script>
   <script>
+    let isHoverPreviewEnabled = true;
+
     // Layout Switching Logic
     function switchLayout(mode) {
       const container = document.getElementById('cards-container');
       const buttons = document.querySelectorAll('.layout-btn[data-layout]');
       const categoryBar = document.getElementById('category-bar');
       const wrap = document.getElementById('main-wrap');
+
+      // Random Mode Logic
+      if (mode === 'random') {
+        container.className = 'grid mode-random';
+
+        // Shuffle DOM card order
+        const cards = Array.from(container.children);
+        for (let i = cards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          container.appendChild(cards[j]);
+        }
+
+        // Randomly assign Bento Box span classes
+        cards.forEach(card => {
+          card.classList.remove('span-wide', 'span-tall');
+          const rand = Math.random();
+          if (rand > 0.75) card.classList.add('span-wide');
+          else if (rand > 0.6) card.classList.add('span-tall');
+        });
+
+        buttons.forEach(btn => btn.classList.remove('active'));
+        document.querySelector('.layout-btn[data-layout="random"]').classList.add('active');
+        return;
+      }
+
+      // Reset random spans if not in random mode
+      const cards = Array.from(container.children);
+      cards.forEach(card => card.classList.remove('span-wide', 'span-tall'));
 
       // Remove previous mode classes
       container.className = 'grid mode-' + mode;
@@ -551,6 +724,19 @@
       localStorage.setItem('h5_layout_mode', mode);
     }
 
+    // Toggle Hover Preview Enable / Disable
+    function toggleHoverPreview() {
+      isHoverPreviewEnabled = !isHoverPreviewEnabled;
+      const btn = document.getElementById('btn-toggle-hover');
+      if (isHoverPreviewEnabled) {
+        btn.textContent = '👁️ 悬停实时小窗预览：已开启';
+        btn.className = 'layout-btn toggle-on';
+      } else {
+        btn.textContent = '🙈 悬停实时小窗预览：已关闭';
+        btn.className = 'layout-btn';
+      }
+    }
+
     // Category Filter Logic
     function filterCategory(cat) {
       const cards = document.querySelectorAll('.card');
@@ -570,10 +756,59 @@
       });
     }
 
+    // Setup Mouse Hover Live Interactive Iframe Preview
+    function setupHoverPreviews() {
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        let hoverTimer = null;
+
+        card.addEventListener('mouseenter', () => {
+          if (!isHoverPreviewEnabled) return;
+
+          hoverTimer = setTimeout(() => {
+            const url = card.dataset.url;
+            const previewBody = card.querySelector('.preview-body');
+
+            if (url && previewBody && !previewBody.querySelector('iframe')) {
+              const iframe = document.createElement('iframe');
+              iframe.className = 'preview-iframe';
+              iframe.src = url;
+              previewBody.appendChild(iframe);
+            }
+            card.classList.add('hover-active');
+          }, 350); // 350ms hover delay threshold
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (hoverTimer) clearTimeout(hoverTimer);
+          card.classList.remove('hover-active');
+
+          // Clean up iframe to save resources
+          setTimeout(() => {
+            if (!card.classList.contains('hover-active')) {
+              const previewBody = card.querySelector('.preview-body');
+              if (previewBody) previewBody.innerHTML = '';
+            }
+          }, 300);
+        });
+      });
+    }
+
+    function closePreview(btn) {
+      const card = btn.closest('.card');
+      if (card) {
+        card.classList.remove('hover-active');
+        const previewBody = card.querySelector('.preview-body');
+        if (previewBody) previewBody.innerHTML = '';
+      }
+    }
+
     // Restore user saved layout mode on launch
     window.addEventListener('DOMContentLoaded', () => {
       const savedMode = localStorage.getItem('h5_layout_mode') || 'grid';
       switchLayout(savedMode);
+      setupHoverPreviews();
     });
 
     function openCodeModal(id, name, htmlUrl, cssUrl, jsUrl) {
