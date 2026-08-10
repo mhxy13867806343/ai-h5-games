@@ -16,8 +16,8 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (14)</button>
-        <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (6)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (15)</button>
+        <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (7)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (3)</button>
       </div>
@@ -41,6 +41,40 @@
     <div class="grid mode-grid" id="cards-container">
 
       <!-- ==================== antigravity-game 专区 ==================== -->
+      <!-- 口袋妖怪：新纪元 -->
+      <div class="card" data-folder="antigravity-game" data-url="pokemon-new-era.html" data-name="口袋妖怪：新纪元">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge">📂 antigravity-game</span>
+              <span class="tag">GBA 宝可梦改版</span>
+            </div>
+            <h2>⚡ 口袋妖怪：新纪元 (Pokémon: New Era)</h2>
+            <p>冠军之路制作组倾力打造！全新的曙光地区、黑白传奇三龙首发与独创【共鸣进化】机制。</p>
+            <div class="meta"><span>宝可梦</span><span>GBA</span><span>共鸣进化</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="pokemon-new-era.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('pokemon-new-era', '口袋妖怪：新纪元', 'pokemon-new-era.html', 'pokemon-new-era/style.css', 'pokemon-new-era/game.js')">📄 源码</button>
+            <button class="card-btn" onclick="downloadZip('pokemon-new-era', '口袋妖怪：新纪元', 'pokemon-new-era.html', 'pokemon-new-era/style.css', 'pokemon-new-era/game.js')">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎮 试玩预览 · 《口袋妖怪：新纪元》</span>
+            <div class="preview-actions">
+              <a href="pokemon-new-era.html" class="preview-play-btn">🎮 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
       <!-- 口袋妖怪：暗黑升起 -->
       <div class="card" data-folder="antigravity-game" data-url="pokemon-dark-rising.html" data-name="口袋妖怪：暗黑升起">
         <div class="card-main">

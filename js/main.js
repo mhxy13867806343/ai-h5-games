@@ -7,6 +7,10 @@ const { createApp, ref, computed, onMounted } = Vue;
 const GAMES_DATA = [
     // antigravity-game 专区
     {
+        id: 'pokemon-new-era', name: '口袋妖怪：新纪元', url: 'pokemon-new-era.html', icon: '⚡', tag: '📂 antigravity-game · GBA 宝可梦改版', desc: '冠军之路制作组原创 GBA 神作！全新的曙光地区与独创【共鸣进化】机制。',
+        htmlUrl: 'pokemon-new-era.html', cssUrl: 'pokemon-new-era/style.css', jsUrl: 'pokemon-new-era/game.js', folder: 'antigravity-game'
+    },
+    {
         id: 'pokemon-dark-rising', name: '口袋妖怪：暗黑升起', url: 'pokemon-dark-rising.html', icon: '🐲', tag: '📂 antigravity-game · GBA 宝可梦', desc: '神级三大龙系初始宝可梦、暗黑修罗神剧情，内置预载 ROM 引擎。',
         htmlUrl: 'pokemon-dark-rising.html', cssUrl: 'pokemon-dark-rising/style.css', jsUrl: 'pokemon-dark-rising/game.js', folder: 'antigravity-game'
     },

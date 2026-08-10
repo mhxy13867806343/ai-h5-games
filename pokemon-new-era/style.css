@@ -1,0 +1,453 @@
+/* ============================================================
+   《口袋妖怪：新纪元》(Pokémon: New Era) gbarom.cn 1:1 风格样式表
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --panel: #21262d;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-white: #ffffff;
+  --brand: #ff6c00;
+  --brand-hover: #e05f00;
+  --accent-cyan: #38bdf8;
+  --accent-purple: #c084fc;
+  --accent-green: #10b981;
+}
+
+html, body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
+}
+
+/* 顶部黑色公共条 */
+.topbar {
+  background: #010409;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: #8b949e;
+  padding: 6px 0;
+}
+
+.topbar .inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.topbar a {
+  color: #8b949e;
+  text-decoration: none;
+  margin-right: 12px;
+}
+
+.topbar a:hover {
+  color: var(--brand);
+}
+
+/* 主 Header */
+.header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+
+.header .inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text-white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo .sub {
+  font-size: 13px;
+  color: var(--brand);
+  font-weight: normal;
+}
+
+.search-box {
+  display: flex;
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-box input {
+  flex: 1;
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+
+.search-box button {
+  background: var(--brand);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 0 16px;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+
+/* 主导航栏 */
+.mainnav {
+  background: #161b22;
+  border-bottom: 2px solid var(--brand);
+}
+
+.mainnav .inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  gap: 4px;
+}
+
+.mainnav a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.mainnav a:hover, .mainnav a.active {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* 面包屑 */
+.breadcrumb {
+  max-width: 1200px;
+  margin: 16px auto;
+  padding: 0 16px;
+  font-size: 13px;
+  color: #8b949e;
+}
+
+.breadcrumb a { color: #8b949e; text-decoration: none; }
+.breadcrumb a:hover { color: var(--brand); }
+.breadcrumb .sep { margin: 0 6px; color: #484f58; }
+.breadcrumb .current { color: var(--text-white); }
+
+/* 主体 Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .container { grid-template-columns: 1fr; }
+}
+
+/* 游戏头部 Header Card */
+.game-header {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.game-cover {
+  width: 180px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.game-meta { flex: 1; min-width: 280px; }
+.game-meta h1 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.game-meta .en-name { font-size: 12px; color: #8b949e; margin-bottom: 12px; }
+
+.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.tag { background: #21262d; border: 1px solid var(--border); font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #8b949e; }
+.tag-red { background: rgba(255, 108, 0, 0.2); color: var(--brand); border-color: var(--brand); }
+
+.rating-box { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.score { font-size: 24px; font-weight: 900; color: var(--brand); }
+.stars { color: #f59e0b; font-size: 14px; }
+.count { font-size: 12px; color: #8b949e; }
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  background: #0d1117;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.meta-grid .label { color: #8b949e; }
+.meta-grid .value { color: #fff; font-weight: 600; }
+
+.game-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary { background: var(--brand); color: #fff; }
+.btn-primary:hover { background: var(--brand-hover); }
+.btn-success { background: var(--accent-green); color: #fff; }
+.btn-info { background: var(--accent-cyan); color: #000; }
+.btn-outline { background: #21262d; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover { background: #30363d; color: #fff; }
+
+/* 在线试玩区 */
+.play-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.play-section-header {
+  background: #21262d;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.play-section-header h3 { font-size: 15px; color: #fff; }
+.play-controls { display: flex; gap: 8px; }
+.control-btn {
+  background: #30363d;
+  border: 1px solid var(--border);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.control-btn:hover { background: var(--brand); }
+
+/* GBA Canvas screen */
+.emulator-wrapper { background: #000; width: 100%; }
+.canvas-screen {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  max-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #050811;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+/* 虚拟手柄区 */
+.gamepad-container {
+  background: #161b22;
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  user-select: none;
+}
+
+.dpad { width: 120px; height: 120px; position: relative; }
+.dpad-btn {
+  position: absolute;
+  background: #21262d;
+  border: 1px solid var(--border);
+  color: #c9d1d9;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dpad-btn:active, .dpad-btn.pressed { background: var(--brand); color: #fff; }
+.dpad-up { top: 0; left: 40px; width: 40px; height: 40px; border-radius: 6px 6px 0 0; }
+.dpad-down { bottom: 0; left: 40px; width: 40px; height: 40px; border-radius: 0 0 6px 6px; }
+.dpad-left { top: 40px; left: 0; width: 40px; height: 40px; border-radius: 6px 0 0 6px; }
+.dpad-right { top: 40px; right: 0; width: 40px; height: 40px; border-radius: 0 6px 6px 0; }
+.dpad-center { top: 40px; left: 40px; width: 40px; height: 40px; background: #0d1117; pointer-events: none; }
+
+.center-keys { display: flex; gap: 16px; }
+.pill-btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.pill-btn {
+  width: 48px;
+  height: 16px;
+  background: #30363d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transform: rotate(-25deg);
+  cursor: pointer;
+}
+
+.pill-btn:active, .pill-btn.pressed { background: var(--brand); }
+.pill-label { font-size: 10px; color: #8b949e; font-weight: bold; }
+
+.action-keys { display: flex; gap: 14px; }
+.round-btn-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.round-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand) 0%, #d95a00 100%);
+  border: 2px solid #ff9d4d;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.round-btn:active, .round-btn.pressed { transform: translateY(2px); background: #ff9d4d; }
+.btn-label { font-size: 11px; color: #8b949e; }
+
+.shoulder-keys { display: flex; gap: 8px; }
+.shoulder-btn {
+  padding: 4px 10px;
+  background: #21262d;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: #c9d1d9;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.shoulder-btn:active, .shoulder-btn.pressed { background: var(--brand); color: #fff; }
+
+/* Tabs 卡片与内容 */
+.tabs { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.tabs-nav { display: flex; background: #21262d; border-bottom: 1px solid var(--border); }
+.tab {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #8b949e;
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+}
+
+.tab:hover { color: #fff; }
+.tab.active { background: var(--bg-card); color: var(--brand); border-bottom: 2px solid var(--brand); }
+
+.tabs-content { padding: 20px; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+.intro-content h3 { font-size: 16px; color: #fff; margin: 16px 0 8px; }
+.intro-content h3:first-child { margin-top: 0; }
+.intro-content p { font-size: 14px; line-height: 1.8; color: #c9d1d9; margin-bottom: 12px; }
+.feature-list { padding-left: 20px; font-size: 14px; line-height: 1.8; color: #c9d1d9; }
+
+/* 下载卡片 */
+.dl-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  text-decoration: none;
+}
+
+.dl-name { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 4px; }
+.dl-size { font-size: 12px; color: #8b949e; }
+.dl-btn { background: var(--brand); color: #fff; padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 13px; }
+
+/* 金手指 */
+.cheat-box { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.cheat-item { background: #0d1117; border: 1px solid var(--border); border-radius: 6px; padding: 12px; }
+.cheat-title { font-size: 13px; font-weight: bold; color: var(--accent-cyan); display: block; margin-bottom: 6px; }
+.cheat-item code { font-family: monospace; background: #161b22; color: #10b981; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+
+/* 截图相册 */
+.screenshots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.screenshots-grid img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 1px solid var(--border); }
+
+/* 侧边栏 */
+.sidebar-col .widget {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.widget-title { font-size: 15px; font-weight: bold; color: #fff; margin-bottom: 12px; border-left: 3px solid var(--brand); padding-left: 8px; }
+.widget-list { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+.widget-list a { color: #c9d1d9; text-decoration: none; }
+.widget-list a:hover { color: var(--brand); }
+
+/* 灯箱 */
+.lightbox {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.lightbox.show { display: flex; }
+.lightbox img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+
+/* Footer */
+.footer { background: #010409; border-top: 1px solid var(--border); padding: 24px 0; text-align: center; font-size: 13px; color: #8b949e; }
