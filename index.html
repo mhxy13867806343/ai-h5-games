@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI H5 Games 大厅 · 在线复刻大厅</title>
+  <title>AI H5 游戏大厅 · 在线复刻与源码下载大厅</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -116,6 +116,34 @@
       align-items: center;
       gap: 6px;
     }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 2;
+    }
+    .card-btn {
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #e2e8f0;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-btn:hover {
+      background: #ffb703;
+      color: #000;
+      border-color: #ffb703;
+    }
     .footer {
       margin-top: 60px;
       padding-top: 24px;
@@ -130,144 +158,175 @@
   <div class="wrap">
     <div class="header-box">
       <h1>🎮 AI H5 游戏大厅</h1>
-      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 高清在线复刻大厅 · 浏览器即开即玩</div>
+      <div class="sub">4399 & 经典网页游戏 1:1 纯前端 HTML5 复刻大厅 · 支持在线玩、查看/复制源码与全量打包下载</div>
     </div>
 
     <div class="grid">
       <!-- 合金弹头2 -->
-      <a class="card" href="metal-slug-2.html">
-        <div>
+      <div class="card">
+        <a href="metal-slug-2.html" style="text-decoration:none; color:inherit;">
           <span class="tag">横版射击</span>
           <h2>💥 合金弹头 2</h2>
           <p>SNK 经典动作射击。8方向瞄准、下蹲跳跃、手雷弧线、6大武器库（P/H/S/R/F/L）及 BOSS 战。</p>
-          <div class="meta">
-            <span>街机</span><span>射击</span><span>4399 1:1复刻</span>
-          </div>
+          <div class="meta"><span>街机</span><span>射击</span><span>4399 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('metal-slug-2', '合金弹头 2', 'metal-slug-2.html', 'metal-slug-2/style.css', 'metal-slug-2/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 斗地主经典版 -->
-      <a class="card" href="dou-di-zhu.html">
-        <div>
+      <div class="card">
+        <a href="dou-di-zhu.html" style="text-decoration:none; color:inherit;">
           <span class="tag">棋牌对战</span>
           <h2>🎴 斗地主经典版</h2>
           <p>经典三人斗地主。完整的牌型判断（顺子、连对、飞机、炸弹、火箭）、叫地主抢底牌与智能 AI 对手。</p>
-          <div class="meta">
-            <span>棋牌</span><span>扑克</span><span>4399 1:1复刻</span>
-          </div>
+          <div class="meta"><span>棋牌</span><span>扑克</span><span>4399 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('dou-di-zhu', '斗地主经典版', 'dou-di-zhu.html', 'dou-di-zhu/style.css', 'dou-di-zhu/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 忍者拆炸弹 -->
-      <a class="card" href="ninja-bomb.html">
-        <div>
+      <div class="card">
+        <a href="ninja-bomb.html" style="text-decoration:none; color:inherit;">
           <span class="tag">敏捷解谜</span>
           <h2>🥷 忍者拆炸弹</h2>
           <p>暗部忍者横版拆弹。剪线解密、忍印结印、时间冻结炸弹与 5 大关卡尾兽弹 BOSS 战。</p>
-          <div class="meta">
-            <span>敏捷</span><span>拆弹</span><span>4399 1:1复刻</span>
-          </div>
+          <div class="meta"><span>敏捷</span><span>拆弹</span><span>4399 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('ninja-bomb', '忍者拆炸弹', 'ninja-bomb.html', 'ninja-bomb/style.css', 'ninja-bomb/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 开心农场 -->
-      <a class="card" href="happy-farm.html">
-        <div>
+      <div class="card">
+        <a href="happy-farm.html" style="text-decoration:none; color:inherit;">
           <span class="tag">模拟经营</span>
           <h2>👨‍🌾 开心农场 (Happy Farm)</h2>
           <p>田园农场经营。耕地播种、喂养母鸡奶牛、面包坊/乳品厂加工、告示板卡车订单发货。</p>
-          <div class="meta">
-            <span>经营</span><span>农场</span><span>4399 1:1复刻</span>
-          </div>
+          <div class="meta"><span>经营</span><span>农场</span><span>4399 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('happy-farm', '开心农场', 'happy-farm.html', 'happy-farm/style.css', 'happy-farm/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 真侍魂：武士道列传 -->
-      <a class="card" href="samurai-shodown.html">
-        <div>
+      <div class="card">
+        <a href="samurai-shodown.html" style="text-decoration:none; color:inherit;">
           <span class="tag">动作 RPG</span>
           <h2>⚔️ 真侍魂：武士道列传</h2>
           <p>侍魂传世 RPG。霸王丸/橘右京/娜可露露参战，刀械保养磨刀、怒气爆发超必杀与道义抉择。</p>
-          <div class="meta">
-            <span>侍魂</span><span>RPG</span><span>瑾龙游戏 1:1复刻</span>
-          </div>
+          <div class="meta"><span>侍魂</span><span>RPG</span><span>瑾龙游戏 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('samurai-shodown', '真侍魂：武士道列传', 'samurai-shodown.html', 'samurai-shodown/style.css', 'samurai-shodown/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 三国志：曹操传 -->
-      <a class="card" href="cao-cao-chuan.html">
-        <div>
+      <div class="card">
+        <a href="cao-cao-chuan.html" style="text-decoration:none; color:inherit;">
           <span class="tag">策略 SLG</span>
           <h2>🚩 三国志：曹操传</h2>
           <p>光荣经典战棋 SLG。魏国五大名将、12x9 地形地图防守、火攻水计、虎牢关与赤壁四大战役。</p>
-          <div class="meta">
-            <span>三国志</span><span>SLG</span><span>在线玩 1:1复刻</span>
-          </div>
+          <div class="meta"><span>三国志</span><span>SLG</span><span>在线玩 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('cao-cao-chuan', '三国志：曹操传', 'cao-cao-chuan.html', 'cao-cao-chuan/style.css', 'cao-cao-chuan/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 螺旋泡泡柱2 -->
-      <a class="card" href="spiral-bubble-2/spiral-bubble-2.html">
-        <div>
+      <div class="card">
+        <a href="spiral-bubble-2.html" style="text-decoration:none; color:inherit;">
           <span class="tag">敏捷消除</span>
           <h2>🔮 螺旋泡泡柱 2</h2>
           <p>六边形蜂巢网格 + 3D 透视消除。拖动发射器瞄准，同色泡泡相连即可触发爆炸消除。</p>
-          <div class="meta">
-            <span>消除</span><span>休闲</span><span>在线复刻</span>
-          </div>
+          <div class="meta"><span>消除</span><span>休闲</span><span>在线复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('spiral-bubble-2', '螺旋泡泡柱 2', 'spiral-bubble-2/spiral-bubble-2.html', 'spiral-bubble-2/spiral-bubble-2.css', 'spiral-bubble-2/spiral-bubble-2.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 水果忍者 -->
-      <a class="card" href="fruit-ninja.html">
-        <div>
+      <div class="card">
+        <a href="fruit-ninja.html" style="text-decoration:none; color:inherit;">
           <span class="tag">敏捷解压</span>
           <h2>🍉 水果忍者 (Fruit Ninja)</h2>
           <p>经典切水果。炫彩光刃挥舞、多重果汁溅射、一割为二物理掉落、Combo 连击与炸弹挑战。</p>
-          <div class="meta">
-            <span>切水果</span><span>Poki 1:1复刻</span><span>敏捷</span>
-          </div>
+          <div class="meta"><span>切水果</span><span>Poki 1:1复刻</span><span>敏捷</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('fruit-ninja', '水果忍者', 'fruit-ninja.html', 'fruit-ninja/style.css', 'fruit-ninja/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- 黄金太阳 -->
-      <a class="card" href="golden-sun.html">
-        <div>
+      <div class="card">
+        <a href="golden-sun.html" style="text-decoration:none; color:inherit;">
           <span class="tag">GBA JRPG</span>
           <h2>☀️ 黄金太阳 (Golden Sun)</h2>
           <p>GBA 史诗 JRPG 巅峰。罗宾/杰拉德四大主角参战，索力(Move)精神力解谜与元素精灵召唤。</p>
-          <div class="meta">
-            <span>JRPG</span><span>黄金太阳</span><span>瑾龙游戏 1:1复刻</span>
-          </div>
+          <div class="meta"><span>JRPG</span><span>黄金太阳</span><span>瑾龙游戏 1:1复刻</span></div>
+          <div class="play">在线试玩 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('golden-sun', '黄金太阳', 'golden-sun.html', 'golden-sun/style.css', 'golden-sun/game.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试玩 →</div>
-      </a>
+      </div>
 
       <!-- FF1-6 修改器 -->
-      <a class="card" href="ff-editor.html">
-        <div>
+      <div class="card">
+        <a href="ff-editor.html" style="text-decoration:none; color:inherit;">
           <span class="tag">JRPG 工具</span>
           <h2>💎 最终幻想 1-6 属性修改器</h2>
           <p>FF1-6 全系列修改器。全员 99 级、9999 HP/MP、255 属性、999W 金币与全武器究极魔法。</p>
-          <div class="meta">
-            <span>修改器</span><span>FF1-6</span><span>像素复刻</span>
-          </div>
+          <div class="meta"><span>修改器</span><span>FF1-6</span><span>像素复刻</span></div>
+          <div class="play">在线试用 →</div>
+        </a>
+        <div class="card-actions">
+          <button class="card-btn" onclick="openCodeModal('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">📄 查看/复制源码</button>
+          <button class="card-btn" onclick="downloadZip('ff-editor', 'FF1-6 修改器', 'ff-editor.html', 'ff-editor/style.css', 'ff-editor/editor.js')">💾 打包下载</button>
         </div>
-        <div class="play">在线试用 →</div>
-      </a>
+      </div>
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 仅供学习交流使用 · 灵感与素材源自 4399 / 瑾龙游戏 / 老游戏在线玩
+      AI H5 Games 在线复刻大厅 · 支持纯前端代码查看、复制与 Zip 打包下载 · 仅供学习交流使用
     </div>
   </div>
+
+  <script src="js/jszip.min.js"></script>
+  <script src="js/code-viewer-downloader.js"></script>
+  <script>
+    function openCodeModal(id, name, htmlUrl, cssUrl, jsUrl) {
+      CodeViewerDownloader.open({ id, name, htmlUrl, cssUrl, jsUrl, folder: id });
+    }
+    function downloadZip(id, name, htmlUrl, cssUrl, jsUrl) {
+      CodeViewerDownloader.downloadZip({ id, name, htmlUrl, cssUrl, jsUrl });
+    }
+  </script>
 </body>
 </html>

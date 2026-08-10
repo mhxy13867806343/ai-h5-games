@@ -15,6 +15,8 @@
                 <div class="nav-buttons">
                     <a href="index.html" class="nav-btn">🏠 返回首页大厅</a>
                     <a href="main.html#happy-farm" class="nav-btn">📱 切换大厅视图</a>
+                    <button onclick="CodeViewerDownloader.open({ id: 'happy-farm', name: '开心农场', htmlUrl: 'happy-farm.html', cssUrl: 'happy-farm/style.css', jsUrl: 'happy-farm/game.js', folder: 'happy-farm' })" class="nav-btn">📄 查看/复制源码</button>
+                    <button onclick="CodeViewerDownloader.downloadZip({ id: 'happy-farm', name: '开心农场', htmlUrl: 'happy-farm.html', cssUrl: 'happy-farm/style.css', jsUrl: 'happy-farm/game.js' })" class="nav-btn">💾 打包下载 (.zip)</button>
                     <button onclick="window.history.back()" class="nav-btn back-btn">⬅️ 返回上一页</button>
                 </div>
             </div>
@@ -92,6 +94,8 @@
         </div>
     </div>
 
+    <script src="js/jszip.min.js"></script>
+    <script src="js/code-viewer-downloader.js"></script>
     <script src="happy-farm/game.js"></script>
     <script>
         window.addEventListener('DOMContentLoaded', () => {

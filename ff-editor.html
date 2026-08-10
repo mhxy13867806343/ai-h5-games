@@ -15,6 +15,8 @@
                 <div class="nav-buttons">
                     <a href="index.html" class="nav-btn">🏠 返回首页大厅</a>
                     <a href="main.html#ff-editor" class="nav-btn">📱 切换大厅视图</a>
+                    <button onclick="CodeViewerDownloader.open({ id: 'ff-editor', name: 'FF1-6 修改器', htmlUrl: 'ff-editor.html', cssUrl: 'ff-editor/style.css', jsUrl: 'ff-editor/editor.js', folder: 'ff-editor' })" class="nav-btn">📄 查看/复制源码</button>
+                    <button onclick="CodeViewerDownloader.downloadZip({ id: 'ff-editor', name: 'FF1-6 修改器', htmlUrl: 'ff-editor.html', cssUrl: 'ff-editor/style.css', jsUrl: 'ff-editor/editor.js' })" class="nav-btn">💾 打包下载 (.zip)</button>
                     <button onclick="window.history.back()" class="nav-btn back-btn">⬅️ 返回上一页</button>
                 </div>
             </div>
@@ -211,6 +213,8 @@
     <!-- Hidden file input for import -->
     <input type="file" id="file-import" accept=".json,.sav,.txt" style="display:none;" />
 
+    <script src="js/jszip.min.js"></script>
+    <script src="js/code-viewer-downloader.js"></script>
     <script src="ff-editor/editor.js"></script>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
