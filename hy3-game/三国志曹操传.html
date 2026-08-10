@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三国志曹操传 · 复刻版</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; background:#1b1410; color:#e8dcc4; font-family:"PingFang SC","Microsoft YaHei",sans-serif; overflow:hidden; }
+  #wrap { display:flex; flex-direction:column; align-items:center; height:100%; }
+  #topbar { width:100%; max-width:1000px; display:flex; align-items:center; gap:10px; padding:8px 12px; }
+  #topbar h1 { font-size:18px; color:#f0c560; letter-spacing:2px; }
+  #topbar .tag { font-size:12px; color:#9a8a6a; }
+  #stage { position:relative; }
+  canvas { background:#2a2018; border:3px solid #5a4326; border-radius:6px; box-shadow:0 6px 24px rgba(0,0,0,.5); display:block; touch-action:none; }
+  #hud { width:100%; max-width:1000px; display:flex; gap:8px; padding:8px 12px; flex-wrap:wrap; align-items:stretch; }
+  .panel { background:#241b14; border:1px solid #46341f; border-radius:6px; padding:8px 10px; flex:1; min-width:200px; }
+  .panel h3 { font-size:12px; color:#c9a85a; margin-bottom:4px; letter-spacing:1px; }
+  .panel .row { font-size:13px; line-height:1.5; color:#d8c8a8; }
+  .panel .row b { color:#f0d890; }
+  #actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  button { font-family:inherit; cursor:pointer; border:none; border-radius:5px; padding:8px 14px; font-size:14px; font-weight:600; color:#1b1410; background:#e8c062; transition:transform .08s, filter .15s; }
+  button:hover { filter:brightness(1.08); }
+  button:active { transform:translateY(1px); }
+  button:disabled { background:#5a4d36; color:#8a7c60; cursor:default; }
+  button.alt { background:#7a8c5a; color:#fff; }
+  button.danger { background:#b5564a; color:#fff; }
+  #phaseTag { font-size:13px; padding:6px 10px; border-radius:5px; background:#3a2c1c; color:#f0c560; align-self:center; }
+  #banner { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(10,7,4,.82); border-radius:6px; flex-direction:column; gap:14px; text-align:center; }
+  #banner.hidden { display:none; }
+  #banner h2 { font-size:34px; letter-spacing:6px; }
+  #banner p { font-size:15px; color:#cbb78a; max-width:440px; line-height:1.7; }
+  #banner .win { color:#f0c560; }
+  #banner .lose { color:#d9746a; }
+  .hint { font-size:11px; color:#8a7c60; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="topbar">
+    <h1>三国志 · 曹操传</h1>
+    <span class="tag">战棋 SLG · 复刻版（原创资源）</span>
+    <span id="phaseTag">玩家回合</span>
+    <button id="muteBtn" class="alt" style="margin-left:auto;padding:6px 10px;">🔊</button>
+  </div>
+  <div id="stage">
+    <canvas id="game" width="864" height="576"></canvas>
+    <div id="banner" class="hidden"><h2 id="bannerTitle"></h2><p id="bannerText"></p><button id="bannerBtn">继续</button></div>
+  </div>
+  <div id="hud">
+    <div class="panel" id="selPanel">
+      <h3>选中武将</h3>
+      <div class="row" id="selInfo">点击我方武将进行操作</div>
+    </div>
+    <div class="panel" id="logPanel">
+      <h3>战报</h3>
+      <div class="row" id="logText" style="font-size:12px;line-height:1.6;">— 颍川之战 —</div>
+    </div>
+    <div class="panel" id="actPanel">
+      <h3>操作</h3>
+      <div id="actions">
+        <button id="atkBtn" disabled>攻击</button>
+        <button id="magBtn" class="alt" disabled>计策</button>
+        <button id="waitBtn" disabled>待机</button>
+        <button id="endBtn" class="danger">结束回合</button>
+      </div>
+      <div class="hint" style="margin-top:6px;">点己方武将→点蓝格移动→攻击/计策/待机；或点红格直接攻击相邻敌</div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  // ====================== 配置 ======================
+  const TILE = 48;
+  const COLS = 18, ROWS = 12;
+  const W = COLS*TILE, H = ROWS*TILE;
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+
+  const TERRAIN = {
+    plain:  { name:'平原', def:0,  mv:1, color:'#6f7a3a' },
+    grass:  { name:'草地', def:10, mv:1, color:'#5c6e34' },
+    forest: { name:'森林', def:25, mv:2, color:'#3a5a2a' },
+    mtn:    { name:'山地', def:35, mv:3, color:'#7a6a4a' },
+    city:   { name:'城池', def:45, mv:1, color:'#8a6a3a' },
+    water:  { name:'水域', def:-15, mv:99, color:'#2f5a7a' },
+    bridge: { name:'桥梁', def:0,  mv:1, color:'#9a7c4a' }
+  };
+
+  // 音效
+  let AC = null, muted = false;
+  function audio(){ if(!AC){ try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return AC; }
+  const SFX = {
+    hit(){ tone(220,0.12,'sawtooth',0.25); },
+    crit(){ tone(140,0.2,'square',0.3); tone(330,0.15,'sawtooth',0.2); },
+    magic(){ tone(660,0.25,'sine',0.2); tone(880,0.2,'sine',0.15); },
+    move(){ tone(330,0.06,'triangle',0.12); },
+    win(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,0.3,'triangle',0.25),i*120)); },
+    lose(){ [400,300,200].forEach((f,i)=>setTimeout(()=>tone(f,0.35,'sawtooth',0.25),i*160)); }
+  };
+  function tone(freq,dur,type,vol){
+    if(muted) return; const a=audio(); if(!a) return;
+    const o=a.createOscillator(), g=a.createGain();
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+dur);
+  }
+
+  // ====================== 关卡数据 ======================
+  // 地图用字符串：.平原 g草地 f森林 m山地 c城池 w水 b桥
+  const LEVELS = [
+    {
+      name:'颍川之战',
+      intro:'黄巾贼寇肆虐颍川，曹公率亲卫讨之。击败所有贼首即可平定。',
+      map:[
+        "..................",
+        "..gg......fff.....",
+        "..gg....f...f.....",
+        "....c...f.m.f.....",
+        "....c..ff.mmff....",
+        "......b......b....",
+        "....w..ff.mmff....",
+        "....w...f.m.f.....",
+        "..gg....f...f.....",
+        "..gg......fff.....",
+        "..................",
+        ".................."
+      ],
+      players:[
+        {name:'曹操', ch:'曹', war:95, int:80, lead:90, hp:120, mp:40, move:5, range:1, weapon:'倚天剑', cmd:true},
+        {name:'夏侯惇', ch:'夏', war:92, int:58, lead:85, hp:100, mp:10, move:5, range:1, weapon:'刀'},
+        {name:'张辽', ch:'辽', war:93, int:70, lead:88, hp:104, mp:20, move:6, range:1, weapon:'戟'},
+        {name:'许褚', ch:'褚', war:98, int:30, lead:80, hp:116, mp:0, move:4, range:1, weapon:'锤'},
+        {name:'郭嘉', ch:'嘉', war:42, int:96, lead:76, hp:78, mp:70, move:4, range:1, weapon:'扇', mage:true}
+      ],
+      playersPos:[[2,5],[3,4],[2,6],[3,7],[2,4]],
+      enemies:[
+        {name:'张角', ch:'角', war:60, int:88, lead:78, hp:110, mp:60, move:4, range:1, weapon:'杖', boss:true, mage:true},
+        {name:'张宝', ch:'宝', war:55, int:75, lead:70, hp:88, mp:45, move:4, range:1, weapon:'杖', mage:true},
+        {name:'黄巾兵', ch:'巾', war:62, int:30, lead:55, hp:70, mp:0, move:5, range:1, weapon:'枪'},
+        {name:'黄巾兵', ch:'巾', war:60, int:28, lead:52, hp:68, mp:0, move:5, range:1, weapon:'枪'},
+        {name:'黄巾弓', ch:'弓', war:58, int:35, lead:50, hp:60, mp:0, move:5, range:2, weapon:'弓'}
+      ],
+      enemiesPos:[[15,5],[14,4],[16,6],[15,8],[14,7]]
+    },
+    {
+      name:'虎牢关前',
+      intro:'董卓遣吕布据守虎牢，曹公挥师而进。阵前斩将，以振军威。',
+      map:[
+        "..................",
+        "..c....mmm....c...",
+        "..c...m...m...c...",
+        "...b.m.....m.b....",
+        ".....mm...mm......",
+        "......b.b.b.......",
+        ".....mm...mm......",
+        "...b.m.....m.b....",
+        "..c...m...m...c...",
+        "..c....mmm....c...",
+        "..................",
+        ".................."
+      ],
+      players:[
+        {name:'曹操', ch:'曹', war:95, int:80, lead:90, hp:130, mp:45, move:5, range:1, weapon:'倚天剑', cmd:true},
+        {name:'夏侯惇', ch:'夏', war:94, int:60, lead:86, hp:108, mp:10, move:5, range:1, weapon:'刀'},
+        {name:'张辽', ch:'辽', war:95, int:72, lead:89, hp:110, mp:20, move:6, range:1, weapon:'戟'},
+        {name:'许褚', ch:'褚', war:100, int:32, lead:82, hp:124, mp:0, move:4, range:1, weapon:'锤'},
+        {name:'郭嘉', ch:'嘉', war:44, int:98, lead:78, hp:84, mp:80, move:4, range:1, weapon:'扇', mage:true},
+        {name:'徐晃', ch:'晃', war:88, int:65, lead:84, hp:100, mp:10, move:5, range:1, weapon:'斧'}
+      ],
+      playersPos:[[2,5],[3,4],[2,6],[3,7],[2,4],[3,3]],
+      enemies:[
+        {name:'吕布', ch:'布', war:110, int:55, lead:95, hp:170, mp:20, move:7, range:1, weapon:'方天画戟', boss:true},
+        {name:'华雄', ch:'雄', war:90, int:50, lead:80, hp:110, mp:10, move:5, range:1, weapon:'刀'},
+        {name:'董卓骑', ch:'卓', war:80, int:45, lead:72, hp:96, mp:0, move:6, range:1, weapon:'枪'},
+        {name:'西凉兵', ch:'凉', war:72, int:35, lead:60, hp:80, mp:0, move:5, range:1, weapon:'枪'},
+        {name:'西凉弓', ch:'弓', war:70, int:40, lead:58, hp:70, mp:0, move:5, range:2, weapon:'弓'},
+        {name:'西凉兵', ch:'凉', war:74, int:36, lead:62, hp:82, mp:0, move:5, range:1, weapon:'枪'}
+      ],
+      enemiesPos:[[15,5],[14,4],[16,6],[15,8],[14,7],[16,4]]
+    }
+  ];
+
+  // ====================== 状态 ======================
+  let G = null;
+  let selected = null;        // 选中的我方单位
+  let moveCells = [];         // 可移动格
+  let atkCells = [];          // 可攻击目标
+  let mode = 'select';        // select / moved / target / magtarget
+  let pendingAtk = null;      // 等待选择目标的攻击发起方
+  let pendingMag = null;      // 等待选择目标的计策发起方
+
+  function newUnit(side, def, x, y){
+    return {
+      side, name:def.name, ch:def.ch, war:def.war, int:def.int, lead:def.lead,
+      hp:def.hp, maxhp:def.hp, mp:def.mp||0, maxmp:def.mp||0,
+      move:def.move, range:def.range, weapon:def.weapon||'兵',
+      wlv:1, wexp:0, mage:!!def.mage, cmd:!!def.cmd, boss:!!def.boss,
+      x, y, alive:true, hasMoved:false, hasActed:false, chaos:0
+    };
+  }
+
+  function buildLevel(idx){
+    const L = LEVELS[idx];
+    const grid = L.map.map(row=>row.split('').map(ch=>{
+      return ({'.':'plain','g':'grass','f':'forest','m':'mtn','c':'city','w':'water','b':'bridge'})[ch]||'plain';
+    }));
+    const players = L.players.map((d,i)=>newUnit('p',d,L.playersPos[i][0],L.playersPos[i][1]));
+    const enemies = L.enemies.map((d,i)=>newUnit('e',d,L.enemiesPos[i][0],L.enemiesPos[i][1]));
+    G = {
+      idx, name:L.name, intro:L.intro, grid,
+      units:[...players,...enemies],
+      phase:'player', level:idx, over:false,
+      moveAnim:null
+    };
+    selected=null; mode='select'; moveCells=[]; atkCells=[]; pendingAtk=null; pendingMag=null;
+    log(L.name+'：'+L.intro);
+  }
+
+  function unitAt(x,y){ return G.units.find(u=>u.alive && u.x===x && u.y===y); }
+  function inBounds(x,y){ return x>=0&&y>=0&&x<COLS&&y<ROWS; }
+  function terrainAt(x,y){ const k=G.grid[y] && G.grid[y][x]; return TERRAIN[k]||TERRAIN.plain; }
+
+  // ====================== 移动范围 (Dijkstra) ======================
+  function moveRange(unit){
+    const cost = Array.from({length:ROWS},()=>Array(COLS).fill(Infinity));
+    cost[unit.y][unit.x]=0;
+    const pq=[[0,unit.x,unit.y]];
+    while(pq.length){
+      pq.sort((a,b)=>a[0]-b[0]);
+      const [c,x,y]=pq.shift();
+      if(c>cost[y][x]) continue;
+      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const nx=x+dx, ny=y+dy;
+        if(!inBounds(nx,ny)) continue;
+        const t=terrainAt(nx,ny);
+        if(t.mv>=99) continue;               // 水域不可通行
+        if(unitAt(nx,ny)) continue;          // 被占
+        const nc=c+t.mv;
+        if(nc<=unit.move && nc<cost[ny][nx]){ cost[ny][nx]=nc; pq.push([nc,nx,ny]); }
+      }
+    }
+    const cells=[];
+    for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+      if(cost[y][x]<=unit.move && !(x===unit.x&&y===unit.y)) cells.push({x,y});
+    }
+    return cells;
+  }
+
+  function attackCellsFrom(unit, fx, fy){
+    const cells=[];
+    for(const e of G.units){
+      if(!e.alive || e.side===unit.side) continue;
+      const d=Math.abs(e.x-fx)+Math.abs(e.y-fy);
+      if(d<=unit.range) cells.push({x:e.x,y:e.y,target:e});
+    }
+    return cells;
+  }
+
+  // ====================== 战斗结算 ======================
+  function weaponBonus(u){ return u.wlv*2; }
+  function attackPower(u){ return u.war + weaponBonus(u); }
+  function defenseOf(u){ return u.lead*0.3 + terrainAt(u.x,u.y).def; }
+
+  function resolveMelee(atk, def){
+    const ap=attackPower(atk), df=defenseOf(def);
+    let dmg=Math.max(1, Math.round((ap - df*0.5) * (0.9+Math.random()*0.25)));
+    const critChance = Math.max(0, Math.min(0.4,(atk.war-def.lead)/300 + 0.05));
+    let crit=false;
+    if(Math.random()<critChance){ dmg=Math.round(dmg*1.6); crit=true; }
+    def.hp=Math.max(0, def.hp-dmg);
+    // 武具成长
+    atk.wexp++;
+    if(atk.wexp>=3 && atk.wlv<8){ atk.wlv++; atk.wexp=0; log(atk.name+'的'+atk.weapon+'精进至 Lv'+atk.wlv+'！'); }
+    log((crit?'★暴击！ ':'')+atk.name+' 攻击 '+def.name+'，造成 '+dmg+' 伤害。');
+    crit?SFX.crit():SFX.hit();
+    if(def.hp<=0) killUnit(def);
+  }
+
+  function resolveMagic(atk, def, kind){
+    if(kind==='fire'){
+      const dmg=Math.max(1, Math.round(atk.int*1.2 - def.int*0.4));
+      def.hp=Math.max(0, def.hp-dmg);
+      log(atk.name+' 施放【火计】于 '+def.name+'，灼烧 '+dmg+' 点。');
+      SFX.magic();
+      if(def.hp<=0) killUnit(def);
+    } else if(kind==='chaos'){
+      def.chaos=2;
+      log(atk.name+' 施放【混乱】，'+def.name+' 陷入恍惚！');
+      SFX.magic();
+    }
+    atk.mp=Math.max(0, atk.mp - (kind==='fire'?8:10));
+  }
+
+  function killUnit(u){
+    u.alive=false;
+    log(u.name+' 阵亡！');
+    if(u.cmd){ // 主将阵亡
+      G.over = (u.side==='p') ? 'lose' : 'win';
+    }
+  }
+
+  function checkEnd(){
+    if(G.over) return true;
+    const pAlive=G.units.some(u=>u.alive&&u.side==='p');
+    const eAlive=G.units.some(u=>u.alive&&u.side==='e');
+    if(!eAlive){ G.over='win'; return true; }
+    if(!pAlive){ G.over='lose'; return true; }
+    return false;
+  }
+
+  // ====================== 玩家交互 ======================
+  function selectUnit(u){
+    selected=u; mode='select'; atkCells=[]; pendingAtk=null; pendingMag=null;
+    moveCells = u.hasMoved ? [] : moveRange(u);
+    updateSelPanel();
+    updateButtons();
+  }
+
+  function clickCell(x,y){
+    if(G.over || G.phase!=='player') return;
+    const u=unitAt(x,y);
+    if(mode==='target' && pendingAtk){
+      const t=atkCells.find(c=>c.x===x&&c.y===y&&c.target);
+      if(t){ doAttack(pendingAtk, t.target); }
+      return;
+    }
+    if(mode==='magtarget' && pendingMag){
+      const t=atkCells.find(c=>c.x===x&&c.y===y&&c.target);
+      if(t){ doMagic(pendingMag, t.target); }
+      return;
+    }
+    if(u && u.side==='p' && !u.hasActed){
+      selectUnit(u);
+      return;
+    }
+    if(selected && !selected.hasMoved){
+      const mc=moveCells.find(c=>c.x===x&&c.y===y);
+      if(mc){ doMove(selected, x, y); return; }
+    }
+    if(selected){
+      const ac=atkCells.find(c=>c.x===x&&c.y===y&&c.target);
+      if(ac && selected.hasMoved){ enterTarget(selected); return; }
+    }
+  }
+
+  function doMove(u, x, y){
+    u.x=x; u.y=y; u.hasMoved=true; SFX.move();
+    moveCells=[];
+    atkCells = u.hasActed ? [] : attackCellsFrom(u, x, y);
+    mode='moved';
+    updateSelPanel(); updateButtons();
+  }
+
+  function enterTarget(u){
+    mode='target'; pendingAtk=u;
+    // 攻击目标 = 当前位置可达敌
+    atkCells = attackCellsFrom(u, u.x, u.y);
+    updateButtons();
+  }
+
+  function enterMag(u){
+    if(u.mp<8) return;
+    mode='magtarget'; pendingMag=u;
+    // 火计范围2，混乱范围1
+    const cells=[];
+    for(const e of G.units){
+      if(!e.alive||e.side===u.side) continue;
+      if(Math.abs(e.x-u.x)+Math.abs(e.y-u.y)<=2) cells.push({x:e.x,y:e.y,target:e});
+    }
+    atkCells=cells;
+    updateButtons();
+  }
+
+  function doAttack(atk, def){
+    resolveMelee(atk, def);
+    atk.hasActed=true; atk.hasMoved=true;
+    mode='select'; pendingAtk=null; atkCells=[]; moveCells=[];
+    selected=null;
+    afterAction();
+  }
+
+  function doMagic(atk, def){
+    // 选火计(默认) 或混乱：混乱优先用于高武力敌且自身mp足
+    const kind = (atk.mp>=18 && def.war>atk.int && Math.random()<0.5) ? 'chaos' : 'fire';
+    resolveMagic(atk, def, kind);
+    atk.hasActed=true; atk.hasMoved=true;
+    mode='select'; pendingMag=null; atkCells=[]; moveCells=[];
+    selected=null;
+    afterAction();
+  }
+
+  function waitUnit(){
+    if(!selected) return;
+    selected.hasActed=true; selected.hasMoved=true;
+    selected=null; mode='select'; atkCells=[]; moveCells=[];
+    afterAction();
+  }
+
+  function afterAction(){
+    updateSelPanel(); updateButtons();
+    if(checkEnd()){ endBattle(); return; }
+    // 若所有我方已行动，自动结束
+    const allActed = G.units.filter(u=>u.alive&&u.side==='p').every(u=>u.hasActed);
+    if(allActed) endPlayerPhase();
+  }
+
+  function endPlayerPhase(){
+    G.phase='enemy'; setPhaseTag();
+    setTimeout(enemyPhase, 350);
+  }
+
+  // ====================== 敌方 AI ======================
+  function manhattan(a,b){ return Math.abs(a.x-b.x)+Math.abs(a.y-b.y); }
+
+  function enemyPhase(){
+    const foeList = G.units.filter(u=>u.alive&&u.side==='e');
+    let i=0;
+    function step(){
+      if(G.over){ endBattle(); return; }
+      if(i>=foeList.length){ startPlayerPhase(); return; }
+      const e=foeList[i];
+      if(!e.alive){ i++; step(); return; }
+      if(e.chaos>0){ e.chaos--; log(e.name+' 受混乱所扰，无法行动。'); i++; setTimeout(step,180); return; }
+      enemyAct(e);
+      i++;
+      setTimeout(step, 320);
+    }
+    step();
+  }
+
+  function enemyAct(e){
+    const targets = G.units.filter(u=>u.alive&&u.side==='p');
+    if(!targets.length) return;
+    // 选最近目标
+    let target = targets.reduce((a,b)=> manhattan(e,a)<=manhattan(e,b)?a:b);
+    // 若可计策且目标强力
+    if(e.mage && e.mp>=8 && Math.random()<0.6){
+      const reach = targets.filter(t=>manhattan(e,t)<=2);
+      if(reach.length){
+        const tgt = reach.reduce((a,b)=>a.hp<=b.hp?a:b);
+        resolveMagic(e, tgt, 'fire');
+        e.hasActed=true;
+        if(checkEnd()){ G.over='win'; }
+        return;
+      }
+    }
+    // 移动到能攻击目标的位置
+    const range = moveRange(e);
+    let best=null, bestScore=1e9;
+    for(const c of range){
+      const d=Math.abs(c.x-target.x)+Math.abs(c.y-target.y);
+      const canHit = d<=e.range;
+      const score = canHit ? -1000 + d : d + terrainAt(c.x,c.y).def*0.01;
+      if(score<bestScore){ bestScore=score; best=c; }
+    }
+    if(best){ e.x=best.x; e.y=best.y; SFX.move(); }
+    // 攻击
+    const atk=attackCellsFrom(e, e.x, e.y);
+    if(atk.length){
+      const tgt = atk.map(c=>c.target).reduce((a,b)=> a.hp<=b.hp ? a : b);
+      resolveMelee(e, tgt);
+      if(checkEnd()){ G.over='win'; }
+    }
+    e.hasActed=true;
+  }
+
+  function startPlayerPhase(){
+    if(checkEnd()){ endBattle(); return; }
+    G.phase='player';
+    G.units.forEach(u=>{ if(u.alive){ u.hasMoved=false; u.hasActed=false; } });
+    setPhaseTag();
+    log('—— 我方回合 ——');
+  }
+
+  // ====================== 结束 ======================
+  function endBattle(){
+    G.phase='over';
+    setPhaseTag();
+    const win = G.over==='win';
+    win?SFX.win():SFX.lose();
+    const title=document.getElementById('bannerTitle');
+    const text=document.getElementById('bannerText');
+    const btn=document.getElementById('bannerBtn');
+    title.textContent = win ? '胜 利' : '败 北';
+    title.className = win ? 'win' : 'lose';
+    if(win){
+      if(G.idx < LEVELS.length-1){
+        text.textContent = '「'+G.name+'」已克！曹公威名更盛。下一场战役一触即发。';
+        btn.textContent='进军下一战';
+        btn.onclick=()=>{ document.getElementById('banner').classList.add('hidden'); buildLevel(G.idx+1); setPhaseTag(); };
+      } else {
+        text.textContent = '群雄尽伏，三国归晋之基已成。曹公霸业，于此而定！';
+        btn.textContent='再战一回';
+        btn.onclick=()=>{ document.getElementById('banner').classList.add('hidden'); buildLevel(0); setPhaseTag(); };
+      }
+    } else {
+      text.textContent = '战事不利，主公暂退。整军经武，来日再图恢复。';
+      btn.textContent='重整旗鼓';
+      btn.onclick=()=>{ document.getElementById('banner').classList.add('hidden'); buildLevel(G.idx); setPhaseTag(); };
+    }
+    document.getElementById('banner').classList.remove('hidden');
+  }
+
+  // ====================== UI ======================
+  function setPhaseTag(){
+    const t=document.getElementById('phaseTag');
+    t.textContent = G.phase==='player'?'玩家回合':G.phase==='enemy'?'敌军行动…':'战斗结束';
+  }
+  let logLines=[];
+  function log(s){ logLines.push(s); if(logLines.length>6) logLines.shift(); document.getElementById('logText').innerHTML=logLines.map(l=>'· '+l).join('<br>'); }
+  function updateSelPanel(){
+    const el=document.getElementById('selInfo');
+    if(!selected){ el.innerHTML='点击我方武将进行操作'; return; }
+    const u=selected;
+    el.innerHTML = '<b>'+u.name+'</b> '+(u.cmd?'<span style="color:#f0c560">主公</span>':'')+'<br>'+
+      '武 '+u.war+' · 智 '+u.int+' · 统 '+u.lead+'<br>'+
+      'HP '+u.hp+'/'+u.maxhp+(u.maxmp?' · MP '+u.mp+'/'+u.maxmp:'')+'<br>'+
+      '兵装 '+u.weapon+' Lv'+u.wlv+(u.range>1?' · 射程'+u.range:'');
+  }
+  function updateButtons(){
+    const sel=selected;
+    const canAct = sel && sel.alive && sel.side==='p' && !sel.hasActed;
+    const hasAtk = canAct && (sel.hasMoved ? attackCellsFrom(sel,sel.x,sel.y).length>0 : true);
+    document.getElementById('atkBtn').disabled = !(mode==='moved' && sel && attackCellsFrom(sel,sel.x,sel.y).length>0);
+    document.getElementById('magBtn').disabled = !(canAct && sel.mage && sel.mp>=8);
+    document.getElementById('waitBtn').disabled = !(canAct);
+    document.getElementById('endBtn').disabled = (G.phase!=='player'||G.over);
+  }
+
+  // ====================== 渲染 ======================
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // 地形
+    for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+      const t=TERRAIN[G.grid[y][x]];
+      ctx.fillStyle=t.color;
+      ctx.fillRect(x*TILE,y*TILE,TILE,TILE);
+      // 纹理
+      if(t.name==='森林'){ ctx.fillStyle='rgba(20,50,20,.5)'; for(let k=0;k<3;k++){ ctx.beginPath(); ctx.arc(x*TILE+12+k*12,y*TILE+24,7,0,7); ctx.fill(); } }
+      else if(t.name==='山地'){ ctx.fillStyle='rgba(60,50,30,.5)'; ctx.beginPath(); ctx.moveTo(x*TILE+24,y*TILE+8); ctx.lineTo(x*TILE+40,y*TILE+40); ctx.lineTo(x*TILE+8,y*TILE+40); ctx.fill(); }
+      else if(t.name==='城池'){ ctx.fillStyle='rgba(120,90,40,.6)'; ctx.fillRect(x*TILE+8,y*TILE+8,TILE-16,TILE-16); ctx.fillStyle='rgba(80,60,30,.7)'; ctx.fillRect(x*TILE+14,y*TILE+14,TILE-28,TILE-28); }
+      else if(t.name==='水域'){ ctx.strokeStyle='rgba(180,210,230,.3)'; ctx.beginPath(); ctx.moveTo(x*TILE+6,y*TILE+20); ctx.lineTo(x*TILE+42,y*TILE+20); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x*TILE+6,y*TILE+34); ctx.lineTo(x*TILE+42,y*TILE+34); ctx.stroke(); }
+      ctx.strokeStyle='rgba(0,0,0,.18)'; ctx.strokeRect(x*TILE,y*TILE,TILE,TILE);
+    }
+    // 移动范围高亮
+    if(mode==='select'||mode==='moved'){
+      for(const c of moveCells){ ctx.fillStyle='rgba(90,150,230,.32)'; ctx.fillRect(c.x*TILE+2,c.y*TILE+2,TILE-4,TILE-4); }
+    }
+    // 攻击目标高亮
+    for(const c of atkCells){ if(c.target){ ctx.fillStyle='rgba(220,70,60,.4)'; ctx.fillRect(c.x*TILE+2,c.y*TILE+2,TILE-4,TILE-4); } }
+    // 单位
+    for(const u of G.units){
+      if(!u.alive) continue;
+      drawUnit(u);
+    }
+  }
+
+  function drawUnit(u){
+    const cx=u.x*TILE+TILE/2, cy=u.y*TILE+TILE/2;
+    const r=18;
+    // 阴影
+    ctx.fillStyle='rgba(0,0,0,.3)'; ctx.beginPath(); ctx.ellipse(cx,cy+18,16,6,0,0,7); ctx.fill();
+    // 主体
+    const base = u.side==='p' ? (u.cmd?'#3a6ec0':'#4a8bd0') : (u.boss?'#b03a3a':'#c0504a');
+    ctx.fillStyle=base;
+    roundRect(cx-r,cy-r,r*2,r*2,8); ctx.fill();
+    ctx.strokeStyle= u.side==='p'?'#bfe0ff':'#ffcfc0'; ctx.lineWidth=2; ctx.stroke();
+    // 字符
+    ctx.fillStyle='#fff'; ctx.font='bold 18px "PingFang SC",sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(u.ch, cx, cy+1);
+    // 主将冠
+    if(u.cmd){ ctx.fillStyle='#f0c560'; ctx.fillRect(cx-r,cy-r-5,r*2,4); }
+    // HP 条
+    const bw=36, bh=4, bx=cx-bw/2, by=cy-r-9;
+    ctx.fillStyle='#301810'; ctx.fillRect(bx,by,bw,bh);
+    const ratio=u.hp/u.maxhp;
+    ctx.fillStyle= ratio>0.5?'#5fbf4f':ratio>0.25?'#e0b03a':'#d05050';
+    ctx.fillRect(bx,by,bw*ratio,bh);
+    // 混乱标记
+    if(u.chaos>0){ ctx.fillStyle='#d070e0'; ctx.font='12px sans-serif'; ctx.fillText('乱',cx+r-4,cy-r+2); }
+    // 可行动指示
+    if(u.side==='p' && !u.hasActed && G.phase==='player'){ ctx.strokeStyle='#f0e060'; ctx.lineWidth=2; roundRect(cx-r-3,cy-r-3,r*2+6,r*2+6,10); ctx.stroke(); }
+  }
+  function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+
+  // ====================== 输入 ======================
+  function canvasPos(ev){
+    const rect=canvas.getBoundingClientRect();
+    const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+    const px=(ev.touches?ev.touches[0].clientX:ev.clientX)-rect.left;
+    const py=(ev.touches?ev.touches[0].clientY:ev.clientY)-rect.top;
+    return { x:Math.floor(px*sx/TILE), y:Math.floor(py*sy/TILE) };
+  }
+  function onDown(ev){ ev.preventDefault(); audio(); const p=canvasPos(ev); if(inBounds(p.x,p.y)) clickCell(p.x,p.y); }
+  canvas.addEventListener('mousedown', onDown);
+  canvas.addEventListener('touchstart', onDown, {passive:false});
+
+  document.getElementById('atkBtn').onclick=()=>{ if(selected&&selected.hasMoved) enterTarget(selected); };
+  document.getElementById('magBtn').onclick=()=>{ if(selected) enterMag(selected); };
+  document.getElementById('waitBtn').onclick=()=>waitUnit();
+  document.getElementById('endBtn').onclick=()=>{ if(G.phase==='player'&&!G.over) endPlayerPhase(); };
+  document.getElementById('muteBtn').onclick=()=>{ muted=!muted; document.getElementById('muteBtn').textContent=muted?'🔇':'🔊'; if(!muted) audio(); };
+
+  // ====================== 主循环 ======================
+  function loop(){ if(G){ draw(); } requestAnimationFrame(loop); }
+  buildLevel(0);
+  setPhaseTag();
+  loop();
+})();
+</script>
+</body>
+</html>
