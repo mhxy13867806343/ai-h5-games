@@ -200,11 +200,15 @@ class CodeViewerDownloader {
 
 
 /* ============================================================
-   CSS + jQuery 专属高颜值分享弹窗系统 (ShareHelper)
+   CSS + jQuery 浏览器绝对居中分享弹窗系统 (ShareHelper v3)
    ============================================================ */
 class ShareHelper {
     static initModal() {
-        if (document.getElementById('share-modal-overlay')) return;
+        // Remove any outdated modal elements from DOM
+        const oldShareBox = document.getElementById('share-modal');
+        if (oldShareBox) oldShareBox.remove();
+        const oldOverlay = document.getElementById('share-modal-overlay');
+        if (oldOverlay) oldOverlay.remove();
 
         const modalHtml = `
             <div id="share-modal-overlay">
@@ -256,7 +260,7 @@ class ShareHelper {
         `;
 
         const styleHtml = `
-            <style>
+            <style id="share-modal-styles">
                 #share-modal-overlay {
                     position: fixed !important;
                     top: 0 !important;
@@ -266,35 +270,37 @@ class ShareHelper {
                     width: 100vw !important;
                     height: 100vh !important;
                     background: rgba(10, 15, 29, 0.85) !important;
-                    backdrop-filter: blur(10px) !important;
-                    -webkit-backdrop-filter: blur(10px) !important;
+                    backdrop-filter: blur(12px) !important;
+                    -webkit-backdrop-filter: blur(12px) !important;
                     display: none;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    z-index: 9999999 !important;
-                    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif !important;
-                    box-sizing: border-box !important;
-                    padding: 20px !important;
+                    z-index: 99999999 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
                 }
 
                 #share-modal-dialog {
-                    width: 100% !important;
+                    position: fixed !important;
+                    top: 50% !important;
+                    left: 50% !important;
+                    transform: translate(-50%, -50%) !important;
+                    width: 90% !important;
                     max-width: 460px !important;
                     background: #111827 !important;
                     border: 1px solid #374151 !important;
                     border-radius: 16px !important;
-                    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.15) !important;
+                    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 50px rgba(56, 189, 248, 0.2) !important;
                     overflow: hidden !important;
                     display: flex !important;
                     flex-direction: column !important;
                     color: #f3f4f6 !important;
                     box-sizing: border-box !important;
+                    z-index: 100000000 !important;
                     animation: jqueryModalZoom 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
 
                 @keyframes jqueryModalZoom {
-                    from { transform: scale(0.88); opacity: 0; }
-                    to { transform: scale(1); opacity: 1; }
+                    from { transform: translate(-50%, -50%) scale(0.85); opacity: 0; }
+                    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
                 }
 
                 .s-modal-header {
@@ -501,11 +507,11 @@ class ShareHelper {
 
         // Bind jQuery close events
         if (window.$) {
-            $('#s-btn-close-x, #s-btn-close-footer').on('click', function () {
+            $('#s-btn-close-x, #s-btn-close-footer').off('click').on('click', function () {
                 ShareHelper.closeModal();
             });
 
-            $('#share-modal-overlay').on('click', function (e) {
+            $('#share-modal-overlay').off('click').on('click', function (e) {
                 if (e.target === this) ShareHelper.closeModal();
             });
         }
@@ -572,7 +578,7 @@ class ShareHelper {
         // Auto copy to clipboard
         this.copyText(shareMsg).then(() => {
             if (window.$) {
-                $('#s-toast-bar').stop(true, true).slideDown(200).delay(2000).slideUp(200);
+                $('#s-toast-bar').stop(true, true).slideDown(200).delay(2500).slideUp(200);
             }
         });
 
@@ -586,10 +592,10 @@ class ShareHelper {
 
         // jQuery fadeIn animation for centered popup!
         if (window.$) {
-            $('#share-modal-overlay').css('display', 'flex').hide().fadeIn(250);
+            $('#share-modal-overlay').stop(true, true).fadeIn(250);
         } else {
             const overlay = document.getElementById('share-modal-overlay');
-            if (overlay) overlay.style.display = 'flex';
+            if (overlay) overlay.style.display = 'block';
         }
 
         // Bind copy button with jQuery
