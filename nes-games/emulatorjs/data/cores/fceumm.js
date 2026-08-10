@@ -1,1 +1,1 @@
-Couldn't find the requested file /data/cores/fceumm.js in EmulatorJS/EmulatorJS.
+Package version not found: @emulatorjs/emulatorjs@1.0.0

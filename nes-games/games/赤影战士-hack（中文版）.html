@@ -166,6 +166,7 @@ NATSUME公司在红白机时代推出了一款清版过关游戏——《赤影�
     <div class="game-frame" id="frame-wrap">
       <div id="game" style="width:100%;height:100%;"></div>
     </div>
+    </div>
 
     <div class="toolbar">
       <button id="btn-restart" title="重新开始">↻ 重新开始</button>
@@ -282,12 +283,15 @@ NATSUME公司在红白机时代推出了一款清版过关游戏——《赤影�
 
   <script src="../game-detail.js"></script>
 
+  
   <script>
-    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/赤影战士 hack（中文版）-daab4391-2a52-4a76-8796-3d606ee8ff68.zip";
-    EmuJS_system = "nes";
-    EmuJS_dataPath = "https://cdn.emulatorjs.org/stable/data/";
-    EmuJS_startOnLoaded = true;
+    EJS_player = "#game";
+    EJS_gameUrl = "https://cdn.lxyong.com/games/nes/赤影战士 hack（中文版）-daab4391-2a52-4a76-8796-3d606ee8ff68.zip";
+    EJS_gameID = "1";
+    EJS_core = "nes";
+    EJS_pathtodata = "../emulatorjs/data/";
+    EJS_startOnLoaded = true;
   </script>
-  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+  <script src="../emulatorjs/data/loader.js"></script>
 </body>
 </html>

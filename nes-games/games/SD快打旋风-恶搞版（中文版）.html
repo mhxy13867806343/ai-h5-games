@@ -80,6 +80,7 @@
     <div class="game-frame" id="frame-wrap">
       <div id="game" style="width:100%;height:100%;"></div>
     </div>
+    </div>
 
     <div class="toolbar">
       <button id="btn-restart" title="重新开始">↻ 重新开始</button>
@@ -153,12 +154,15 @@
 
   <script src="../game-detail.js"></script>
 
+  
   <script>
-    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/SD快打旋风 恶搞版（中文版）-98da9a71-104e-4f4a-acb1-66e3442df499.zip";
-    EmuJS_system = "nes";
-    EmuJS_dataPath = "https://cdn.emulatorjs.org/stable/data/";
-    EmuJS_startOnLoaded = true;
+    EJS_player = "#game";
+    EJS_gameUrl = "https://cdn.lxyong.com/games/nes/SD快打旋风 恶搞版（中文版）-98da9a71-104e-4f4a-acb1-66e3442df499.zip";
+    EJS_gameID = "1";
+    EJS_core = "nes";
+    EJS_pathtodata = "../emulatorjs/data/";
+    EJS_startOnLoaded = true;
   </script>
-  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+  <script src="../emulatorjs/data/loader.js"></script>
 </body>
 </html>

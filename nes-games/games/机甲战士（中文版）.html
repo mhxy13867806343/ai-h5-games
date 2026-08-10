@@ -78,6 +78,7 @@ Data East以街机的电子游戏开发为主要业务，全盛期为1980年代�
     <div class="game-frame" id="frame-wrap">
       <div id="game" style="width:100%;height:100%;"></div>
     </div>
+    </div>
 
     <div class="toolbar">
       <button id="btn-restart" title="重新开始">↻ 重新开始</button>
@@ -150,12 +151,15 @@ Data East以街机的电子游戏开发为主要业务，全盛期为1980年代�
 
   <script src="../game-detail.js"></script>
 
+  
   <script>
-    EmuJS_gameUrl = "https://cdn.lxyong.com/games/nes/机甲战士（中文版）-61087d3b-bbae-40cd-b2a3-5280069f74e2.zip";
-    EmuJS_system = "nes";
-    EmuJS_dataPath = "https://cdn.emulatorjs.org/stable/data/";
-    EmuJS_startOnLoaded = true;
+    EJS_player = "#game";
+    EJS_gameUrl = "https://cdn.lxyong.com/games/nes/机甲战士（中文版）-61087d3b-bbae-40cd-b2a3-5280069f74e2.zip";
+    EJS_gameID = "1";
+    EJS_core = "nes";
+    EJS_pathtodata = "../emulatorjs/data/";
+    EJS_startOnLoaded = true;
   </script>
-  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+  <script src="../emulatorjs/data/loader.js"></script>
 </body>
 </html>
