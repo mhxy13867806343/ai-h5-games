@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HY3 游戏合集 —— 网页小游戏复刻站</title>
+<meta name="title" content="HY3 游戏合集 —— 网页小游戏复刻站">
+<meta name="description" content="用原创 Canvas 图形与自研逻辑复刻的一批网页小游戏：螺旋泡泡柱2、斗地主、忍者拆炸弹、开心农场、真侍魂、三国志曹操传、水果忍者、黄金太阳，外加一个最终幻想属性修改器。打开即玩，无需安装。">
+<meta name="site" content="HY3 游戏合集">
+<meta name="keywords" content="网页游戏,H5小游戏,游戏复刻,Canvas游戏,在线小游戏">
+<meta property="og:title" content="HY3 游戏合集 —— 网页小游戏复刻站">
+<meta property="og:description" content="打开即玩的原创复刻网页小游戏合集。">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/share/share.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="index.html">
+      <span class="logo">🎮</span>
+      <span>HY3 游戏合集<br><small>原创复刻 · 打开即玩</small></span>
+    </a>
+    <span class="spacer"></span>
+    <div class="topbar-share">
+      <span class="lbl">分享本站</span>
+      <div class="social-share ss-sm" id="siteShare"
+           data-sites="weibo,qq,qzone,wechat,douban,copy"
+           data-wechat-qrcode-title="微信扫一扫：分享游戏合集"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>一批<span class="grad">亲手复刻</span>的网页小游戏</h1>
+    <p>全部为单文件 HTML5 实现：原创 Canvas 图形 + 自研玩法逻辑 + WebAudio 音效，不含任何第三方专有素材。点开就能玩，也可以进详情页看玩法与操作说明。</p>
+    <div class="stats">
+      <div><b id="stNum">0</b><span>个作品</span></div>
+      <div><b id="stCat">0</b><span>个分类</span></div>
+      <div><b>0</b><span>依赖 / 完全离线</span></div>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <div class="search">
+      <span class="ico">🔍</span>
+      <input id="q" type="search" placeholder="搜索游戏名、标签或简介…" autocomplete="off">
+    </div>
+    <div class="chips" id="chips"></div>
+    <select class="sortsel" id="sort">
+      <option value="new">最新在前</option>
+      <option value="name">按名称排序</option>
+      <option value="cat">按分类排序</option>
+    </select>
+  </section>
+
+  <section class="grid" id="grid"></section>
+  <div class="empty" id="empty" style="display:none">没有匹配的游戏，换个关键词试试。</div>
+
+</main>
+
+<footer class="foot-site">
+  <div class="wrap">
+    <div>本站所有游戏均为原创代码实现的玩法复刻，不含原作图片、音频或源码。</div>
+    <div class="social-share ss-sm" id="footShare"
+         data-sites="weibo,qq,qzone,wechat,tencent,douban,diandian,linkedin,facebook,twitter,copy"></div>
+  </div>
+</footer>
+
+<script src="assets/games.js"></script>
+<script src="assets/share/share.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var grid = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+  var chipsBox = document.getElementById('chips');
+  var qInput = document.getElementById('q');
+  var sortSel = document.getElementById('sort');
+
+  var state = { cat: '全部', q: '', sort: 'new' };
+
+  document.getElementById('stNum').textContent = GAMES.length;
+  document.getElementById('stCat').textContent = GAME_CATS.length - 1;
+
+  // 分类筛选按钮
+  GAME_CATS.forEach(function (c) {
+    var b = document.createElement('button');
+    b.className = 'chip' + (c === state.cat ? ' on' : '');
+    b.textContent = c;
+    b.addEventListener('click', function () {
+      state.cat = c;
+      [].forEach.call(chipsBox.children, function (n) { n.classList.toggle('on', n === b); });
+      render();
+    });
+    chipsBox.appendChild(b);
+  });
+
+  function absUrl(rel) {
+    try { return new URL(rel, location.href).href; }
+    catch (e) { return rel; }
+  }
+
+  function detailUrl(g) { return absUrl('detail.html?id=' + encodeURIComponent(g.id)); }
+
+  function filtered() {
+    var kw = state.q.trim().toLowerCase();
+    var list = GAMES.filter(function (g) {
+      if (state.cat !== '全部' && g.cat !== state.cat) return false;
+      if (!kw) return true;
+      var hay = (g.name + ' ' + g.cat + ' ' + g.tags.join(' ') + ' ' + g.brief + ' ' + g.from).toLowerCase();
+      return hay.indexOf(kw) !== -1;
+    });
+    if (state.sort === 'name') list.sort(function (a, b) { return a.name.localeCompare(b.name, 'zh-Hans-CN'); });
+    else if (state.sort === 'cat') list.sort(function (a, b) { return a.cat.localeCompare(b.cat, 'zh-Hans-CN') || a.name.localeCompare(b.name, 'zh-Hans-CN'); });
+    else list.sort(function (a, b) { return b.date.localeCompare(a.date); });
+    return list;
+  }
+
+  function card(g) {
+    var el = document.createElement('article');
+    el.className = 'card';
+
+    var url = detailUrl(g);
+    var cover = document.createElement('a');
+    cover.className = 'cover';
+    cover.href = 'detail.html?id=' + encodeURIComponent(g.id);
+    cover.style.background = 'linear-gradient(135deg,' + g.grad[0] + ',' + g.grad[1] + ')';
+    cover.innerHTML = '<span class="cat"></span><span class="emo">' + g.emoji + '</span>';
+    cover.querySelector('.cat').textContent = g.cat;
+
+    var body = document.createElement('div');
+    body.className = 'body';
+
+    var h3 = document.createElement('h3');
+    var a = document.createElement('a');
+    a.href = 'detail.html?id=' + encodeURIComponent(g.id);
+    a.textContent = g.name;
+    h3.appendChild(a);
+
+    var tags = document.createElement('div');
+    tags.className = 'tags';
+    g.tags.forEach(function (t) { var i = document.createElement('i'); i.textContent = t; tags.appendChild(i); });
+
+    var p = document.createElement('p');
+    p.className = 'brief';
+    p.textContent = g.brief;
+
+    var foot = document.createElement('div');
+    foot.className = 'foot';
+
+    var play = document.createElement('a');
+    play.className = 'btn primary';
+    play.href = g.file;
+    play.target = '_blank';
+    play.rel = 'noopener';
+    play.textContent = '▶ 直接玩';
+
+    var more = document.createElement('a');
+    more.className = 'btn';
+    more.href = 'detail.html?id=' + encodeURIComponent(g.id);
+    more.textContent = '详情';
+
+    // 每张卡片独立的分享组件：分享的是该游戏的详情页链接
+    var share = document.createElement('div');
+    share.className = 'social-share ss-sm';
+    share.setAttribute('data-sites', 'weibo,qzone,wechat,copy');
+    share.setAttribute('data-url', url);
+    share.setAttribute('data-title', g.name + ' —— HY3 游戏合集');
+    share.setAttribute('data-description', g.brief);
+    share.setAttribute('data-source', 'HY3 游戏合集');
+    share.setAttribute('data-wechat-qrcode-title', '微信扫一扫：分享《' + g.name + '》');
+    share.setAttribute('data-wechat-qrcode-helper', '<p>用微信扫码，把这个游戏</p><p>分享给好友或朋友圈。</p>');
+
+    foot.appendChild(play);
+    foot.appendChild(more);
+    foot.appendChild(share);
+
+    body.appendChild(h3);
+    body.appendChild(tags);
+    body.appendChild(p);
+    body.appendChild(foot);
+
+    el.appendChild(cover);
+    el.appendChild(body);
+    return el;
+  }
+
+  function render() {
+    var list = filtered();
+    grid.innerHTML = '';
+    list.forEach(function (g) { grid.appendChild(card(g)); });
+    empty.style.display = list.length ? 'none' : 'block';
+    // 渲染完成后初始化本批卡片上的分享组件
+    if (window.socialShare) socialShare('.card .social-share:not([data-share-done])');
+  }
+
+  var timer = null;
+  qInput.addEventListener('input', function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () { state.q = qInput.value; render(); }, 120);
+  });
+  sortSel.addEventListener('change', function () { state.sort = sortSel.value; render(); });
+
+  render();
+})();
+</script>
+</body>
+</html>
