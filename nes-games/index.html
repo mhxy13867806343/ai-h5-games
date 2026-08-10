@@ -6,27 +6,7 @@
 <title>红白机（FC / NES）游戏大全 - 240款免费在线玩 - 复古游戏中文网</title>
 <meta name="description" content="免费在线游玩经典红白机（FC / NES）游戏，无下载，浏览器直接畅玩，支持PC和手机，重温童年回忆。">
 <link rel="stylesheet" href="style.css">
-<style>
-.list-page { max-width: 1280px; margin: 0 auto; padding: 20px; }
-.header { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 20px; }
-.header h1 { font-size: 24px; margin-bottom: 8px; }
-.header .stats { color: var(--muted); font-size: 14px; display: flex; gap: 16px; flex-wrap: wrap; }
-.search-bar { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.search-bar input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 8px; font-size: 14px; outline: none; }
-.search-bar input:focus { border-color: var(--brand); }
-.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; margin-bottom: 24px; }
-.game-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; text-decoration: none; color: var(--text); transition: all 0.2s; display: flex; flex-direction: column; }
-.game-card:hover { transform: translateY(-4px); border-color: var(--brand); box-shadow: 0 8px 24px rgba(59,130,246,0.2); }
-.game-card .cover { aspect-ratio: 1; background: var(--bg); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.game-card .cover img { width: 100%; height: 100%; object-fit: cover; }
-.game-card .title { padding: 10px 12px; font-size: 13px; font-weight: 500; line-height: 1.4; min-height: 56px; display: flex; align-items: center; }
-.game-card .tag { font-size: 11px; background: var(--brand); color: #fff; padding: 2px 8px; border-radius: 10px; display: inline-block; margin: 0 12px 10px; }
-.pagination { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; padding: 20px 0; }
-.pagination a { background: var(--panel); color: var(--text); border: 1px solid var(--border); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 13px; min-width: 40px; text-align: center; transition: all 0.2s; }
-.pagination a:hover { background: var(--panel-2); border-color: var(--brand); }
-.pagination a.active { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border-color: transparent; color: #fff; font-weight: 600; }
-.pagination a.disabled { opacity: 0.5; cursor: not-allowed; }
-</style>
+
 </head>
 <body>
 <nav class="nav">
@@ -222,18 +202,11 @@
   </div>
 </div>
 
-<footer style="background:#0b1020;border-top:1px solid var(--border);color:var(--muted);text-align:center;padding:24px 20px;font-size:13px">
+<footer class="site-footer">
   <div>© 2026 复古游戏中文网 · 致力于为您提供经典的怀旧游戏体验</div>
 </footer>
 
-<script>
-document.getElementById("search").addEventListener("input", (e) => {
-  const q = e.target.value.toLowerCase().trim();
-  document.querySelectorAll(".game-card").forEach(card => {
-    const t = card.dataset.title.toLowerCase();
-    card.style.display = t.includes(q) ? "" : "none";
-  });
-});
-</script>
+
+  <script src="list.js"></script>
 </body>
 </html>

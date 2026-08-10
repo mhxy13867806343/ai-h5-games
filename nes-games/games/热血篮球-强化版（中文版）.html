@@ -121,51 +121,7 @@
   <div>© 2026 复古游戏中文网 · 致力于为您提供经典的怀旧游戏体验</div>
 </footer>
 
-<script>
-const FRAME_URL = "/nostalgist/?core=nes&amp;id=f0ecb3e8-f184-4ff7-9c1a-5d8dab0ea184&amp;rom=https%3A%2F%2Fcdn.lxyong.com%2Fgames%2Fnes%2F%E7%83%AD%E8%A1%80%E7%AF%AE%E7%90%83%20%E5%BC%BA%E5%8C%96%E7%89%88%EF%BC%88%E4%B8%AD%E6%96%87%E7%89%88%EF%BC%89-f0ecb3e8-f184-4ff7-9c1a-5d8dab0ea184.zip";
 
-(function init() {
-  // 插入 iframe
-  const wrap = document.getElementById("frame-wrap");
-  if (FRAME_URL) {
-    const iframe = document.createElement("iframe");
-    iframe.src = FRAME_URL;
-    iframe.allow = "fullscreen; gamepad; autoplay; cross-origin-isolated";
-    iframe.allowFullscreen = true;
-    iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:0;display:block;";
-    iframe.onload = () => {
-      const ld = document.getElementById("loading");
-      if (ld) ld.style.display = "none";
-    };
-    wrap.appendChild(iframe);
-  } else {
-    wrap.innerHTML = '<div class="error">⚠️ 游戏 ROM 不可用，请稍后再试。</div>';
-  }
-
-  // 按钮
-  document.getElementById("btn-restart").addEventListener("click", () => {
-    const iframe = wrap.querySelector("iframe");
-    if (iframe) iframe.src = iframe.src;
-  });
-  document.getElementById("btn-fullscreen").addEventListener("click", () => {
-    const iframe = wrap.querySelector("iframe");
-    if (iframe && iframe.requestFullscreen) iframe.requestFullscreen();
-  });
-  let liked = false, disliked = false;
-  const lc = 689, dc = 177;
-  document.getElementById("btn-like").addEventListener("click", (e) => {
-    if (liked) { liked = false; document.getElementById("like-count").textContent = lc; }
-    else { liked = true; if (disliked) { disliked = false; document.getElementById("dislike-count").textContent = dc; } document.getElementById("like-count").textContent = lc + 1; }
-  });
-  document.getElementById("btn-dislike").addEventListener("click", (e) => {
-    if (disliked) { disliked = false; document.getElementById("dislike-count").textContent = dc; }
-    else { disliked = true; if (liked) { liked = false; document.getElementById("like-count").textContent = lc; } document.getElementById("dislike-count").textContent = dc + 1; }
-  });
-
-  // 模拟 view 计数
-  let vc = 5867;
-  setInterval(() => { vc += Math.floor(Math.random()*3); document.getElementById("view-count").textContent = vc; }, 8000);
-})();
-</script>
+  <script src="../game-detail.js"></script>
 </body>
 </html>
