@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>火焰纹章：圣魔之光石（女孩版） - FE Girls GBA 在线玩丨掌机迷在线复刻</title>
+    <meta name="description" content="火焰纹章：圣魔之光石（女孩版 FE Girls）HTML5 在线版 - 经典 GBA SRPG 战棋同人改版，全女性角色阵容、武器相克、地形防守、技能奥义与关卡战斗！">
+    <!-- 外部 CSS 样式表 (gbarom.cn 风格) -->
+    <link rel="stylesheet" href="fire-emblem-girls/style.css">
+</head>
+<body>
+    <!-- 顶部导航栏 (gbarom.cn 风格) -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <span>🎮</span> 掌机迷 GBAROM
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">首页大厅</a>
+                <a href="index.html" class="nav-link active">GBA 游戏</a>
+                <a href="index.html" class="nav-link">FC 经典</a>
+                <a href="index.html" class="nav-link">SFC 战棋</a>
+                <a href="index.html" class="nav-link">改版专题</a>
+            </nav>
+            <div class="header-spacer"></div>
+            <span class="platform-badge">GBA / 掌机战棋</span>
+        </div>
+    </header>
+
+    <!-- 主页面内容 -->
+    <main class="main-wrap">
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <a href="index.html">首页</a>
+            <span>›</span>
+            <a href="index.html">GBA 游戏大全</a>
+            <span>›</span>
+            <span style="color:#fff;">火焰纹章：圣魔之光石（女孩版）</span>
+        </div>
+
+        <!-- 游戏标题与操作卡片 -->
+        <div class="game-info-card">
+            <div class="game-title-group">
+                <h1>🔥 火焰纹章：圣魔之光石（女孩版） <span style="font-size:14px; font-weight:normal; color:#fb7185;">(FE Girls ROM Hack)</span></h1>
+                <div class="game-meta-tags">
+                    <span class="meta-item">语言: <b>中文汉化版</b></span>
+                    <span class="meta-item">类型: <b>SRPG 策略战棋</b></span>
+                    <span class="meta-item">平台: <b>GBA 掌机</b></span>
+                    <span class="meta-item">特色: <b>全女性角色阵容</b></span>
+                    <span class="meta-item">支持: <b>PC / 手机双端</b></span>
+                </div>
+            </div>
+            <div class="action-buttons-group">
+                <a href="index.html" class="action-btn">🏠 返回首页大厅</a>
+                <a href="main.html#fire-emblem-girls" class="action-btn">📱 切换大厅视图</a>
+                <button onclick="ShareHelper.open({ name: '火焰纹章：圣魔之光石（女孩版）', url: 'fire-emblem-girls.html' })" class="action-btn">🔗 一键分享</button>
+                <button onclick="CodeViewerDownloader.open({ id: 'fire-emblem-girls', name: '火焰纹章：圣魔之光石（女孩版）', htmlUrl: 'fire-emblem-girls.html', cssUrl: 'fire-emblem-girls/style.css', jsUrl: 'fire-emblem-girls/game.js', folder: 'fire-emblem-girls' })" class="action-btn">📄 查看/复制源码</button>
+                <button onclick="CodeViewerDownloader.downloadZip({ id: 'fire-emblem-girls', name: '火焰纹章：圣魔之光石（女孩版）', htmlUrl: 'fire-emblem-girls.html', cssUrl: 'fire-emblem-girls/style.css', jsUrl: 'fire-emblem-girls/game.js' })" class="action-btn">💾 打包下载 (.zip)</button>
+                <button onclick="window.history.back()" class="action-btn">⬅️ 返回上一页</button>
+            </div>
+        </div>
+
+        <!-- 模拟器视口区域 (gbarom.cn 核心组件) -->
+        <div class="emulator-wrapper" id="emulator-wrapper">
+            <!-- 状态工具栏 -->
+            <div class="toolbar-bar">
+                <div class="tool-btn-group">
+                    <button class="tool-btn" id="tool-restart">🔄 重新开始</button>
+                    <button class="tool-btn" id="tool-speed">⚡ 运行倍速 (1x)</button>
+                </div>
+                <div class="tool-btn-group">
+                    <button class="tool-btn" id="tool-fullscreen">🖥️ 全屏游玩</button>
+                </div>
+            </div>
+
+            <!-- Canvas 模拟器屏幕 -->
+            <div class="canvas-screen">
+                <canvas id="game-canvas"></canvas>
+            </div>
+
+            <!-- GBA 虚拟手柄区 (Virtual Gamepad) -->
+            <div class="gamepad-container">
+                <!-- 顶部 L / R 肩键 -->
+                <div class="shoulder-keys">
+                    <button class="shoulder-btn" id="btn-l">L (上一单位)</button>
+                    <button class="shoulder-btn" id="btn-r">R (下一单位)</button>
+                </div>
+
+                <!-- 左侧十字 D-Pad -->
+                <div class="dpad">
+                    <button class="dpad-btn dpad-up" id="btn-dpad-up">▲</button>
+                    <button class="dpad-btn dpad-down" id="btn-dpad-down">▼</button>
+                    <button class="dpad-btn dpad-left" id="btn-dpad-left">◄</button>
+                    <button class="dpad-btn dpad-right" id="btn-dpad-right">►</button>
+                    <div class="dpad-center"></div>
+                </div>
+
+                <!-- 中间 Select / Start 键 -->
+                <div class="center-keys">
+                    <div class="pill-btn-wrapper">
+                        <button class="pill-btn" id="btn-select"></button>
+                        <span class="pill-label">Select</span>
+                    </div>
+                    <div class="pill-btn-wrapper">
+                        <button class="pill-btn" id="btn-start"></button>
+                        <span class="pill-label">Start</span>
+                    </div>
+                </div>
+
+                <!-- 右侧 A / B 动作键 -->
+                <div class="action-keys">
+                    <div class="round-btn-wrapper">
+                        <button class="round-btn" id="btn-b">B</button>
+                        <span class="btn-label">取消 / 返回</span>
+                    </div>
+                    <div class="round-btn-wrapper">
+                        <button class="round-btn" id="btn-a">A</button>
+                        <span class="btn-label">确认 / 攻击</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏介绍与按键说明 -->
+        <div class="details-section">
+            <div class="detail-panel">
+                <h2>⚔️ 游戏介绍 (Game Overview)</h2>
+                <p>《火焰纹章：圣魔之光石（女孩版）》(FE Girls) 是风靡战棋界的 GBA 史诗改版！在经典圣魔之光石的世界观中，可操作的勇士与敌方将领被重塑为全女性角色阵容（艾莉可、瓦涅莎、露特、娜塔莎、塔娜、阿梅莉亚等）！</p>
+                <p>游戏保留了武器相克法则（剑克斧、斧克枪、枪克剑）、地形加成（森林回避+20%、山地防御加成）、攻速二连击与技能奥义，难度极具挑战性！</p>
+            </div>
+
+            <div class="detail-panel">
+                <h2>🎮 键盘按键映射 (Key Controls)</h2>
+                <div class="controls-grid">
+                    <div class="control-card">
+                        <span class="key-desc">移动光标 / 方向</span>
+                        <span class="key-badge">WASD / 方向键</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">确认 / 选中 / 攻击</span>
+                        <span class="key-badge">J / Z / 鼠标左键</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">取消 / 查看范围</span>
+                        <span class="key-badge">K / X</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">回合结束 / 菜单</span>
+                        <span class="key-badge">Enter</span>
+                    </div>
+                    <div class="control-card">
+                        <span class="key-desc">切换视角单位</span>
+                        <span class="key-badge">L / U</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        © 2026 掌机迷 GBAROM · 纯前端 HTML5 《火焰纹章：圣魔之光石（女孩版）》网页 1:1 复刻版
+    </footer>
+
+    <!-- 外部 JavaScript 库与脚本导入 -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/code-viewer-downloader.js?v=3"></script>
+    <script src="fire-emblem-girls/game.js"></script>
+    <script src="fire-emblem-girls/main.js"></script>
+</body>
+</html>

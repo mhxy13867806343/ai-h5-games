@@ -7,6 +7,10 @@ const { createApp, ref, computed, onMounted } = Vue;
 const GAMES_DATA = [
     // antigravity-game 专区
     {
+        id: 'fire-emblem-girls', name: '火焰纹章：圣魔之光石（女孩版）', url: 'fire-emblem-girls.html', icon: '⚔️', tag: '📂 antigravity-game · GBA 战棋', desc: 'gbarom.cn 1:1 在线复刻！GBA 史诗改版 FE Girls，全女性角色阵容、武器相克法则与策略战棋。',
+        htmlUrl: 'fire-emblem-girls.html', cssUrl: 'fire-emblem-girls/style.css', jsUrl: 'fire-emblem-girls/game.js', folder: 'antigravity-game'
+    },
+    {
         id: 'metal-slug-2', name: '合金弹头 2', url: 'metal-slug-2.html', icon: '💥', tag: '📂 antigravity-game · 动作射击', desc: 'SNK 经典射击...',
         htmlUrl: 'metal-slug-2.html', cssUrl: 'metal-slug-2/style.css', jsUrl: 'metal-slug-2/game.js', folder: 'antigravity-game'
     },
