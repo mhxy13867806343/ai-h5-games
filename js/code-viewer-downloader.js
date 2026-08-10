@@ -273,16 +273,16 @@ class ShareHelper {
                     backdrop-filter: blur(12px) !important;
                     -webkit-backdrop-filter: blur(12px) !important;
                     display: none;
+                    align-items: center !important;
+                    justify-content: center !important;
                     z-index: 99999999 !important;
                     margin: 0 !important;
                     padding: 0 !important;
+                    cursor: pointer !important;
                 }
 
                 #share-modal-dialog {
-                    position: fixed !important;
-                    top: 50% !important;
-                    left: 50% !important;
-                    transform: translate(-50%, -50%) !important;
+                    position: relative !important;
                     width: 90% !important;
                     max-width: 460px !important;
                     background: #111827 !important;
@@ -296,11 +296,12 @@ class ShareHelper {
                     box-sizing: border-box !important;
                     z-index: 100000000 !important;
                     animation: jqueryModalZoom 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    cursor: default !important;
                 }
 
                 @keyframes jqueryModalZoom {
-                    from { transform: translate(-50%, -50%) scale(0.85); opacity: 0; }
-                    to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                    from { transform: scale(0.85); opacity: 0; }
+                    to { transform: scale(1); opacity: 1; }
                 }
 
                 .s-modal-header {
@@ -505,14 +506,42 @@ class ShareHelper {
 
         document.body.insertAdjacentHTML('beforeend', modalHtml + styleHtml);
 
-        // Bind jQuery close events
-        if (window.$) {
-            $('#s-btn-close-x, #s-btn-close-footer').off('click').on('click', function () {
+        // Bind close events using native JS (works everywhere, no jQuery dependency)
+        const overlay = document.getElementById('share-modal-overlay');
+        const closeX = document.getElementById('s-btn-close-x');
+        const closeFooter = document.getElementById('s-btn-close-footer');
+
+        // ✕ button close
+        if (closeX) {
+            closeX.addEventListener('click', function (e) {
+                e.stopPropagation();
                 ShareHelper.closeModal();
             });
+        }
 
-            $('#share-modal-overlay').off('click').on('click', function (e) {
-                if (e.target === this) ShareHelper.closeModal();
+        // Footer "关闭窗口" button close
+        if (closeFooter) {
+            closeFooter.addEventListener('click', function (e) {
+                e.stopPropagation();
+                ShareHelper.closeModal();
+            });
+        }
+
+        // Overlay backdrop click close (点击空白处关闭)
+        if (overlay) {
+            overlay.addEventListener('click', function (e) {
+                // Only close if clicked directly on overlay backdrop, not on dialog children
+                if (e.target === overlay) {
+                    ShareHelper.closeModal();
+                }
+            });
+        }
+
+        // Prevent dialog clicks from bubbling to overlay
+        const dialog = document.getElementById('share-modal-dialog');
+        if (dialog) {
+            dialog.addEventListener('click', function (e) {
+                e.stopPropagation();
             });
         }
     }
@@ -590,20 +619,24 @@ class ShareHelper {
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(targetUrl)}`;
         document.getElementById('s-qr-img').src = qrUrl;
 
-        // jQuery fadeIn animation for centered popup!
-        if (window.$) {
-            $('#share-modal-overlay').stop(true, true).fadeIn(250);
-        } else {
-            const overlay = document.getElementById('share-modal-overlay');
-            if (overlay) overlay.style.display = 'block';
+        // Show modal with animation (display: flex for centering)
+        const overlayEl = document.getElementById('share-modal-overlay');
+        if (window.$ && overlayEl) {
+            $(overlayEl).css('display', 'flex').hide().fadeIn(250);
+        } else if (overlayEl) {
+            overlayEl.style.display = 'flex';
         }
 
-        // Bind copy button with jQuery
-        if (window.$) {
-            $('#s-btn-copy').off('click').on('click', () => {
+        // Bind copy button
+        const copyBtn = document.getElementById('s-btn-copy');
+        if (copyBtn) {
+            // Remove old listeners by cloning
+            const newCopyBtn = copyBtn.cloneNode(true);
+            copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
+            newCopyBtn.addEventListener('click', () => {
                 this.copyText(shareMsg).then(() => {
-                    $('#s-btn-copy').text('✅ 已成功复制！');
-                    setTimeout(() => { $('#s-btn-copy').text('📋 复制链接'); }, 2000);
+                    newCopyBtn.textContent = '✅ 已成功复制！';
+                    setTimeout(() => { newCopyBtn.textContent = '📋 复制链接'; }, 2000);
                 });
             });
         }
