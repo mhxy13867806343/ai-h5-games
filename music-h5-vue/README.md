@@ -4,7 +4,7 @@
 
 ## 在线预览
 
-**https://mhxy13867806343.github.io/ai-h5-games/music-h5-vue/**（`dist/` 已随仓库构建）
+**https://mhxy13867806343.github.io/ai-h5-games/music-h5-vue/#/**（`dist/` 已随仓库构建）
 
 ## 运行
 
