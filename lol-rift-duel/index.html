@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#010a13">
+<meta name="description" content="峡谷对决：复刻 LoL 的完整对局流程——英雄选择、战场加载、中路 1v1 打斗与胜利失败结算。英雄数据实时来自 lol.qq.com 官方接口。">
+<title>峡谷对决 · Rift Duel</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a1428'/%3E%3Cpath d='M16 5l9 5v9l-9 8-9-8v-9z' fill='none' stroke='%23c8aa6d' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='3' fill='%23c8aa6d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <span class="brand">⚜ 峡谷对决 <em>RIFT DUEL</em></span>
+  <span class="datasource" id="datasource">正在连接 lol.qq.com 数据接口…</span>
+  <a class="nav-home" href="../index.html">← 返回大厅</a>
+</header>
+
+<!-- 屏1 · 英雄选择 -->
+<section id="screen-select" class="screen active">
+  <div class="select-layout">
+    <aside class="select-side">
+      <h1>选择你的英雄</h1>
+      <p class="select-sub">数据实时来自官方接口 · 共 <span id="roster-count">—</span> 位英雄</p>
+      <input id="champ-search" type="search" placeholder="搜索英雄名 / 定位" autocomplete="off" aria-label="搜索英雄">
+      <div id="role-filter" class="role-filter" aria-label="按定位筛选">
+        <button data-role="" class="active">全部</button>
+        <button data-role="fighter">战士</button>
+        <button data-role="tank">坦克</button>
+        <button data-role="mage">法师</button>
+        <button data-role="assassin">刺客</button>
+        <button data-role="marksman">射手</button>
+        <button data-role="support">辅助</button>
+      </div>
+    </aside>
+    <div id="champ-grid" class="champ-grid" aria-label="英雄列表"></div>
+    <aside class="select-preview" id="champ-preview">
+      <div class="preview-empty">点击左侧英雄<br>查看详情</div>
+    </aside>
+  </div>
+</section>
+
+<!-- 屏2 · 战场加载 -->
+<section id="screen-loading" class="screen">
+  <div class="loading-vs">
+    <div class="loading-card blue">
+      <div class="lc-art"><img id="load-art-blue" alt=""><div class="lc-fallback" id="load-fb-blue"></div></div>
+      <div class="lc-name" id="load-name-blue"></div>
+      <div class="lc-title" id="load-title-blue"></div>
+      <div class="lc-spells" id="load-spells-blue"></div>
+    </div>
+    <div class="vs-mark">VS</div>
+    <div class="loading-card red">
+      <div class="lc-art"><img id="load-art-red" alt=""><div class="lc-fallback" id="load-fb-red"></div></div>
+      <div class="lc-name" id="load-name-red"></div>
+      <div class="lc-title" id="load-title-red"></div>
+      <div class="lc-spells" id="load-spells-red"></div>
+    </div>
+  </div>
+  <p class="loading-tip" id="loading-tip">正在召唤…</p>
+  <div class="loading-bar"><div id="loading-fill"></div></div>
+</section>
+
+<!-- 屏3 · 战斗 -->
+<section id="screen-battle" class="screen">
+  <canvas id="rift" aria-label="召唤师峡谷中路对决"></canvas>
+
+  <div class="hud-top">
+    <div class="hud-kda blue-side">
+      <img id="hud-icon-blue" alt="">
+      <div><b id="hud-name-blue"></b><span id="hud-kda-blue">0 / 0</span></div>
+    </div>
+    <div class="hud-timer" id="hud-timer">00:00</div>
+    <div class="hud-kda red-side">
+      <div style="text-align:right"><b id="hud-name-red"></b><span id="hud-kda-red">0 / 0</span></div>
+      <img id="hud-icon-red" alt="">
+    </div>
+  </div>
+
+  <div class="hud-bottom">
+    <div class="hud-cs">补刀 <b id="hud-cs">0</b> · 金币 <b id="hud-gold">0</b></div>
+    <div class="skillbar">
+      <div class="lifebars">
+        <div class="bar hp"><div id="bar-hp"></div><span id="text-hp"></span></div>
+        <div class="bar mp"><div id="bar-mp"></div><span id="text-mp"></span></div>
+      </div>
+      <div class="skills" id="skill-bar">
+        <button class="skill" data-key="q"><img alt="Q"><span class="key">Q</span><span class="cd"></span><span class="cost"></span></button>
+        <button class="skill" data-key="w"><img alt="W"><span class="key">W</span><span class="cd"></span><span class="cost"></span></button>
+        <button class="skill" data-key="e"><img alt="E"><span class="key">E</span><span class="cd"></span><span class="cost"></span></button>
+        <button class="skill ult" data-key="r"><img alt="R"><span class="key">R</span><span class="cd"></span><span class="cost"></span></button>
+      </div>
+      <div class="enemy-brief">
+        <div class="ebar hp"><div id="ebar-hp"></div></div>
+        <span id="enemy-hp-text"></span>
+      </div>
+    </div>
+  </div>
+  <p class="battle-hint">移动：点击地面 / WASD · 技能：Q W E R（朝鼠标方向）· 回己方防御塔回血回蓝</p>
+</section>
+
+<!-- 屏4 · 结算 -->
+<section id="screen-result" class="screen">
+  <div class="result-inner">
+    <div id="result-banner" class="banner">
+      <span id="result-en">VICTORY</span>
+      <span id="result-zh">胜利</span>
+    </div>
+    <div class="result-duel">
+      <div class="r-champ blue"><img id="result-icon-blue" alt=""><b id="result-name-blue"></b></div>
+      <div class="result-stats" id="result-stats"></div>
+      <div class="r-champ red"><img id="result-icon-red" alt=""><b id="result-name-red"></b></div>
+    </div>
+    <div class="result-actions">
+      <button id="btn-rematch">⚔ 再来一局</button>
+      <button id="btn-repick">🔀 更换英雄</button>
+      <a class="btn-home" href="../index.html">🏠 返回大厅</a>
+    </div>
+  </div>
+</section>
+
+<script src="hero-fallback.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

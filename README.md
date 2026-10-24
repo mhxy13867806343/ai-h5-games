@@ -25,6 +25,7 @@
 | 15 | **在线交互日历** (Interactive Calendar) | `interactive-calendar` | 实用工具 · 日历 | [在线使用](https://mhxy13867806343.github.io/ai-h5-games/interactive-calendar/) |
 | 16 | **七十七年 · 大事年表** (Chronicle 77) | `chronicle-77` | 历史年表 1949—2026 (104 项) | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/chronicle-77/) |
 | 17 | **鹈鹕骑行** (Pelican Coast Ride) | `pelican-coast-ride` | Canvas 交互动画 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/pelican-coast-ride/) |
+| 18 | **峡谷对决** (Rift Duel) | `lol-rift-duel` | LoL 对局流程复刻 · MOBA | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/lol-rift-duel/) |
 
 ---
 

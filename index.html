@@ -16,7 +16,7 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (21)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (22)</button>
         <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (7)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (4)</button>
@@ -24,6 +24,7 @@
         <button class="folder-tab" onclick="filterFolder('interactive-calendar')">📅 interactive-calendar 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('chronicle-77')">📜 chronicle-77 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('pelican-coast-ride')">🚲 pelican-coast-ride 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('lol-rift-duel')">🛡️ lol-rift-duel 专区 (1)</button>
       </div>
 
       <!-- Layout Switcher Bar -->
@@ -763,10 +764,44 @@
         </div>
       </div>
 
+      <!-- 峡谷对决 -->
+      <div class="card" data-folder="lol-rift-duel" data-url="lol-rift-duel/index.html" data-name="峡谷对决">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#3b82f6; background:rgba(59,130,246,0.15); border-color:rgba(59,130,246,0.3);">📂 lol-rift-duel</span>
+              <span class="tag">MOBA 对决</span>
+            </div>
+            <h2>🛡️ 峡谷对决 · Rift Duel</h2>
+            <p>复刻 LoL 完整对局流程：173 位英雄选择（数据实时来自 lol.qq.com 官方接口）→ 战场加载 → 中路 1v1 打斗（小兵/防御塔/QWER 技能）→ 胜利失败结算。</p>
+            <div class="meta"><span>LoL 流程复刻</span><span>官方接口数据</span><span>Canvas 战斗</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="lol-rift-duel/index.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('lol-rift-duel', '峡谷对决', 'lol-rift-duel/index.html', 'lol-rift-duel/style.css', 'lol-rift-duel/app.js')">📄 源码</button>
+            <button class="card-btn" onclick="CodeViewerDownloader.downloadZip({ id: 'lol-rift-duel', name: '峡谷对决', htmlUrl: 'lol-rift-duel/index.html', extraFiles: ['lol-rift-duel/style.css', 'lol-rift-duel/app.js', 'lol-rift-duel/hero-fallback.js'] })">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🛡️ 试玩预览 · 《峡谷对决》</span>
+            <div class="preview-actions">
+              <a href="lol-rift-duel/index.html" class="preview-play-btn">🛡️ 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride 7 大源码文件夹分类筛选与一键分享
+      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel 8 大源码文件夹分类筛选与一键分享
     </div>
   </div>
 
