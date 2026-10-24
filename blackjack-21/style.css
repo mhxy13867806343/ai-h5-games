@@ -285,6 +285,33 @@ input:focus { border-color: var(--gold); }
 .bet-broke-tag { font-size: .76rem; color: #ff9c8a; }
 .bet-warn { font-size: .8rem; color: #ff9c8a; text-align: center; }
 
+/* 加入新玩家 */
+.join-box {
+  border: 1px dashed var(--line); border-radius: 8px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;
+}
+.join-title { font-size: .76rem; color: #7d9184; letter-spacing: 1px; }
+.join-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.join-row input[type="text"] { flex: 1; min-width: 120px; }
+#btn-join {
+  padding: 9px 18px; font-size: .85rem; font-weight: 700; cursor: pointer;
+  color: #10231b; background: linear-gradient(180deg, #7fe0a2, #3fae6a);
+  border: none; border-radius: 4px;
+}
+#btn-join:disabled { filter: grayscale(.8) brightness(.6); cursor: not-allowed; }
+.join-full { font-size: .75rem; color: #7d9184; }
+
+/* 最终胜利横幅 */
+.final-banner {
+  text-align: center; font-size: 1.5rem; font-weight: 800; letter-spacing: 3px;
+  color: var(--gold-bright); text-shadow: 0 0 26px rgba(240,230,210,.5);
+  padding: 10px; border: 1px solid var(--gold); border-radius: 8px;
+  background: rgba(200,170,109,.1);
+  animation: bannerIn .55s cubic-bezier(.2,1.5,.4,1);
+}
+@keyframes bannerIn { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+.final-winner { text-align: center; font-size: 1.05rem; color: var(--text-bright); }
+
 /* 座位筹码显示 */
 .chip-line { font-size: .68rem; color: var(--gold); margin-top: 2px; }
 .chip-line b { color: var(--gold-bright); }

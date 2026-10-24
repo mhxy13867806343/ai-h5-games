@@ -66,6 +66,14 @@
     <p class="bet-title">💰 下注</p>
     <p class="bet-sub" id="bet-round-info">本局庄家：—</p>
     <div id="bet-rows"></div>
+    <div class="join-box">
+      <div class="join-title">➕ 有人要加入吗？（可选，开牌前均可加入，最多 5 座）</div>
+      <div class="join-row">
+        <input id="join-name" type="text" maxlength="8" placeholder="新玩家名字">
+        <label class="ai-toggle"><input type="checkbox" id="join-ai"> 🤖 电脑</label>
+        <button id="btn-join">加入本局</button>
+      </div>
+    </div>
     <p class="bet-warn" id="bet-warn" hidden></p>
     <button id="btn-deal" class="btn-start">🃏 确认下注，开始发牌</button>
     <button id="btn-reset-chips2" class="btn-ghost" style="align-self:center">💰 重置筹码（每人 1000）</button>
@@ -114,6 +122,7 @@
 <!-- 屏4 · 结算 -->
 <section id="screen-result" class="screen">
   <div class="result-card">
+    <div id="final-banner" class="final-banner" hidden>🏆 最终胜利！</div>
     <h2 id="result-title">本局结算</h2>
     <div class="result-table" id="result-table"></div>
     <div class="scoreboard" id="scoreboard"></div>

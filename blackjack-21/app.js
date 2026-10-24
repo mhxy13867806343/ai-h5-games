@@ -73,6 +73,7 @@ const state = {
   scores: [],         // 每人累计赢局
   chips: [],          // 每人筹码（初始 1000）
   bets: [],           // 本局底注
+  finalWinner: null,  // 最终获胜者座位（只剩一人有筹码时）
   resolveHuman: null,
 };
 
@@ -155,17 +156,29 @@ $('#btn-start').addEventListener('click', () => {
   state.scores = ps.map(() => 0);
   state.chips = ps.map(() => 1000); // 每人 1000 筹码
   state.bets = ps.map(() => 0);
+  state.finalWinner = null;
   state.session++;
   rollDice();
 });
 
 /* ---------- 下注阶段 ---------- */
 function betPhase() {
+  // 只剩一位玩家有筹码 → 直接最终获胜，不再下注
+  const aliveIdx = state.players.map((p, i) => state.chips[i] >= 10 ? i : -1).filter(i => i >= 0);
+  if (aliveIdx.length <= 1 && state.players.length > 1) {
+    showFinalWin(aliveIdx[0] ?? -1);
+    return;
+  }
+  // 保留真人已填的注额（重渲染时不丢失）
+  document.querySelectorAll('#bet-rows input[data-bet-input]').forEach(input => {
+    const i = Number(input.dataset.betInput);
+    state.bets[i] = Math.max(10, Math.min(state.chips[i], Math.floor(Number(input.value) || 10)));
+  });
   state.players.forEach((p, i) => {
     p.cards = [];
     p.status = state.chips[i] < 10 ? 'out' : 'waiting';
     p.result = null;
-    state.bets[i] = 0;
+    if (!state.bets[i]) state.bets[i] = 0;
   });
   // 庄家破产则顺延给下一位有筹码的玩家
   if (state.players[state.dealerIdx].status === 'out') {
@@ -187,18 +200,17 @@ function betPhase() {
     } else if (isDealer) {
       row.innerHTML = `<span class="bname">${p.name}</span><span class="bchips">筹码 <b>${state.chips[i]}</b></span><span class="bet-auto">🎲 庄家（不下注）</span>`;
     } else if (p.isAI) {
-      const bet = Math.min(100, state.chips[i]);
-      state.bets[i] = bet;
-      row.innerHTML = `<span class="bname">${p.name}</span><span class="bchips">筹码 <b>${state.chips[i]}</b></span><span class="bet-auto">🤖 自动下注 <b>${bet}</b></span>`;
+      if (!state.bets[i]) state.bets[i] = Math.min(100, state.chips[i]);
+      row.innerHTML = `<span class="bname">${p.name}</span><span class="bchips">筹码 <b>${state.chips[i]}</b></span><span class="bet-auto">🤖 自动下注 <b>${state.bets[i]}</b></span>`;
     } else {
-      const def = Math.min(100, state.chips[i]);
+      const def = Math.max(10, Math.min(state.chips[i], state.bets[i] || Math.min(100, state.chips[i])));
       state.bets[i] = def;
       row.innerHTML = `
         <span class="bname">${p.name}</span>
         <span class="bchips">筹码 <b>${state.chips[i]}</b></span>
         <span class="bet-quick">
           ${[50, 100, 200].filter(v => v <= state.chips[i]).map(v => `<button data-bet="${v}" class="${v === def ? 'active' : ''}">${v}</button>`).join('')}
-          ${state.chips[i] > 200 ? `<button data-bet="${state.chips[i]}">梭哈 ${state.chips[i]}</button>` : ''}
+          ${state.chips[i] > 200 ? `<button data-bet="${state.chips[i]}" class="${def === state.chips[i] ? 'active' : ''}">梭哈 ${state.chips[i]}</button>` : ''}
         </span>
         <input type="number" min="10" max="${state.chips[i]}" value="${def}" data-bet-input="${i}" aria-label="${p.name} 下注额">`;
     }
@@ -218,12 +230,35 @@ function betPhase() {
     input.addEventListener('change', () => {
       const i = Number(input.dataset.betInput);
       const v = Math.floor(Number(input.value) || 0);
-      const clamped = Math.max(10, Math.min(state.chips[i], v));
-      input.value = clamped;
+      input.value = Math.max(10, Math.min(state.chips[i], v));
     });
   });
+  // 加入区状态（最多 5 座）
+  const full = state.players.length >= 5;
+  $('#btn-join').disabled = full;
+  $('#join-name').disabled = full;
+  $('#join-ai').disabled = full;
+  $('#join-name').placeholder = full ? '座位已满（5/5）' : '新玩家名字';
   showScreen('bet');
 }
+
+/* 中途加入新玩家（开牌前的报名） */
+$('#btn-join').addEventListener('click', () => {
+  if (state.players.length >= 5) return;
+  Sound.play('click');
+  const isAI = $('#join-ai').checked;
+  let name = $('#join-name').value.trim();
+  if (!name) name = isAI ? `电脑 ${state.players.length + 1}` : `玩家 ${state.players.length + 1}`;
+  // 与现有名字去重
+  if (state.players.some(p => p.name === name)) name += '·新';
+  state.players.push({ name, isAI, cards: [], status: 'waiting', result: null });
+  state.scores.push(0);
+  state.chips.push(1000);   // 新玩家自带 1000 筹码
+  state.bets.push(0);
+  $('#join-name').value = '';
+  $('#join-ai').checked = false;
+  betPhase(); // 重渲染（真人注额已保留）
+});
 
 $('#btn-deal').addEventListener('click', () => {
   // 收集真人下注
@@ -231,12 +266,18 @@ $('#btn-deal').addEventListener('click', () => {
     const i = Number(input.dataset.betInput);
     state.bets[i] = Math.max(10, Math.min(state.chips[i], Math.floor(Number(input.value) || 10)));
   });
+  // 只剩一人有筹码 → 直接最终获胜
+  const alive = state.players.map((p, i) => state.chips[i] >= 10 ? i : -1).filter(i => i >= 0);
+  if (alive.length <= 1 && state.players.length > 1) {
+    showFinalWin(alive[0] ?? -1);
+    return;
+  }
   const activeCount = state.players.filter((p, i) => p.status !== 'out' && i !== state.dealerIdx).length;
   const warn = $('#bet-warn');
   if (activeCount < 1) {
     warn.hidden = false;
     warn.textContent = '庄家以外已无人有筹码，请点击下方“重置筹码”后再战';
-    Sound.play('buzz');
+    Sound.play('bust');
     return;
   }
   warn.hidden = true;
@@ -246,15 +287,37 @@ $('#btn-deal').addEventListener('click', () => {
 
 function resetChips() {
   state.chips = state.players.map(() => 1000);
+  state.finalWinner = null;
   Sound.play('click');
   $('#bet-warn').hidden = true;
-  if (screens.bet.classList.contains('active')) betPhase();
-  else if (screens.result.classList.contains('active')) {
-    $('#scoreboard').innerHTML = '筹码已重置：' + state.players.map((p, i) => `${p.name} <b>1000</b>`).join(' · ');
+  if (screens.result.classList.contains('active')) {
+    renderScoreboard();
   }
 }
+function renderScoreboard() {
+  $('#scoreboard').innerHTML = '筹码：' + state.players
+    .map((p, i) => `${p.name} <b>${state.chips[i]}</b>`).join(' · ')
+    + '<br>胜场：' + state.players.map((p, i) => `${p.name} ${state.scores[i]}`).join(' · ');
+}
 $('#btn-reset-chips').addEventListener('click', resetChips);
-$('#btn-reset-chips2').addEventListener('click', resetChips);
+$('#btn-reset-chips2').addEventListener('click', () => {
+  resetChips();
+  betPhase();
+});
+
+/* 最终胜利：只剩一人有筹码 */
+function showFinalWin(idx) {
+  state.finalWinner = idx;
+  const w = idx >= 0 ? state.players[idx] : null;
+  Sound.play('win');
+  $('#final-banner').hidden = false;
+  $('#result-title').textContent = w ? `${w.name} 赢得了全部筹码！` : '筹码耗尽';
+  $('#result-table').innerHTML = `<p class="final-winner">${w ? `其他玩家的筹码都已输光，本桌牌局由 <b style="color:var(--gold-bright)">${w.name}</b> 独揽 🏆` : '所有人都没筹码了'}</p>`;
+  renderScoreboard();
+  $('#btn-next').textContent = '💰 再战一场（重置筹码）';
+  setActions(false);
+  showScreen('result');
+}
 
 /* ---------- 掷骰定庄 ---------- */
 async function rollDice() {
@@ -604,13 +667,27 @@ function settle() {
       <span class="detail">${d.cards.map(cardText).join(' ')} · ${handValue(d.cards)} 点${d.status === 'bj' ? ' · Blackjack' : ''}${d.status === 'tiger' ? ' · 小老虎' : ''}${d.status === 'bust' ? ' · 爆牌' : ''}</span>
       <span class="verdict push">庄<span class="delta ${dealerDelta > 0 ? 'up' : dealerDelta < 0 ? 'down' : 'flat'}">${dealerDelta > 0 ? '+' + dealerDelta : dealerDelta}</span></span>
     </div>`;
-  $('#scoreboard').innerHTML = '筹码：' + state.players
-    .map((p, i) => `${p.name} <b>${state.chips[i]}</b>`).join(' · ')
-    + '<br>胜场：' + state.players.map((p, i) => `${p.name} ${state.scores[i]}`).join(' · ');
+  renderScoreboard();
+  // 最终胜利判定：只剩一人有筹码 → 直接夺冠
+  const aliveAfter = state.players.map((p, i) => state.chips[i] >= 10 ? i : -1).filter(i => i >= 0);
+  if (aliveAfter.length <= 1) {
+    state.finalWinner = aliveAfter[0] ?? -1;
+    $('#final-banner').hidden = false;
+    $('#result-title').textContent = aliveAfter.length === 1
+      ? `${state.players[aliveAfter[0]].name} 赢得了全部筹码！` : '筹码耗尽';
+    $('#btn-next').textContent = '💰 再战一场（重置筹码）';
+    Sound.play('win');
+  } else {
+    $('#final-banner').hidden = true;
+    $('#result-title').textContent = '本局结算';
+    $('#btn-next').textContent = '🎲 下一局（重新掷骰）';
+  }
   const humanWon = rows.some(r => r.verdict === 'win' && !r.p.isAI);
   const humanLost = rows.some(r => r.p.isAI === false && r.verdict === 'lose');
-  if (humanWon) Sound.play('win');
-  else if (humanLost) Sound.play('lose');
+  if (aliveAfter.length > 1) {
+    if (humanWon) Sound.play('win');
+    else if (humanLost) Sound.play('lose');
+  }
   log(`本局结算完成`);
   setActions(false);
   showScreen('result');
@@ -620,6 +697,7 @@ $('#btn-next').addEventListener('click', () => {
   Sound.play('click');
   state.session++;
   $('#privacy-gate').hidden = true;
+  if (state.finalWinner !== null) resetChips(); // 有人独揽筹码：重置后开新一场
   rollDice();
 });
 $('#btn-setup2').addEventListener('click', () => {
