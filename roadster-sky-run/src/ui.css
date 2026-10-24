@@ -1,0 +1,104 @@
+#roadster-sky-run{--rs-ink:#f1f7fb;--rs-subtle:#b9d4e8;--rs-panel:#102b41;--rs-cyan:#8becff;--rs-yellow:#ffda79;--van-button-default-height:44px;--van-button-default-background:#193b53;--van-button-default-color:#eaf7ff;--van-button-default-border-color:#33536a;--van-button-primary-background:#b5f0ff;--van-button-primary-color:#09283b;--van-button-primary-border-color:#b5f0ff;--van-button-border-radius:14px;--van-button-normal-font-size:14px;--van-button-normal-padding:0 20px;width:100%;overflow:hidden;background:#0b1e2b;color:var(--rs-ink);font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.5;border-radius:20px;isolation:isolate;color-scheme:dark}
+#roadster-sky-run *{box-sizing:border-box}
+#roadster-sky-run button{font-family:inherit;-webkit-tap-highlight-color:transparent}
+#roadster-sky-run .rs-appbar{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 24px;background:#102736}
+#roadster-sky-run .rs-brand{display:flex;align-items:center;gap:13px;min-width:0}
+#roadster-sky-run .rs-wordmark{font-size:17px;font-weight:750;letter-spacing:2.4px;font-style:italic;color:#eef9ff;line-height:1.2}
+#roadster-sky-run .rs-brand-title{font-size:12px;color:#aec8da;letter-spacing:2px;padding-left:13px;border-left:1px solid #365267;white-space:nowrap}
+#roadster-sky-run .rs-build{font-size:11px;letter-spacing:1.4px;color:#97b6c9;white-space:nowrap}
+#roadster-sky-run .rs-game{position:relative;width:100%;height:590px;overflow:hidden;background:linear-gradient(#75b5e7,#cce4e9 67%,#6e9654 68%);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#roadster-sky-run .rs-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#roadster-sky-run .rs-hud{position:absolute;inset:0;pointer-events:none}
+#roadster-sky-run .rs-hud-top{position:absolute;top:22px;left:24px;right:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+#roadster-sky-run .rs-scoreboard{background:#17394ddd;padding:13px 19px 12px;border-radius:18px;min-width:173px;box-shadow:0 8px 24px #071f3416}
+#roadster-sky-run .rs-score{display:block;font-size:39px;font-weight:650;line-height:1.1;letter-spacing:-1.5px;font-variant-numeric:tabular-nums}
+#roadster-sky-run .rs-score-meta{display:flex;gap:12px;align-items:center;white-space:nowrap;margin-top:5px;font-size:11px;color:#c6e2f3;letter-spacing:.3px}
+#roadster-sky-run .rs-score-meta b{color:var(--rs-cyan);font-weight:650}
+#roadster-sky-run .rs-top-right{display:flex;gap:10px;align-items:flex-start}
+#roadster-sky-run .rs-tools{pointer-events:auto;display:flex;gap:8px;align-items:center}
+#roadster-sky-run .rs-tool.van-button{width:44px;height:44px;padding:0;border-radius:50%;background:#15374fd9;border:1px solid #7a9eb842;color:#e4f6ff;min-width:44px}
+#roadster-sky-run .rs-tool .van-button__text{font-size:17px;line-height:1}
+#roadster-sky-run .rs-speedometer{min-width:98px;border-radius:18px;padding:12px 16px 10px;background:#17394ddd;text-align:right;font-variant-numeric:tabular-nums}
+#roadster-sky-run .rs-speedometer strong{font-size:31px;line-height:1.15;display:block;letter-spacing:-1px;color:var(--rs-yellow);font-weight:650}
+#roadster-sky-run .rs-speedometer span{font-size:11px;color:#b9d6e7;letter-spacing:1.7px}
+#roadster-sky-run .rs-meters{position:absolute;right:25px;top:40%;display:flex;gap:17px;text-align:center;transition:opacity .15s}
+#roadster-sky-run .rs-meter{display:flex;align-items:center;flex-direction:column;gap:7px;min-width:29px}
+#roadster-sky-run .rs-meter-track{height:142px;width:10px;border-radius:7px;background:#17314787;position:relative;overflow:hidden}
+#roadster-sky-run .rs-meter-fill{position:absolute;bottom:0;width:100%;border-radius:7px;background:linear-gradient(#d4fcff,#22b5f0);transition:height .08s linear}
+#roadster-sky-run .rs-meter-height .rs-meter-fill{background:linear-gradient(#ffdc8d,#fead54)}
+#roadster-sky-run .rs-meter.low .rs-meter-fill{background:linear-gradient(#ffc391,#ee9069)}
+#roadster-sky-run .rs-meter-label{font-size:11px;font-weight:500;color:#e1f4ff;text-shadow:0 1px 5px #17445c;line-height:1.55;display:flex;flex-direction:column;font-variant-numeric:tabular-nums}
+#roadster-sky-run .rs-meter-label b{font-size:12px;font-weight:600}
+#roadster-sky-run .rs-distance{position:absolute;bottom:113px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;white-space:nowrap}
+#roadster-sky-run .rs-distance-main{display:flex;align-items:baseline;gap:10px;border-radius:40px;padding:8px 19px;background:#142f44e8;box-shadow:0 5px 18px #172e4420;font-size:12px;color:#b9d7e9}
+#roadster-sky-run .rs-distance-main strong{font-size:26px;font-weight:600;line-height:1.25;color:#a8efff;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+#roadster-sky-run .rs-distance-main small{font-size:11px;margin-left:-6px;color:#f5faff}
+#roadster-sky-run .rs-hint{margin-top:8px;font-size:12px;letter-spacing:.5px;color:#e3f6ff;background:#1b3b4ee0;border-radius:20px;padding:5px 14px;transition:background .15s}
+#roadster-sky-run .rs-distance.ignite .rs-distance-main{background:#0c3d54}
+#roadster-sky-run .rs-distance.ignite .rs-hint{background:#b8efff;color:#123347;font-weight:600}
+#roadster-sky-run .rs-driving-controls{position:absolute;left:24px;right:24px;bottom:23px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;pointer-events:none}
+#roadster-sky-run .rs-steering{display:flex;gap:9px;align-items:flex-end;pointer-events:auto}
+#roadster-sky-run .rs-steer.van-button{width:51px;height:51px;min-width:51px;padding:0;border-radius:16px;border:1px solid #a5d1ee42;background:#15394ce8;color:#effaff;touch-action:none}
+#roadster-sky-run .rs-steer .van-button__text{display:flex;align-items:center;flex-direction:column;gap:0;font-size:23px;line-height:1.05}
+#roadster-sky-run .rs-steer small{font-size:11px;line-height:1.2;color:#bfd9e9;margin-top:1px}
+#roadster-sky-run .rs-brake.van-button{width:49px;height:44px;min-width:44px;border-radius:14px;font-size:11px;letter-spacing:1px;margin-left:1px;padding:0;background:#183c50e8;touch-action:none}
+#roadster-sky-run .rs-boost.van-button{width:180px;height:65px;pointer-events:auto;background:#b8efff;color:#0f3447;border:0;border-radius:22px;box-shadow:0 5px 0 #32677e,0 12px 28px #0b2d4047;padding:0;touch-action:none;transition:background .12s,transform .12s,box-shadow .12s}
+#roadster-sky-run .rs-boost .van-button__text{display:flex;align-items:center;justify-content:center;gap:11px}
+#roadster-sky-run .rs-boost-mark{font-size:24px;font-weight:500;transform:rotate(-45deg);display:block}
+#roadster-sky-run .rs-boost-copy{display:flex;flex-direction:column;align-items:flex-start;line-height:1.45}
+#roadster-sky-run .rs-boost-copy b{font-size:16px;font-weight:700;letter-spacing:1px}
+#roadster-sky-run .rs-boost-copy small{font-size:11px;letter-spacing:1px;opacity:.7}
+#roadster-sky-run .rs-boost.is-held{transform:translateY(3px);background:#e1faff;box-shadow:0 2px 0 #32677e,0 0 28px #a7efff88}
+#roadster-sky-run .rs-steer.is-held,#roadster-sky-run .rs-brake.is-held{background:#a0e7fc;color:#143e55;border-color:#a0e7fc}
+#roadster-sky-run .rs-steer.is-held small{color:#1d4a61}
+#roadster-sky-run .rs-driving-controls.is-inactive{opacity:.5;pointer-events:none}
+#roadster-sky-run .rs-driving-controls.is-inactive button{pointer-events:none}
+#roadster-sky-run .rs-toast{position:absolute;left:50%;top:24%;transform:translateX(-50%);max-width:calc(100% - 40px);padding:10px 20px;background:#0d344de8;color:#d3f8ff;font-size:15px;border-radius:24px;text-align:center;box-shadow:0 7px 24px #17436020;font-weight:550;animation:rs-message-in .2s ease-out;z-index:3}
+#roadster-sky-run .rs-overlay{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;padding:22px;background:#102b4725}
+#roadster-sky-run .rs-overlay.is-paused,#roadster-sky-run .rs-overlay.is-over,#roadster-sky-run .rs-overlay.is-error{background:#0d253581;backdrop-filter:blur(5px)}
+#roadster-sky-run .rs-dialog{position:relative;max-width:396px;width:100%;padding:29px 30px 26px;text-align:center;border-radius:25px;background:#102b41f2;box-shadow:0 22px 60px #09243b50;border:1px solid #8cb6d52e}
+#roadster-sky-run .rs-eyebrow{font-size:11px;letter-spacing:3.7px;color:#a8e6fb;font-weight:600}
+#roadster-sky-run .rs-dialog h1,#roadster-sky-run .rs-dialog h2{font-size:30px;font-weight:650;letter-spacing:2px;line-height:1.3;margin:11px 0 12px;color:#f1f9fe}
+#roadster-sky-run .rs-dialog p{font-size:13px;line-height:1.8;color:#bfdaea;margin:0}
+#roadster-sky-run .rs-dialog .rs-description{color:#c6e2ef;font-size:13px}
+#roadster-sky-run .rs-start-button.van-button{width:100%;height:51px;font-size:15px;letter-spacing:2px;border-radius:15px;margin-top:24px;font-weight:650}
+#roadster-sky-run .rs-key-guide{display:flex;justify-content:center;flex-wrap:wrap;gap:9px 15px;margin-top:17px;color:#bfd8e9;font-size:11px;align-items:center}
+#roadster-sky-run .rs-key-guide span{display:flex;align-items:center;gap:6px}
+#roadster-sky-run kbd{font-family:inherit;font-size:11px;line-height:1.4;padding:2px 5px;border:1px solid #6b97b457;border-bottom-width:2px;border-radius:5px;background:#214056;color:#e1f4ff}
+#roadster-sky-run .rs-timing{margin-top:18px;font-size:12px;color:#aacbdd;padding-top:15px;border-top:1px solid #315369;letter-spacing:.2px}
+#roadster-sky-run .rs-timing b{color:#b7f2ff;font-weight:650}
+#roadster-sky-run .rs-over-score{font-size:52px;line-height:1.1;color:#baf0ff;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-2px;margin:20px 0 4px}
+#roadster-sky-run .rs-over-stats{display:flex;justify-content:center;gap:21px;font-size:12px;color:#bddbea;margin:7px 0 18px}
+#roadster-sky-run .rs-over-stats b{font-weight:650;color:#f0f9ff;margin-left:4px}
+#roadster-sky-run .rs-secondary.van-button{margin-top:10px;width:100%;height:44px;background:#214258;border-color:#365b72;border-radius:14px}
+#roadster-sky-run .rs-record{font-size:11px;letter-spacing:1px;color:#ffdf94;margin-top:7px}
+#roadster-sky-run .rs-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 22px;background:#102736;color:#9abbcf;font-size:11px;letter-spacing:.2px;min-height:45px}
+#roadster-sky-run .rs-footer em{color:#c7dfea;font-style:normal}
+#roadster-sky-run .rs-footer-help{white-space:nowrap}
+#roadster-sky-run .rs-flash{position:absolute;inset:0;pointer-events:none;background:#feac8222;z-index:4;animation:rs-flash-out .45s ease-out forwards}
+#roadster-sky-run .rs-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@keyframes rs-message-in{from{opacity:0;transform:translate(-50%,7px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes rs-flash-out{to{opacity:0}}
+@media(min-width:900px){#roadster-sky-run .rs-game{height:635px}#roadster-sky-run .rs-hud-top{top:25px;left:28px;right:28px}#roadster-sky-run .rs-driving-controls{left:28px;right:28px;bottom:26px}}
+@media(max-width:540px){#roadster-sky-run{border-radius:16px}#roadster-sky-run .rs-appbar{min-height:57px;padding:12px 16px}#roadster-sky-run .rs-wordmark{font-size:15px;letter-spacing:2px}#roadster-sky-run .rs-brand{gap:9px}#roadster-sky-run .rs-brand-title{font-size:11px;letter-spacing:1px;padding-left:9px}#roadster-sky-run .rs-build{display:none}#roadster-sky-run .rs-game{height:585px}#roadster-sky-run .rs-hud-top{top:15px;left:15px;right:15px;gap:8px}#roadster-sky-run .rs-scoreboard{min-width:130px;padding:12px 13px;border-radius:15px}#roadster-sky-run .rs-score{font-size:31px}#roadster-sky-run .rs-score-meta{gap:7px;letter-spacing:0}#roadster-sky-run .rs-top-right{gap:8px;align-items:flex-end;flex-direction:column-reverse}#roadster-sky-run .rs-tools{gap:6px}#roadster-sky-run .rs-tool.van-button{width:44px;height:44px;min-width:44px}#roadster-sky-run .rs-speedometer{min-width:86px;padding:11px 13px 9px;border-radius:15px}#roadster-sky-run .rs-speedometer strong{font-size:27px}#roadster-sky-run .rs-meters{right:15px;gap:13px;top:39%}#roadster-sky-run .rs-meter-track{height:108px;width:9px}#roadster-sky-run .rs-meter{min-width:22px}#roadster-sky-run .rs-meter-label b{font-size:11px}#roadster-sky-run .rs-driving-controls{left:15px;right:15px;bottom:25px;gap:10px}#roadster-sky-run .rs-steering{gap:6px;flex-wrap:wrap;max-width:111px}#roadster-sky-run .rs-brake.van-button{order:-1;width:108px;height:35px;min-height:44px;margin:0}#roadster-sky-run .rs-steer.van-button{width:51px;height:51px;min-width:51px}#roadster-sky-run .rs-boost.van-button{width:145px;height:66px;border-radius:21px}#roadster-sky-run .rs-boost .van-button__text{gap:8px}#roadster-sky-run .rs-boost-copy b{font-size:15px}#roadster-sky-run .rs-boost-mark{font-size:21px}#roadster-sky-run .rs-distance{bottom:139px}#roadster-sky-run .rs-distance-main{padding:8px 17px;gap:8px}#roadster-sky-run .rs-distance-main strong{font-size:24px}#roadster-sky-run .rs-dialog{max-width:330px;padding:27px 23px 23px;border-radius:23px}#roadster-sky-run .rs-dialog h1,#roadster-sky-run .rs-dialog h2{font-size:26px}#roadster-sky-run .rs-key-guide{gap:8px 11px}#roadster-sky-run .rs-footer{padding:12px 16px;flex-direction:column;align-items:flex-start;gap:3px}#roadster-sky-run .rs-footer-help{white-space:normal}#roadster-sky-run .rs-toast{top:32%;font-size:13px;padding:8px 15px;max-width:88%}}
+@media(prefers-reduced-motion:reduce){#roadster-sky-run .rs-toast,#roadster-sky-run .rs-flash{animation:none}#roadster-sky-run .rs-boost.van-button,#roadster-sky-run .rs-meter-fill{transition:none}}
+#roadster-sky-run .rs-mode-labels{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:14px 0 -7px;color:#b8f1fc;font-size:11px;letter-spacing:1px}
+#roadster-sky-run .rs-mode-labels span{padding:4px 10px;border-radius:6px;background:#21465a}
+#roadster-sky-run .rs-mode-labels span:last-child{background:#564634;color:#ffe4a7}
+#roadster-sky-run .rs-threat{position:absolute;left:24px;top:124px;max-width:210px;padding:9px 13px 10px;border-radius:12px;background:#17394dea;color:#c9e7f5;transition:background .15s}
+#roadster-sky-run .rs-threat-title{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:12px}
+#roadster-sky-run .rs-threat-title strong{font-weight:550}
+#roadster-sky-run .rs-threat-dot{height:6px;width:6px;flex:none;border-radius:50%;background:#a7ecd5}
+#roadster-sky-run .rs-threat-detail{font-size:11px;line-height:1.5;color:#c0d8e7;margin-top:3px;font-variant-numeric:tabular-nums}
+#roadster-sky-run .rs-threat.locking{background:#594529f5;color:#ffe3a6}
+#roadster-sky-run .rs-threat.locking .rs-threat-dot{background:#ffd481}
+#roadster-sky-run .rs-threat.locking .rs-threat-detail{color:#f9deac}
+#roadster-sky-run .rs-threat.incoming{background:#622f32f2;color:#fff0e6}
+#roadster-sky-run .rs-threat.incoming .rs-threat-dot{background:#ffc29e;box-shadow:0 0 9px #ff9260}
+#roadster-sky-run .rs-threat.incoming .rs-threat-detail{color:#ffd1b7}
+#roadster-sky-run .rs-lock-track{height:3px;background:#ffffff25;margin-top:7px;border-radius:3px;overflow:hidden}
+#roadster-sky-run .rs-lock-fill{height:100%;background:#ffcf78;transition:width .08s linear}
+#roadster-sky-run .rs-toast-danger{background:#66362bed;color:#ffebc7}
+#roadster-sky-run .rs-over-stats{flex-wrap:wrap;gap:8px 17px}
+@media(min-width:900px){#roadster-sky-run .rs-threat{left:28px;top:127px}}
+@media(max-width:540px){#roadster-sky-run .rs-threat{left:15px;top:114px;max-width:180px;padding:8px 10px}#roadster-sky-run .rs-threat-title{font-size:11px;gap:6px}#roadster-sky-run .rs-threat-detail{font-size:11px}#roadster-sky-run .rs-mode-labels{margin-top:11px}}
