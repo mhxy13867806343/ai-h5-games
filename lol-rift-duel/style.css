@@ -40,6 +40,12 @@ body {
 .datasource.err { color: var(--red); }
 .nav-home { font-size: .82rem; color: var(--gold); text-decoration: none; border: 1px solid var(--gold-dim); padding: 4px 12px; border-radius: 3px; }
 .nav-home:hover { background: rgba(200,170,109,.12); }
+.sound-btn {
+  font-size: .82rem; cursor: pointer; padding: 4px 12px; border-radius: 3px;
+  color: var(--gold); background: transparent; border: 1px solid var(--gold-dim);
+}
+.sound-btn[aria-pressed="false"] { color: #5b6472; border-color: var(--line); }
+.sound-btn:hover { background: rgba(200,170,109,.12); }
 
 /* ---------- 屏幕切换 ---------- */
 .screen { display: none; flex: 1; padding: 18px; animation: fadeIn .35s ease; }
