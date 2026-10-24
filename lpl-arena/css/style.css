@@ -1,0 +1,190 @@
+/* ============ LPL ARENA · 赛事数据中心 ============ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #06131f;
+  --bg2: #0a1e31;
+  --panel: #0c2338;
+  --panel2: #103048;
+  --line: #1b3c55;
+  --gold: #caa96c;
+  --gold-bright: #ecd9ac;
+  --blue: #2ea3ff;
+  --red: #ff5a5a;
+  --green: #35c98e;
+  --text: #9db4c4;
+  --text-bright: #f2f7fa;
+}
+body {
+  font-family: "Segoe UI", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background:
+    radial-gradient(1100px 500px at 15% -8%, #0e2c44 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 110%, #0c2438 0%, transparent 55%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+a { color: var(--blue); text-decoration: none; }
+img { display: block; }
+
+/* ---------- 顶部导航 ---------- */
+.topnav {
+  position: sticky; top: 0; z-index: 40;
+  background: linear-gradient(180deg, rgba(6,19,31,.97), rgba(6,19,31,.88));
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+.nav-inner {
+  max-width: 1180px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; gap: 26px; height: 60px;
+}
+.brand { display: flex; align-items: baseline; gap: 8px; }
+.brand b { font-size: 1.2rem; color: var(--gold-bright); letter-spacing: 2px; font-family: Georgia, serif; }
+.brand em { font-style: normal; font-size: .68rem; color: var(--gold); letter-spacing: 3px; }
+.nav-tabs { display: flex; gap: 4px; flex: 1; }
+.nav-tabs a {
+  padding: 8px 18px; border-radius: 4px; font-size: .92rem; color: var(--text);
+  border-bottom: 2px solid transparent;
+}
+.nav-tabs a:hover { color: var(--text-bright); background: rgba(46,163,255,.08); }
+.nav-tabs a.active { color: var(--gold-bright); border-bottom-color: var(--gold); }
+.src-chip { font-size: .68rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 12px; color: #6d8496; white-space: nowrap; }
+.src-chip.live { color: var(--green); border-color: rgba(53,201,142,.4); }
+
+/* ---------- 布局 ---------- */
+.wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.page-title { font-size: 1.35rem; color: var(--text-bright); letter-spacing: 2px; }
+.page-title small { font-size: .7rem; color: var(--gold); letter-spacing: 3px; margin-left: 8px; }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button {
+  padding: 7px 14px; font-size: .8rem; cursor: pointer;
+  background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); border-radius: 4px;
+}
+.seg button:hover { color: var(--text-bright); border-color: var(--blue); }
+.seg button.active { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); color: #20180a; font-weight: 700; border-color: var(--gold); }
+
+.panel {
+  background: linear-gradient(180deg, rgba(16,48,72,.55), rgba(12,35,56,.75));
+  border: 1px solid var(--line); border-radius: 10px; padding: 18px;
+}
+.loading { text-align: center; padding: 50px 0; color: #6d8496; }
+
+/* ---------- 首页 ---------- */
+.hero { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); height: 320px; background: var(--panel); }
+.hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .6s; }
+.hero-slide.on { opacity: 1; }
+.hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+.hero-slide .hero-cap {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 24px 16px;
+  background: linear-gradient(180deg, transparent, rgba(4,14,24,.92));
+  color: var(--text-bright); font-size: 1.05rem; letter-spacing: 1px;
+}
+.hero-dots { position: absolute; right: 14px; bottom: 12px; display: flex; gap: 6px; z-index: 5; }
+.hero-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; }
+.hero-dots i.on { background: var(--gold); }
+.home-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-top: 16px; }
+@media (max-width: 860px) { .home-grid { grid-template-columns: 1fr; } .hero { height: 220px; } }
+.sec-title { font-size: 1rem; color: var(--gold-bright); letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.sec-title::before { content: ''; width: 4px; height: 16px; background: var(--gold); border-radius: 2px; }
+
+.match-row {
+  display: grid; grid-template-columns: 1fr 120px 1fr; align-items: center;
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(12,35,56,.5); margin-bottom: 8px; transition: all .15s;
+}
+.match-row:hover { border-color: var(--blue); transform: translateX(3px); }
+.match-team { display: flex; align-items: center; gap: 10px; font-size: .95rem; color: var(--text-bright); font-weight: 700; }
+.match-team.right { justify-content: flex-end; }
+.match-team img { width: 34px; height: 34px; object-fit: contain; }
+.match-team .tlogo-ph { width: 34px; height: 34px; border-radius: 6px; background: var(--panel2); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 800; }
+.match-mid { text-align: center; }
+.match-mid .score { font-family: Georgia, serif; font-size: 1.3rem; color: var(--gold-bright); font-weight: 800; }
+.match-mid .score .win { color: var(--gold-bright); }
+.match-mid .score .lose { color: #58748a; }
+.match-mid .meta { font-size: .68rem; color: #6d8496; margin-top: 2px; }
+.match-mid .vs { font-family: Georgia, serif; font-size: 1.1rem; color: var(--blue); font-weight: 800; }
+.tag {
+  display: inline-block; font-size: .62rem; padding: 2px 8px; border-radius: 10px;
+  border: 1px solid var(--line); color: #6d8496; margin-left: 6px; font-weight: 400;
+}
+.tag.fin { color: var(--green); border-color: rgba(53,201,142,.35); }
+.tag.live { color: var(--red); border-color: rgba(255,90,90,.4); }
+
+.news-item { display: flex; gap: 12px; padding: 10px 4px; border-bottom: 1px dashed var(--line); }
+.news-item:last-child { border-bottom: none; }
+.news-item img { width: 86px; height: 52px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+.news-item .nt { font-size: .82rem; color: var(--text-bright); line-height: 1.5; }
+.news-item .nd { font-size: .68rem; color: #6d8496; margin-top: 4px; }
+
+.team-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.team-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 6px; border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(12,35,56,.5); color: var(--text); font-size: .72rem;
+  transition: all .15s; cursor: pointer; text-align: center;
+}
+.team-chip:hover { border-color: var(--gold); color: var(--gold-bright); transform: translateY(-3px); }
+.team-chip img { width: 44px; height: 44px; object-fit: contain; }
+
+/* ---------- 赛程 ---------- */
+.round-block { margin-bottom: 18px; }
+.round-head {
+  font-size: .95rem; color: var(--gold-bright); letter-spacing: 1px;
+  padding: 8px 14px; background: rgba(202,169,108,.08);
+  border-left: 3px solid var(--gold); border-radius: 4px; margin-bottom: 10px;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+.round-head span { font-size: .72rem; color: #6d8496; }
+.date-group { font-size: .74rem; color: #6d8496; margin: 10px 0 6px 4px; letter-spacing: 1px; }
+.search-box { padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; color: var(--text-bright); font-size: .85rem; outline: none; width: 180px; }
+.search-box:focus { border-color: var(--blue); }
+
+/* ---------- 积分榜 ---------- */
+table.rank-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.rank-table th {
+  text-align: left; padding: 10px 12px; color: var(--gold);
+  border-bottom: 1px solid var(--line); font-size: .76rem; letter-spacing: 1px;
+  background: rgba(202,169,108,.06);
+}
+.rank-table td { padding: 11px 12px; border-bottom: 1px solid rgba(27,60,85,.5); color: var(--text); }
+.rank-table tr:hover td { background: rgba(46,163,255,.05); }
+.rank-table .rk { font-family: Georgia, serif; font-size: 1.05rem; color: #58748a; font-weight: 800; width: 46px; }
+.rank-table tr:nth-child(1) .rk { color: #ffd76a; }
+.rank-table tr:nth-child(2) .rk { color: #cfd8e0; }
+.rank-table tr:nth-child(3) .rk { color: #d99a6c; }
+.rank-table .team-cell { display: flex; align-items: center; gap: 10px; color: var(--text-bright); font-weight: 700; }
+.rank-table .team-cell img { width: 28px; height: 28px; object-fit: contain; }
+.rank-table .winrate-bar { position: relative; width: 120px; height: 8px; background: rgba(27,60,85,.7); border-radius: 4px; overflow: hidden; }
+.rank-table .winrate-bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #2ea3ff, #35c98e); border-radius: 4px; }
+.rank-table b.up { color: var(--green); } .rank-table b.down { color: var(--red); }
+
+/* ---------- 战队页 ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+.team-card {
+  display: flex; align-items: center; gap: 14px; padding: 18px 16px;
+  border: 1px solid var(--line); border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, rgba(16,48,72,.5), rgba(12,35,56,.7));
+  transition: all .18s;
+}
+.team-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+.team-card img { width: 58px; height: 58px; object-fit: contain; }
+.team-card .tn { color: var(--text-bright); font-weight: 800; font-size: 1rem; }
+.team-card .te { font-size: .68rem; color: #6d8496; letter-spacing: 1px; margin-top: 3px; text-transform: uppercase; }
+
+/* 战队详情 */
+.detail-head { display: flex; align-items: center; gap: 22px; padding: 24px; }
+.detail-head img { width: 96px; height: 96px; object-fit: contain; }
+.detail-head h1 { color: var(--text-bright); font-size: 1.8rem; letter-spacing: 2px; }
+.detail-head .sub { color: #6d8496; font-size: .8rem; letter-spacing: 2px; margin-top: 4px; text-transform: uppercase; }
+.stat-cells { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 14px; }
+.stat-cell { padding: 14px; border: 1px solid var(--line); border-radius: 8px; text-align: center; background: rgba(12,35,56,.5); }
+.stat-cell b { display: block; font-size: 1.5rem; color: var(--gold-bright); font-family: Georgia, serif; }
+.stat-cell span { font-size: .7rem; color: #6d8496; letter-spacing: 1px; }
+
+.footer {
+  text-align: center; padding: 26px; color: #58748a; font-size: .74rem;
+  border-top: 1px solid var(--line); line-height: 2;
+}
+.footer a { color: #6d8496; }
+.empty { text-align: center; color: #58748a; padding: 40px 0; }

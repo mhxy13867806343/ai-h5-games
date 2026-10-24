@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06131f">
+<title>首页 · LPL ARENA</title>
+<meta name="description" content="LPL 英雄联盟职业联赛赛事数据中心：最新赛果、积分榜、战队与官方轮播，数据来自 lpl.qq.com 官方接口。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306131f'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='13' fill='%23caa96c' font-family='Georgia' font-weight='bold'%3ELPL%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+<div class="wrap">
+  <div class="hero" id="hero"><div class="loading">加载官方轮播…</div></div>
+  <div class="hero-dots" id="hero-dots"></div>
+  <div class="home-grid">
+    <div class="panel">
+      <div class="sec-title">最近比赛</div>
+      <div id="recent-list"><div class="loading">加载赛程…</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="panel">
+        <div class="sec-title">2026 LPL · 第三赛段积分榜</div>
+        <div id="mini-rank"><div class="loading">计算中…</div></div>
+        <p style="text-align:right;margin-top:10px"><a href="standings.html">完整积分榜 →</a></p>
+      </div>
+      <div class="panel">
+        <div class="sec-title">LPL 战队</div>
+        <div class="team-strip" id="team-strip"><div class="loading">加载战队…</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/data-snapshot.js"></script>
+<script src="js/data.js?v=2"></script>
+<script src="js/app.js?v=2"></script>
+</body>
+</html>
