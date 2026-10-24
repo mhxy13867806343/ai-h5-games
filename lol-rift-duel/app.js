@@ -45,6 +45,15 @@ function showScreen(name) {
   screens[name].classList.add('active');
 }
 
+// file:// 直接打开本地文件时，相对大厅路径不可靠 → 跳线上大厅
+function goLobby(link) {
+  if (location.protocol === 'file:') {
+    location.href = 'https://mhxy13867806343.github.io/ai-h5-games/';
+    return false;
+  }
+  return true; // 正常走相对路径 ../index.html
+}
+
 /* ---------- 状态 ---------- */
 const state = {
   roster: [],            // 全部英雄（精简）
@@ -538,11 +547,13 @@ class BattleEngine {
         u.towerZapTimer += dt;
         if (u.towerZapTimer >= 1.1) {
           u.towerZapTimer = 0;
-          this.damage(u, TOWER_DMG, null, 'tower');
+          u.towerHits = (u.towerHits || 0) + 1; // 伤害渐入：44 / 66 / 88…
+          this.damage(u, Math.min(TOWER_DMG, 28 + u.towerHits * 22), null, 'tower');
           this.zaps.push({ from: foeTower, to: { x: u.x, y: u.y }, life: 0.25 });
           this.shake = Math.max(this.shake, 5);
+          this.float(u.x, u.y - 58, '⚠ 防御塔攻击！快撤出红圈', '#ffd76a');
         }
-      } else u.towerZapTimer = 0;
+      } else { u.towerZapTimer = 0; u.towerHits = 0; }
     });
 
     // 移动
@@ -865,12 +876,14 @@ class BattleEngine {
     this.drawTower(ctx, TOWERS.blue, '#0ac8b9');
     this.drawTower(ctx, TOWERS.red, '#e84057');
 
-    // 塔范围（淡）
+    // 塔范围（己方绿=回复区，敌方红=攻击区）
     ctx.lineWidth = 1.5;
-    ctx.strokeStyle = 'rgba(10,200,185,.25)';
-    ctx.beginPath(); ctx.arc(TOWERS.blue.x, TOWERS.blue.y, TOWER_REGEN_R, 0, Math.PI * 2); ctx.stroke();
-    ctx.strokeStyle = 'rgba(232,64,87,.25)';
-    ctx.beginPath(); ctx.arc(TOWERS.red.x, TOWERS.red.y, TOWER_THREAT_R, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = 'rgba(47,191,113,.07)';
+    ctx.strokeStyle = 'rgba(10,200,185,.35)';
+    ctx.beginPath(); ctx.arc(TOWERS.blue.x, TOWERS.blue.y, TOWER_REGEN_R, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(232,64,87,.09)';
+    ctx.strokeStyle = 'rgba(232,64,87,.4)';
+    ctx.beginPath(); ctx.arc(TOWERS.red.x, TOWERS.red.y, TOWER_THREAT_R, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
     // 电弧
     this.zaps.forEach(z => {
