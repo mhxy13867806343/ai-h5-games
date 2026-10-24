@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff4dd">
+<title>Codex 额度重置追踪与历史记录 | Codex Resets</title>
+<meta name="description" content="追踪最新的 OpenAI Codex 额度重置，查看重置历史（66 次公告与 13 个月网格图），并在新重置公布时收到通知。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fff4dd'/%3E%3Cpath d='M9 22L16 8l7 14' fill='none' stroke='%23c9611f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M9 22L16 8l7 14" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Codex Resets</a>
+    <span class="online" id="online-chip" title="当前在线人数（模拟）"><i></i><span id="online-count">…</span> <span data-i18n="online">人在线</span></span>
+    <div class="top-actions">
+      <select id="lang-select" aria-label="语言">
+        <option value="zh-CN">简体中文</option>
+        <option value="en">English</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+      </select>
+      <button id="theme-toggle" class="icon-btn" aria-label="切换主题">🌙</button>
+      <a class="nav-home" href="../index.html">← <span data-i18n="lobby">返回大厅</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 通知订阅 -->
+  <section class="panel intro">
+    <p class="intro-line" data-i18n-html="intro">我们帮你关注 <b>@thsottiaux</b> 发布的 Codex 重置消息，省得你反复刷推。</p>
+    <div class="subscribe-row">
+      <button class="sub-btn" data-sub="browser">🔔 <span data-i18n="subBrowser">浏览器</span></button>
+      <a class="sub-btn" href="https://t.me/codex_resets" target="_blank" rel="noopener">✈️ Telegram</a>
+      <button class="sub-btn" data-sub="email">📧 <span data-i18n="subEmail">邮件</span></button>
+    </div>
+    <div class="tz-row">
+      <span data-i18n="timezone">时区</span>
+      <div class="seg" id="tz-seg">
+        <button data-tz="utc" class="active">Tibo 时间</button>
+        <button data-tz="local" data-i18n="localTime">本地时间</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最近一次重置 -->
+  <section class="panel latest" id="latest-panel">
+    <div class="latest-label" data-i18n="latest">最近一次 Codex 额度重置</div>
+    <div class="latest-rel" id="latest-rel">…</div>
+    <div class="latest-abs" id="latest-abs">…</div>
+    <div class="plea">
+      <button id="thanks-btn">🙏 <span data-i18n="thanks">感谢</span></button>
+      <span class="plea-count" id="thanks-count">—</span>
+    </div>
+  </section>
+
+  <!-- 28 天挑战 -->
+  <a class="panel challenge" href="https://x.com/thsottiaux" target="_blank" rel="noopener">
+    <span class="ch-num">28</span>
+    <span class="ch-body">
+      <b data-i18n="challengeTitle">Tibo 的 28 天挑战</b>
+      <span data-i18n="challengeDesc">每天一次改进，或者一次完整重置。</span>
+    </span>
+    <span class="ch-cta" data-i18n="challengeCta">查看每日进展 →</span>
+  </a>
+
+  <!-- 统计 -->
+  <section class="stats">
+    <div class="stat-card"><span data-i18n="statCount">重置次数</span><b id="stat-total">—</b></div>
+    <div class="stat-card"><span data-i18n="statAvg">平均重置间隔 / 平均等待</span><b id="stat-avg">—</b></div>
+    <div class="stat-card"><span data-i18n="statLongest">最长等待</span><b id="stat-longest">—</b></div>
+  </section>
+
+  <!-- 重置历史网格 -->
+  <section class="panel">
+    <div class="sec-head">
+      <h2 data-i18n="gridTitle">Codex 重置历史</h2>
+      <div class="legend">
+        <span><i class="cell l0"></i><span data-i18n="legendNone">未重置</span></span>
+        <span><i class="cell l1"></i><span data-i18n="legendReset">已重置</span></span>
+      </div>
+    </div>
+    <div class="grid-scroll">
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- 重置公告 -->
+  <section class="panel">
+    <div class="sec-head">
+      <h2 data-i18n="logTitle">Codex 重置公告</h2>
+      <span class="sec-sub" data-i18n="logSub">每次公告，都留有记录</span>
+    </div>
+    <ul class="log" id="log-list"></ul>
+    <button id="toggle-log" class="toggle-log">查看全部 66 次重置 ↓</button>
+  </section>
+
+  <!-- 触达用户 -->
+  <section class="panel reach">
+    <h2 data-i18n="reachTitle">触达 Codex 用户</h2>
+    <p data-i18n="reachDesc">本页面是学习交流复刻，广告位仅为样式展示。</p>
+    <div class="sponsor-grid">
+      <div class="sponsor-card"><b>VILAO.AI</b><span>AI 模型市场 · Claude、GPT、Gemini 等</span></div>
+      <div class="sponsor-card"><b>OpenModel</b><span>Codex 最高 90% 优惠（示例文案）</span></div>
+    </div>
+    <p class="reach-mail">support@codex-resets.com</p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  数据快照抓取自 codex-resets.com（2026-10-24，66 次公告 / 406 天网格）·
+  重置消息原始来源 <a href="https://x.com/thsottiaux" target="_blank" rel="noopener">@thsottiaux</a> ·
+  <a href="../index.html">返回大厅</a>
+</footer>
+
+<!-- 通知订阅弹窗 -->
+<div class="modal" id="sub-modal" hidden>
+  <div class="modal-card">
+    <button class="modal-x" id="sub-close" aria-label="关闭">×</button>
+    <h3 id="sub-title">通知订阅</h3>
+    <p id="sub-desc" class="modal-desc">本复刻页不包含真实推送后端，正式版请前往原站订阅。</p>
+    <a class="modal-btn" href="https://codex-resets.com/zh-CN" target="_blank" rel="noopener">前往 codex-resets.com →</a>
+  </div>
+</div>
+
+<div class="tip" id="grid-tip" hidden></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
