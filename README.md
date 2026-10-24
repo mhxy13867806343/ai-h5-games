@@ -22,6 +22,9 @@
 | 12 | **口袋妖怪：黑暗升起（秩序毁灭）** (Pokemon Dark Rising: Order Destroyed) | `traeWork-game` | GBA 同人改版页 1:1 复刻 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/pokemon-dark-rising/pokemon-dark-rising.html) |
 | 13 | **indienova GBA 游戏库** (indienova GAMEDB - GBA) | `traeWork-game` | GBA 游戏列表 1:1 复刻 (180+ 款) | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/indienova/index.html) |
 | 14 | **Roadster · 飞跃收费站** (Roadster Sky Run) | `roadster-sky-run` | 3D 驾驶跑酷 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/roadster-sky-run.html) |
+| 15 | **在线交互日历** (Interactive Calendar) | `interactive-calendar` | 实用工具 · 日历 | [在线使用](https://mhxy13867806343.github.io/ai-h5-games/interactive-calendar/) |
+| 16 | **七十七年 · 大事年表** (Chronicle 77) | `chronicle-77` | 历史年表 1949—2026 (104 项) | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/chronicle-77/) |
+| 17 | **鹈鹕骑行** (Pelican Coast Ride) | `pelican-coast-ride` | Canvas 交互动画 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/pelican-coast-ride/) |
 
 ---
 

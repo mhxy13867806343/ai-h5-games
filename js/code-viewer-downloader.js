@@ -175,6 +175,13 @@ class CodeViewerDownloader {
                 const rJs = await fetch(config.jsUrl);
                 folder.file(`game.js`, await rJs.text());
             }
+            // 可选：多文件项目（数据 json、附属模块等）追加进 zip，保证离线可用
+            if (Array.isArray(config.extraFiles)) {
+                for (const f of config.extraFiles) {
+                    const rExtra = await fetch(f);
+                    folder.file(f.split('/').pop(), await rExtra.text());
+                }
+            }
             folder.file('README.txt', `《${config.name || folderName}》纯前端 HTML5 源码包\n直接在浏览器中打开 ${folderName}.html 即可直接游玩！`);
 
             const blob = await zip.generateAsync({ type: 'blob' });

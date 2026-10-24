@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f2e5"><meta name="description" content="沿着海岸线，和鹈鹕一起慢慢骑。同步蹬踏的交互动画，附可运行自检。">
+<title>Pelican Coast · 鹈鹕骑行</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f5f2e5'/%3E%3Ccircle cx='11' cy='15' r='7' fill='%232d6655'/%3E%3Cpath d='M13 11L29 15L14 20Z' fill='%23e6aa54'/%3E%3Ccircle cx='10' cy='13' r='1.5' fill='%23fffbed'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<main class="postcard">
+<header><div class="brand"><span class="brand-mark" aria-hidden="true">✳</span> PELICAN COAST <span class="divider">/</span> <span class="cn">海岸线 01</span></div><div class="header-actions"><span class="edition">A LITTLE COASTAL RIDE</span><button id="share" class="share-button">分享</button></div></header><div id="share-feedback" role="status" aria-live="polite" hidden></div><div id="share-manual" hidden><label for="share-url">复制这个公开链接，发给朋友</label><input id="share-url" type="url" readonly><button id="share-close" aria-label="关闭分享链接">关闭</button></div>
+<section class="scene" aria-label="鹈鹕骑着绿色自行车沿海岸前行">
+<canvas id="coast" aria-label="戴绿色头盔的白鹈鹕骑着自行车，在金色太阳下经过沙滩和海浪。双脚随踏板转动。" role="img">鹈鹕沿海岸骑行的动画。使用下方按钮暂停或调整速度。</canvas>
+<div class="scene-caption"><span>慢一点，也很好。</span><span>SLOW DAYS BY THE SEA</span></div>
+</section>
+<footer class="controls">
+<div class="ride-state"><span class="state-icon" aria-hidden="true">≈</span><div><span id="status">沿海慢骑中</span><span class="state-note">跟着海风，转一圈</span></div></div>
+<div class="play-controls"><button id="play" class="play-button" aria-label="暂停骑行" aria-pressed="false"><span id="play-icon" aria-hidden="true">Ⅱ</span><span id="play-label">暂停</span></button><div class="speed-control"><span class="speed-label" id="speed-label">骑行速度</span><div role="group" aria-labelledby="speed-label"><button data-speed="0.5" aria-pressed="false">0.5×</button><button data-speed="1" aria-pressed="true">1×</button><button data-speed="1.5" aria-pressed="false">1.5×</button><button data-speed="2" aria-pressed="false">2×</button></div></div></div>
+<details id="tests"><summary><span aria-hidden="true">◉</span> 动画自检</summary><div class="test-panel"><div class="test-heading"><strong>让每一圈都对得上</strong><span>实时运行运动模型检查</span></div><button id="run-tests">运行 6 项检查</button><ul id="test-results" aria-live="polite"></ul><p id="test-summary">检查脚踏贴合、关节、滚动、暂停、倍速和时间连续性</p></div></details>
+</footer>
+<div class="bottom-note"><span>一段没有目的地的旅程</span><span>SPACE 暂停 / 继续</span></div>
+</main>
+</body></html>

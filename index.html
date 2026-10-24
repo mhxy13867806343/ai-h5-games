@@ -16,11 +16,14 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (18)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (21)</button>
         <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (7)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (4)</button>
         <button class="folder-tab" onclick="filterFolder('roadster-sky-run')">🏎️ roadster-sky-run 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('interactive-calendar')">📅 interactive-calendar 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('chronicle-77')">📜 chronicle-77 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('pelican-coast-ride')">🚲 pelican-coast-ride 专区 (1)</button>
       </div>
 
       <!-- Layout Switcher Bar -->
@@ -658,10 +661,112 @@
         </div>
       </div>
 
+      <!-- 在线交互日历 -->
+      <div class="card" data-folder="interactive-calendar" data-url="interactive-calendar/index.html" data-name="在线交互日历">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#06b6d4; background:rgba(6,182,212,0.15); border-color:rgba(6,182,212,0.3);">📂 interactive-calendar</span>
+              <span class="tag">实用工具</span>
+            </div>
+            <h2>📅 在线交互日历</h2>
+            <p>简洁的月历卡片：上/下月切换、一键回到今天、点选日期显示星期。纯原生 HTML+CSS+JS 单文件实现，零依赖。</p>
+            <div class="meta"><span>工具</span><span>日历</span><span>零依赖</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="interactive-calendar/index.html">直接用 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('interactive-calendar', '在线交互日历', 'interactive-calendar/index.html')">📄 源码</button>
+            <button class="card-btn" onclick="downloadZip('interactive-calendar', '在线交互日历', 'interactive-calendar/index.html')">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>📅 试玩预览 · 《在线交互日历》</span>
+            <div class="preview-actions">
+              <a href="interactive-calendar/index.html" class="preview-play-btn">📅 点击进入页面</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
+      <!-- 七十七年大事年表 -->
+      <div class="card" data-folder="chronicle-77" data-url="chronicle-77/index.html" data-name="七十七年大事年表">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#e0455c; background:rgba(224,69,92,0.15); border-color:rgba(224,69,92,0.3);">📂 chronicle-77</span>
+              <span class="tag">历史年表</span>
+            </div>
+            <h2>📜 七十七年 · 大事年表</h2>
+            <p>1949—2026 年间 104 条重要历史事件精选：关键词搜索、年份筛选、年代索引与 6 大主题分类，每项附原始或权威来源链接。</p>
+            <div class="meta"><span>历史</span><span>年表</span><span>104 项</span><span>附来源</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="chronicle-77/index.html">直接看 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('chronicle-77', '七十七年大事年表', 'chronicle-77/index.html', 'chronicle-77/styles.css', 'chronicle-77/app.mjs')">📄 源码</button>
+            <button class="card-btn" onclick="CodeViewerDownloader.downloadZip({ id: 'chronicle-77', name: '七十七年大事年表', htmlUrl: 'chronicle-77/index.html', extraFiles: ['chronicle-77/styles.css', 'chronicle-77/app.mjs', 'chronicle-77/core.mjs', 'chronicle-77/events.json'] })">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>📜 试玩预览 · 《七十七年大事年表》</span>
+            <div class="preview-actions">
+              <a href="chronicle-77/index.html" class="preview-play-btn">📜 点击进入页面</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
+      <!-- 鹈鹕骑行 -->
+      <div class="card" data-folder="pelican-coast-ride" data-url="pelican-coast-ride/index.html" data-name="鹈鹕骑行">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#0d9488; background:rgba(13,148,136,0.15); border-color:rgba(13,148,136,0.3);">📂 pelican-coast-ride</span>
+              <span class="tag">交互动画</span>
+            </div>
+            <h2>🚲 Pelican Coast · 鹈鹕骑行</h2>
+            <p>戴绿色头盔的白鹈鹕沿海岸慢骑：双脚与踏板同步转动的 Canvas 动画，支持暂停/倍速，内置 6 项运动模型自检，纯原生实现。</p>
+            <div class="meta"><span>动画</span><span>Canvas</span><span>治愈系</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="pelican-coast-ride/index.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('pelican-coast-ride', '鹈鹕骑行', 'pelican-coast-ride/index.html', 'pelican-coast-ride/style.css', 'pelican-coast-ride/app.js')">📄 源码</button>
+            <button class="card-btn" onclick="CodeViewerDownloader.downloadZip({ id: 'pelican-coast-ride', name: '鹈鹕骑行', htmlUrl: 'pelican-coast-ride/index.html', extraFiles: ['pelican-coast-ride/style.css', 'pelican-coast-ride/app.js', 'pelican-coast-ride/model.js', 'pelican-coast-ride/share.js'] })">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🚲 试玩预览 · 《鹈鹕骑行》</span>
+            <div class="preview-actions">
+              <a href="pelican-coast-ride/index.html" class="preview-play-btn">🚲 点击进入页面</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run 4 大源码文件夹分类筛选与一键分享
+      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride 7 大源码文件夹分类筛选与一键分享
     </div>
   </div>
 
