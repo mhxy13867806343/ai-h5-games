@@ -13,3 +13,25 @@ body {
 }
 .page-pad { padding-bottom: 110px; min-height: 100vh; }
 .sec-title { font-size: 17px; font-weight: 700; margin: 18px 16px 12px; }
+
+
+/* ---------- PC 端：收窄为手机宽度居中展示 ---------- */
+@media (min-width: 768px) {
+  body { background: #0a0a0c; }
+  .app-shell {
+    max-width: 480px; margin: 0 auto; min-height: 100vh;
+    background: #1c1c1e;
+    box-shadow: 0 0 80px rgba(0, 0, 0, .7);
+  }
+  .adm-tab-bar { max-width: 480px; left: 0; right: 0; margin: 0 auto; }
+  .adm-toast { max-width: 480px; }
+}
+/* PC 端所有 fixed 子元素（tabBar 容器 / 迷你播放条）跟随手机宽度居中 */
+@media (min-width: 768px) {
+  .app-shell > div.fixed,
+  .app-shell > div[class*="fixed"] {
+    left: 50% !important; right: auto !important;
+    transform: translateX(-50%);
+    width: 480px; max-width: 480px;
+  }
+}

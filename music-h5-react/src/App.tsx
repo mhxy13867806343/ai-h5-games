@@ -1,6 +1,6 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { useRoutes, Navigate } from 'react-router-dom';
-import { TabBar } from 'antd-mobile';
+import { TabBar, Toast } from 'antd-mobile';
 import { usePlayer } from './hooks/usePlayer';
 import MiniPlayer from './components/MiniPlayer';
 
@@ -17,6 +17,13 @@ const tabs = [
 ];
 
 export default function App() {
+  // PC 端打开 H5 应用时 Toast 提示
+  useEffect(() => {
+    const isPC = window.innerWidth > 750 && !/Mobi|Android|iPhone|iPad|Harmony/i.test(navigator.userAgent);
+    if (isPC) {
+      Toast.show({ content: '📱 这是 H5 移动端应用，建议用手机打开体验更佳', duration: 3200 });
+    }
+  }, []);
   const element = useRoutes([
     { path: '/', element: <Home /> },
     { path: '/rank', element: <Rank /> },
@@ -27,7 +34,7 @@ export default function App() {
   ]);
   const player = usePlayer();
   return (
-    <div className="min-h-screen bg-netease-bg text-white">
+    <div className="app-shell min-h-screen bg-netease-bg text-white">
       <Suspense fallback={<div className="p-10 text-center text-netease-sub">加载中…</div>}>
         {element}
       </Suspense>
