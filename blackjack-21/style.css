@@ -1,0 +1,319 @@
+/* ============ 21 点 · Blackjack ============ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --felt: #0b5138;
+  --felt-dark: #094230;
+  --gold: #c8aa6d;
+  --gold-bright: #f0e6d2;
+  --red: #d8503f;
+  --panel: #10231b;
+  --line: #274437;
+  --text: #a8b8ac;
+  --text-bright: #f0e6d2;
+}
+body {
+  font-family: "Segoe UI", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background:
+    radial-gradient(900px 500px at 20% -10%, #123c2c 0%, transparent 60%),
+    radial-gradient(800px 400px at 90% 110%, #0e2f24 0%, transparent 55%),
+    #081712;
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.topnav {
+  display: flex; align-items: center; gap: 16px;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, rgba(16,35,27,.95), rgba(16,35,27,.5));
+  border-bottom: 1px solid var(--line);
+}
+.topnav .brand { font-size: 1.05rem; color: var(--text-bright); font-weight: 700; letter-spacing: 2px; }
+.topnav .brand em { font-style: normal; font-size: .72rem; color: var(--gold); letter-spacing: 4px; margin-left: 6px; }
+.sound-btn, .nav-home {
+  font-size: .82rem; cursor: pointer; padding: 4px 12px; border-radius: 3px;
+  color: var(--gold); background: transparent; border: 1px solid var(--line); text-decoration: none;
+}
+.sound-btn[aria-pressed="false"] { color: #5a6b60; }
+.sound-btn:hover, .nav-home:hover { background: rgba(200,170,109,.1); border-color: var(--gold); }
+
+.screen { display: none; flex: 1; padding: 20px; animation: fadeIn .3s ease; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- 设置 ---------- */
+.setup-card, .dice-card, .result-card {
+  width: min(560px, 100%);
+  background: rgba(16,35,27,.8); border: 1px solid var(--line); border-radius: 10px;
+  padding: 26px; display: flex; flex-direction: column; gap: 16px;
+}
+.setup-card h1 { color: var(--text-bright); font-size: 1.25rem; }
+.rules { font-size: .84rem; line-height: 1.8; }
+.rules b { color: var(--gold-bright); }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field > label { font-size: .76rem; color: #7d9184; letter-spacing: 2px; }
+.seg { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button {
+  padding: 8px 15px; cursor: pointer; font-size: .85rem;
+  background: #0c1f17; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
+}
+.seg button:hover { color: var(--text-bright); border-color: var(--gold); }
+.seg button.active { background: linear-gradient(180deg, var(--gold-bright), var(--gold) 50%, #96712f); color: #10231b; font-weight: 700; }
+.prow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; background: rgba(8,23,18,.6);
+  border: 1px solid var(--line); border-radius: 5px;
+}
+.prow + .prow { margin-top: 8px; }
+.pnum { font-family: Georgia, serif; font-weight: 700; color: var(--gold); width: 28px; text-align: center; }
+.prow .pname { flex: 1; }
+input[type="text"] {
+  padding: 9px 11px; background: #081712; border: 1px solid var(--line); border-radius: 4px;
+  color: var(--text-bright); font-size: .9rem; outline: none; width: 100%;
+}
+input:focus { border-color: var(--gold); }
+.ai-toggle {
+  display: flex; align-items: center; gap: 5px; cursor: pointer; flex-shrink: 0;
+  font-size: .8rem; padding: 6px 10px; border: 1px solid var(--line); border-radius: 4px; user-select: none;
+}
+.ai-toggle:has(input:checked) { color: var(--gold-bright); border-color: var(--gold); background: rgba(200,170,109,.12); }
+.ai-toggle input { accent-color: var(--gold); cursor: pointer; }
+.seat-tip { font-size: .75rem; color: #7d9184; }
+.btn-start {
+  padding: 15px; font-size: 1.05rem; font-weight: 700; letter-spacing: 3px; cursor: pointer;
+  color: #10231b; background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #96712f);
+  border: none; border-radius: 5px;
+}
+.btn-start:hover { filter: brightness(1.1); }
+
+/* ---------- 骰子 ---------- */
+#screen-dice { justify-content: center; }
+.dice-card { align-items: center; text-align: center; padding: 40px 30px; }
+.dice-title { font-size: 1.1rem; letter-spacing: 4px; color: var(--gold); }
+.die {
+  width: 110px; height: 110px; margin: 14px 0;
+  background: #f5f2e8; border-radius: 18px; padding: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.5), inset 0 -4px 0 rgba(0,0,0,.12);
+}
+.die.rolling { animation: dieShake .35s infinite; }
+@keyframes dieShake {
+  0% { transform: rotate(-8deg) scale(1); } 50% { transform: rotate(8deg) scale(1.06); } 100% { transform: rotate(-8deg) scale(1); }
+}
+.die-face { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); width: 100%; height: 100%; }
+.die-face span { width: 20px; height: 20px; border-radius: 50%; background: #1d2b22; place-self: center; visibility: hidden; }
+.die-face[data-v="1"] span:nth-child(5),
+.die-face[data-v="2"] span:nth-child(1), .die-face[data-v="2"] span:nth-child(9),
+.die-face[data-v="3"] span:nth-child(1), .die-face[data-v="3"] span:nth-child(5), .die-face[data-v="3"] span:nth-child(9),
+.die-face[data-v="4"] span:nth-child(1), .die-face[data-v="4"] span:nth-child(3), .die-face[data-v="4"] span:nth-child(7), .die-face[data-v="4"] span:nth-child(9),
+.die-face[data-v="5"] span:nth-child(1), .die-face[data-v="5"] span:nth-child(3), .die-face[data-v="5"] span:nth-child(5), .die-face[data-v="5"] span:nth-child(7), .die-face[data-v="5"] span:nth-child(9),
+.die-face[data-v="6"] span:nth-child(1), .die-face[data-v="6"] span:nth-child(3), .die-face[data-v="6"] span:nth-child(4), .die-face[data-v="6"] span:nth-child(6), .die-face[data-v="6"] span:nth-child(7), .die-face[data-v="6"] span:nth-child(9)
+{ visibility: visible; }
+.dice-result { font-size: 1.3rem; color: var(--text-bright); font-weight: 700; }
+.dice-sub { font-size: .85rem; }
+.dice-sub b { color: var(--gold-bright); }
+
+/* ---------- 牌桌 ---------- */
+#screen-table { padding: 12px; }
+.table-wrap { width: min(980px, 100%); display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.felt {
+  background:
+    radial-gradient(ellipse at 50% 0%, #0e5f41 0%, var(--felt) 45%, var(--felt-dark) 100%);
+  border: 6px solid #5a3d22; border-radius: 22px;
+  box-shadow: inset 0 0 60px rgba(0,0,0,.45), 0 10px 34px rgba(0,0,0,.5);
+  padding: 18px 16px; min-height: 52vh;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.dealer-zone { text-align: center; }
+.zone-label { font-size: .8rem; letter-spacing: 2px; color: var(--gold-bright); }
+.cards { display: flex; justify-content: center; gap: 8px; margin: 10px 0 4px; min-height: 96px; flex-wrap: wrap; }
+.hand-total { font-size: .85rem; color: var(--gold-bright); font-weight: 700; }
+.table-msg {
+  text-align: center; font-size: .95rem; color: var(--text-bright);
+  min-height: 1.6em; letter-spacing: .5px;
+}
+.table-msg.flash { animation: msgPop .25s ease; }
+@keyframes msgPop { from { transform: scale(.95); opacity: .4; } to { transform: none; opacity: 1; } }
+
+/* 扑克牌 */
+.card {
+  width: 68px; height: 96px; border-radius: 8px;
+  background: linear-gradient(160deg, #fdfcf7, #ece8da);
+  box-shadow: 0 3px 10px rgba(0,0,0,.4);
+  position: relative; padding: 6px 7px;
+  animation: dealIn .3s ease;
+}
+@keyframes dealIn { from { transform: translateY(-26px) rotate(-7deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.card .rank { font-family: Georgia, serif; font-weight: 800; font-size: 1.15rem; line-height: 1; }
+.card .suit-big { position: absolute; right: 7px; bottom: 5px; font-size: 1.7rem; line-height: 1; }
+.card .suit-sm { font-size: .9rem; }
+.card.red { color: #c0392b; }
+.card.black { color: #1d2b22; }
+.card.back {
+  background: repeating-linear-gradient(45deg, #7c2f26 0 6px, #8c3a2e 6px 12px);
+  border: 3px solid #fdfcf7;
+}
+.card.back .rank, .card.back .suit-big { display: none; }
+
+.players-zone { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; flex: 1; align-items: flex-end; }
+.seat {
+  background: rgba(6,20,14,.55); border: 2px solid var(--line); border-radius: 12px;
+  padding: 10px 12px; min-width: 150px; text-align: center;
+  transition: all .15s;
+}
+.seat.active {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 20px rgba(240,230,210,.28);
+  transform: translateY(-4px);
+}
+.seat.dealer-seat::after { content: '🎲 庄'; color: var(--gold); font-size: .7rem; margin-left: 6px; }
+.seat-name { font-size: .85rem; color: var(--text-bright); font-weight: 700; }
+.seat-name .tag { font-size: .68rem; color: #7d9184; font-weight: 400; }
+.seat .cards { min-height: 80px; margin: 6px 0 2px; }
+.seat .cards .card { width: 52px; height: 74px; }
+.seat .cards .card .rank { font-size: .95rem; }
+.seat .cards .card .suit-big { font-size: 1.25rem; }
+.seat-total { font-size: .78rem; color: var(--gold-bright); font-weight: 700; min-height: 1.1em; }
+.badge {
+  display: inline-block; font-size: .66rem; padding: 2px 8px; border-radius: 10px;
+  margin-top: 4px; letter-spacing: 1px;
+}
+.badge.bust { background: rgba(216,80,63,.2); color: #ff9c8a; border: 1px solid rgba(216,80,63,.5); }
+.badge.bj { background: rgba(240,230,210,.18); color: var(--gold-bright); border: 1px solid var(--gold); }
+.badge.tiger { background: rgba(255,170,60,.2); color: #ffc46b; border: 1px solid rgba(255,170,60,.55); }
+.badge.stand { background: rgba(90,140,110,.2); color: #9fd8b6; border: 1px solid rgba(90,140,110,.5); }
+
+/* 操作栏 */
+.action-bar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: rgba(16,35,27,.8); border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 16px;
+}
+.turn-chip { font-size: .9rem; color: var(--text-bright); flex: 1; }
+.turn-chip b { color: var(--gold-bright); }
+.action-btns { display: flex; gap: 10px; }
+.act {
+  padding: 11px 26px; font-size: .95rem; font-weight: 700; cursor: pointer;
+  border: none; border-radius: 6px;
+}
+.act.hit { background: linear-gradient(180deg, #59c98a, #2f9a62); color: #07251a; }
+.act.stand { background: linear-gradient(180deg, #e0a75c, #b57a34); color: #2a1a08; }
+.act:hover { filter: brightness(1.1); }
+.act:disabled { filter: grayscale(.8) brightness(.55); cursor: not-allowed; }
+.btn-ghost {
+  padding: 8px 14px; font-size: .8rem; cursor: pointer;
+  background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
+}
+.btn-ghost:hover { color: var(--text-bright); border-color: var(--gold); }
+
+/* 记录 */
+.log-panel {
+  background: rgba(16,35,27,.7); border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 16px; max-height: 20vh; overflow-y: auto; width: 100%;
+}
+.log-title { font-size: .72rem; letter-spacing: 3px; color: #7d9184; margin-bottom: 6px; }
+#log-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+#log-list li { font-size: .8rem; padding: 5px 10px; background: rgba(8,23,18,.6); border-radius: 4px; }
+#log-list li b { color: var(--gold-bright); }
+#log-list li.warn { color: #ff9c8a; }
+#log-list li.good { color: #9fd8b6; }
+#log-list li.tiger { color: #ffc46b; }
+
+/* ---------- 结算 ---------- */
+.result-card { width: min(640px, 100%); }
+.result-card h2 { color: var(--text-bright); text-align: center; letter-spacing: 3px; }
+.result-table { display: flex; flex-direction: column; gap: 6px; }
+.rrow {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: .88rem; padding: 10px 14px;
+  background: rgba(8,23,18,.6); border: 1px solid var(--line); border-radius: 6px;
+}
+.rrow .who { font-weight: 700; color: var(--text-bright); }
+.rrow .detail { color: var(--text); font-size: .78rem; }
+.rrow .verdict { font-weight: 800; font-size: .9rem; width: 64px; text-align: center; }
+.verdict.win { color: #7fe0a2; }
+.verdict.lose { color: #ff9c8a; }
+.verdict.push { color: #cfc7b0; }
+.rrow.dealer-row { border-color: var(--gold); background: rgba(200,170,109,.08); }
+.scoreboard { font-size: .8rem; color: var(--text); line-height: 1.9; border-top: 1px dashed var(--line); padding-top: 10px; }
+.scoreboard b { color: var(--gold-bright); }
+.result-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.result-actions button, .result-actions .btn-home2 {
+  padding: 11px 22px; font-size: .88rem; cursor: pointer; border-radius: 5px;
+  background: #0c1f17; color: var(--text-bright); border: 1px solid var(--line);
+  text-decoration: none;
+}
+.result-actions button:hover, .result-actions .btn-home2:hover { border-color: var(--gold); }
+#btn-next { background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #96712f); color: #10231b; font-weight: 700; border: none; }
+
+@media (max-width: 700px) {
+  .seat { min-width: 130px; }
+  .card { width: 56px; height: 80px; }
+}
+
+/* ---------- 下注屏 ---------- */
+.bet-card {
+  width: min(560px, 100%);
+  background: rgba(16,35,27,.8); border: 1px solid var(--line); border-radius: 10px;
+  padding: 24px; display: flex; flex-direction: column; gap: 14px;
+}
+.bet-title { font-size: 1.1rem; color: var(--gold-bright); letter-spacing: 3px; text-align: center; }
+.bet-sub { font-size: .82rem; text-align: center; }
+.bet-sub b { color: var(--gold-bright); }
+.bet-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 12px; background: rgba(8,23,18,.6);
+  border: 1px solid var(--line); border-radius: 6px;
+}
+.bet-row + .bet-row { margin-top: 8px; }
+.bet-row .bname { font-weight: 700; color: var(--text-bright); min-width: 72px; }
+.bet-row .bchips { font-size: .78rem; color: var(--gold); min-width: 90px; }
+.bet-row .bchips b { color: var(--gold-bright); }
+.bet-row.dealer-row { border-color: var(--gold); }
+.bet-row.broke { opacity: .5; }
+.bet-quick { display: flex; gap: 6px; }
+.bet-quick button {
+  padding: 6px 12px; font-size: .78rem; cursor: pointer;
+  background: #0c1f17; color: var(--text); border: 1px solid var(--line); border-radius: 4px;
+}
+.bet-quick button.active, .bet-quick button:hover { border-color: var(--gold); color: var(--gold-bright); }
+.bet-row input[type="number"] {
+  width: 90px; padding: 6px 8px; background: #081712; border: 1px solid var(--line);
+  border-radius: 4px; color: var(--text-bright); font-size: .85rem; outline: none;
+}
+.bet-row input:focus { border-color: var(--gold); }
+.bet-auto { font-size: .78rem; color: #9fd8b6; }
+.bet-broke-tag { font-size: .76rem; color: #ff9c8a; }
+.bet-warn { font-size: .8rem; color: #ff9c8a; text-align: center; }
+
+/* 座位筹码显示 */
+.chip-line { font-size: .68rem; color: var(--gold); margin-top: 2px; }
+.chip-line b { color: var(--gold-bright); }
+
+/* 结算筹码变化 */
+.delta { font-size: .76rem; font-weight: 700; margin-left: 6px; }
+.delta.up { color: #7fe0a2; }
+.delta.down { color: #ff9c8a; }
+.delta.flat { color: #8a9a8e; }
+
+/* ---------- 传递设备确认层 ---------- */
+.privacy-gate {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(4,12,9,.86); backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+}
+.privacy-gate[hidden] { display: none; }
+.gate-card {
+  text-align: center; padding: 34px 44px;
+  background: var(--panel); border: 1px solid var(--gold); border-radius: 12px;
+  box-shadow: 0 0 40px rgba(200,170,109,.25);
+  animation: fadeIn .25s ease;
+}
+.gate-title { font-size: 1rem; color: var(--text); letter-spacing: 2px; }
+.gate-name { font-size: 1.8rem; font-weight: 800; color: var(--gold-bright); margin: 8px 0 2px; }
+.gate-sub { font-size: .78rem; color: #7d9184; margin-bottom: 18px; }
+.gate-btn {
+  padding: 13px 30px; font-size: 1rem; font-weight: 700; cursor: pointer;
+  color: #10231b; background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #96712f);
+  border: none; border-radius: 6px;
+}
+.gate-btn:hover { filter: brightness(1.1); }

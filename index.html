@@ -16,7 +16,7 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (23)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (24)</button>
         <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (7)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (4)</button>
@@ -26,6 +26,7 @@
         <button class="folder-tab" onclick="filterFolder('pelican-coast-ride')">🚲 pelican-coast-ride 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('lol-rift-duel')">🛡️ lol-rift-duel 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('number-bomb')">💣 number-bomb 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('blackjack-21')">🂡 blackjack-21 专区 (1)</button>
       </div>
 
       <!-- Layout Switcher Bar -->
@@ -833,10 +834,44 @@
         </div>
       </div>
 
+      <!-- 21点 -->
+      <div class="card" data-folder="blackjack-21" data-url="blackjack-21/index.html" data-name="21点">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#3fae6a; background:rgba(63,174,106,0.15); border-color:rgba(63,174,106,0.3);">📂 blackjack-21</span>
+              <span class="tag">扑克桌游</span>
+            </div>
+            <h2>🂡 21 点 · Blackjack</h2>
+            <p>掷骰定庄、下注、逐张发牌的多人 21 点：每人 1000 筹码，2~5 人任意真人/电脑组合。只有轮到的本人能看自己的牌，庄家亮牌才公开；两张 21 为 Blackjack，五张 ≤18 为小老虎，真人当庄也手动要牌。</p>
+            <div class="meta"><span>经典 21 点</span><span>筹码下注</span><span>手牌保密</span><span>2~5 人</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="blackjack-21/index.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('blackjack-21', '21点', 'blackjack-21/index.html', 'blackjack-21/style.css', 'blackjack-21/app.js')">📄 源码</button>
+            <button class="card-btn" onclick="CodeViewerDownloader.downloadZip({ id: 'blackjack-21', name: '21点', htmlUrl: 'blackjack-21/index.html', extraFiles: ['blackjack-21/style.css', 'blackjack-21/app.js'] })">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🂡 试玩预览 · 《21 点》</span>
+            <div class="preview-actions">
+              <a href="blackjack-21/index.html" class="preview-play-btn">🂡 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel / number-bomb 9 大源码文件夹分类筛选与一键分享
+      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel / number-bomb / blackjack-21 10 大源码文件夹分类筛选与一键分享
     </div>
   </div>
 

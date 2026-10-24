@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3d2e">
+<meta name="description" content="21 点多人扑克：掷骰定庄、逐张发牌、要牌停牌、5 张 ≤18 点为小老虎，支持 2~5 人任意真人/电脑组合。">
+<title>21 点 · Blackjack</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b3d2e'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-size='18' fill='%23f0e6d2' font-family='Georgia'%3E21%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <span class="brand">🂡 21 点 <em>BLACKJACK</em></span>
+  <button id="sound-toggle" class="sound-btn" aria-pressed="true" title="音效开关（M）">🔊 音效</button>
+  <a class="nav-home" href="../index.html" onclick="return goLobby(this)">← 返回大厅</a>
+</header>
+
+<!-- 屏1 · 设置 -->
+<section id="screen-setup" class="screen active">
+  <div class="setup-card">
+    <h1>21 点 · 掷骰定庄</h1>
+    <p class="rules">每人 <b>1000 筹码</b>。开局<b>掷骰子</b>决定庄家，从庄家开始<b>逐张发牌</b>，每人两张。
+    轮流<b>要牌 / 停牌</b>：超过 21 点即爆牌出局；<b>两张恰 21 点为 Blackjack</b>；
+    <b>凑满 5 张且 ≤18 点为“小老虎”</b>特殊牌型。庄家最后行动，<b>17 点起停牌</b>，比点定胜负。
+    <b>只有轮到的本人能看到自己的牌</b>，别人的牌保密，结算才摊牌。输赢按底注结算：普通胜 ×1，Blackjack ×1.5，小老虎 ×2。</p>
+
+    <div class="field">
+      <label>人数</label>
+      <div class="seg" id="count-seg">
+        <button data-count="2">2 人</button>
+        <button data-count="3">3 人</button>
+        <button data-count="4" class="active">4 人</button>
+        <button data-count="5">5 人</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>玩家座位（勾选 🤖 = 该座位由电脑出战，不勾 = 真人操作）</label>
+      <div id="player-rows"></div>
+      <p class="seat-tip" id="seat-tip"></p>
+    </div>
+
+    <button id="btn-start" class="btn-start">🎲 掷骰开局</button>
+  </div>
+</section>
+
+<!-- 屏2 · 掷骰定庄 -->
+<section id="screen-dice" class="screen">
+  <div class="dice-card">
+    <p class="dice-title">掷骰定庄</p>
+    <div class="die" id="die">
+      <div class="die-face" id="die-face">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <p class="dice-result" id="dice-result">骰子转动中…</p>
+    <p class="dice-sub" id="dice-sub">从 P1 开始数</p>
+  </div>
+</section>
+
+<!-- 屏2.5 · 下注 -->
+<section id="screen-bet" class="screen">
+  <div class="bet-card">
+    <p class="bet-title">💰 下注</p>
+    <p class="bet-sub" id="bet-round-info">本局庄家：—</p>
+    <div id="bet-rows"></div>
+    <p class="bet-warn" id="bet-warn" hidden></p>
+    <button id="btn-deal" class="btn-start">🃏 确认下注，开始发牌</button>
+    <button id="btn-reset-chips2" class="btn-ghost" style="align-self:center">💰 重置筹码（每人 1000）</button>
+  </div>
+</section>
+
+<!-- 屏3 · 牌桌 -->
+<section id="screen-table" class="screen">
+  <div class="table-wrap">
+    <div class="felt">
+      <div class="dealer-zone">
+        <div class="zone-label">庄家 · <span id="dealer-name">—</span></div>
+        <div class="cards" id="dealer-cards"></div>
+        <div class="hand-total" id="dealer-total">—</div>
+      </div>
+      <div class="table-msg" id="table-msg" aria-live="polite"></div>
+      <div class="players-zone" id="players-zone"></div>
+    </div>
+
+    <div class="action-bar" id="action-bar">
+      <div class="turn-chip" id="turn-chip">—</div>
+      <div class="action-btns">
+        <button id="btn-hit" class="act hit">🃏 要牌</button>
+        <button id="btn-stand" class="act stand">✋ 停牌</button>
+      </div>
+      <button id="btn-quit" class="btn-ghost">← 退出</button>
+    </div>
+
+    <div class="log-panel">
+      <div class="log-title">本局记录</div>
+      <ul id="log-list"></ul>
+    </div>
+  </div>
+
+  <!-- 传递设备/查看手牌确认层 -->
+  <div id="privacy-gate" class="privacy-gate" hidden>
+    <div class="gate-card">
+      <p class="gate-title">📱 请把设备交给</p>
+      <p class="gate-name" id="gate-name">玩家 1</p>
+      <p class="gate-sub">其他人的手牌保密中</p>
+      <button id="gate-btn" class="gate-btn">👁 查看我的手牌</button>
+    </div>
+  </div>
+</section>
+
+<!-- 屏4 · 结算 -->
+<section id="screen-result" class="screen">
+  <div class="result-card">
+    <h2 id="result-title">本局结算</h2>
+    <div class="result-table" id="result-table"></div>
+    <div class="scoreboard" id="scoreboard"></div>
+    <div class="result-actions">
+      <button id="btn-next">🎲 下一局（重新掷骰）</button>
+      <button id="btn-reset-chips">💰 重置筹码</button>
+      <button id="btn-setup2">⚙ 更改设置</button>
+      <a class="btn-home2" href="../index.html" onclick="return goLobby(this)">🏠 返回大厅</a>
+    </div>
+  </div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

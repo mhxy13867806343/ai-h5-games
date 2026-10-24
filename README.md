@@ -27,6 +27,7 @@
 | 17 | **鹈鹕骑行** (Pelican Coast Ride) | `pelican-coast-ride` | Canvas 交互动画 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/pelican-coast-ride/) |
 | 18 | **峡谷对决** (Rift Duel) | `lol-rift-duel` | LoL 对局流程复刻 · MOBA | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/lol-rift-duel/) |
 | 19 | **数字炸弹** (Number Bomb) | `number-bomb` | 派对报数游戏 · 人机/双人 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/number-bomb/) |
+| 20 | **21 点** (Blackjack) | `blackjack-21` | 多人扑克 · 掷骰定庄/筹码下注 | [在线试玩](https://mhxy13867806343.github.io/ai-h5-games/blackjack-21/) |
 
 ---
 
