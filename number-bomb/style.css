@@ -63,8 +63,28 @@ body {
 }
 .seg button:hover { color: var(--text-bright); border-color: var(--amber); }
 .seg button.active { background: linear-gradient(180deg, var(--amber-bright), var(--amber) 50%, #b07f2f); color: #241c10; font-weight: 700; border-color: var(--amber); }
-.names-row { display: flex; align-items: center; gap: 10px; }
-.names-row input { flex: 1; }
+.prow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; background: rgba(22,19,16,.6);
+  border: 1px solid var(--line); border-radius: 5px;
+}
+.prow + .prow { margin-top: 8px; }
+.pnum {
+  font-family: Georgia, serif; font-weight: 700; color: var(--amber);
+  font-size: .85rem; width: 30px; text-align: center; flex-shrink: 0;
+}
+.prow .pname { flex: 1; }
+.ai-toggle {
+  display: flex; align-items: center; gap: 5px; cursor: pointer; flex-shrink: 0;
+  font-size: .82rem; color: var(--text); user-select: none;
+  padding: 6px 10px; border: 1px solid var(--line); border-radius: 4px;
+}
+.ai-toggle:has(input:checked) {
+  color: var(--amber-bright); border-color: var(--amber);
+  background: rgba(232,169,76,.12);
+}
+.ai-toggle input { accent-color: var(--amber); cursor: pointer; }
+.seat-tip { font-size: .76rem; color: #8a7f6e; margin-top: 4px; }
 input[type="text"], input[type="number"] {
   padding: 10px 12px; background: #161310; border: 1px solid var(--line); border-radius: 4px;
   color: var(--text-bright); font-size: .9rem; outline: none; width: 100%;
@@ -111,6 +131,25 @@ input:focus { border-color: var(--amber); }
 }
 @keyframes turnPop { from { transform: scale(.9); opacity: .4; } to { transform: none; opacity: 1; } }
 .turn-banner.thinking { color: var(--amber); border-color: var(--amber); }
+.players-strip { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.pchip {
+  font-size: .8rem; padding: 6px 13px; border-radius: 18px;
+  border: 1px solid var(--line); color: var(--text);
+  background: rgba(29,26,22,.7); transition: all .15s;
+}
+.pchip.ai { border-style: dashed; }
+.pchip.active {
+  color: #241c10; font-weight: 700;
+  background: linear-gradient(180deg, var(--amber-bright), var(--amber));
+  border-color: var(--amber-bright);
+  transform: scale(1.08); box-shadow: 0 0 14px rgba(232,169,76,.4);
+}
+.announce {
+  font-size: .95rem; color: var(--amber-bright); min-height: 1.5em;
+  letter-spacing: .5px;
+}
+.announce.flash { animation: annPop .3s ease; }
+@keyframes annPop { from { transform: scale(.94); opacity: .3; } to { transform: none; opacity: 1; } }
 .input-row {
   width: min(420px, 100%); display: flex; gap: 10px;
 }

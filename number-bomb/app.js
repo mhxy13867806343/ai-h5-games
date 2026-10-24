@@ -1,5 +1,5 @@
 /* ============================================================
-   数字炸弹 · Number Bomb
+   数字炸弹 · Number Bomb（2~5 人，任意真人/电脑组合）
    0~N 之间藏着炸弹数字，轮流报数收紧范围：
    直接踩中炸弹、或轮到时只剩炸弹一个数可报 → 输
    ============================================================ */
@@ -83,7 +83,7 @@ document.addEventListener('pointerdown', () => Sound.ensure(), { once: true });
 
 /* ---------- 状态 ---------- */
 const state = {
-  mode: 'ai',            // ai | pvp
+  count: 3,
   N: 1000,
   players: [],           // [{name, isAI}]
   turn: 0,
@@ -95,16 +95,61 @@ const state = {
   aiTimer: 0,
 };
 
-/* ---------- 设置屏 ---------- */
-$('#mode-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button[data-mode]');
+/* ---------- 设置屏：座位 ---------- */
+function renderPlayerRows() {
+  const wrap = $('#player-rows');
+  wrap.innerHTML = '';
+  for (let i = 0; i < state.count; i++) {
+    const row = document.createElement('div');
+    row.className = 'prow';
+    row.innerHTML = `
+      <span class="pnum">P${i + 1}</span>
+      <input class="pname" type="text" maxlength="8" placeholder="玩家 ${i + 1}" value="玩家 ${i + 1}">
+      <label class="ai-toggle"><input type="checkbox" class="pai" ${i > 0 ? 'checked' : ''}> 🤖 电脑</label>
+    `;
+    if (i > 0) row.querySelector('.pname').value = `电脑 ${i + 1}`;
+    wrap.appendChild(row);
+  }
+  wrap.querySelectorAll('.pai, .pname').forEach(el =>
+    el.addEventListener('change', syncSeatTip));
+  // 切换电脑/真人时，未手动改名的座位自动换默认名
+  wrap.querySelectorAll('.prow').forEach((row, i) => {
+    const cb = row.querySelector('.pai');
+    const name = row.querySelector('.pname');
+    cb.addEventListener('change', () => {
+      if (name.value.trim() === `电脑 ${i + 1}` || name.value.trim() === `玩家 ${i + 1}` || !name.value.trim()) {
+        name.value = cb.checked ? `电脑 ${i + 1}` : `玩家 ${i + 1}`;
+      }
+    });
+  });
+  syncSeatTip();
+}
+
+function readPlayers() {
+  return [...document.querySelectorAll('#player-rows .prow')].map((row, i) => {
+    const isAI = row.querySelector('.pai').checked;
+    let name = row.querySelector('.pname').value.trim();
+    if (!name) name = isAI ? `电脑 ${i + 1}` : `玩家 ${i + 1}`;
+    return { name, isAI };
+  });
+}
+
+function syncSeatTip() {
+  const ps = readPlayers();
+  const humans = ps.filter(p => !p.isAI).length;
+  $('#seat-tip').textContent = `当前阵容：${ps.length} 人 · ${humans} 真人 + ${ps.length - humans} 电脑` +
+    (humans === 0 ? '（全员电脑，观战模式）' : '');
+}
+
+$('#count-seg').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-count]');
   if (!btn) return;
   Sound.play('click');
-  state.mode = btn.dataset.mode;
-  document.querySelectorAll('#mode-seg button').forEach(b => b.classList.toggle('active', b === btn));
-  $('#field-names-pvp').hidden = state.mode !== 'pvp';
-  $('#field-first').hidden = state.mode !== 'ai';
+  state.count = Number(btn.dataset.count);
+  document.querySelectorAll('#count-seg button').forEach(b => b.classList.toggle('active', b === btn));
+  renderPlayerRows();
 });
+
 $('#range-seg').addEventListener('click', e => {
   const btn = e.target.closest('button[data-n]');
   if (!btn) return;
@@ -118,30 +163,15 @@ $('#custom-n').addEventListener('input', e => {
   const v = Math.floor(Number(e.target.value));
   state.N = v >= 10 && v <= 999999 ? v : 0;
 });
-$('#first-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button[data-first]');
-  if (!btn) return;
-  Sound.play('click');
-  document.querySelectorAll('#first-seg button').forEach(b => b.classList.toggle('active', b === btn));
-  state.firstAi = btn.dataset.first === 'ai';
-});
 
 $('#btn-start').addEventListener('click', () => {
   if (!state.N) { Sound.play('buzz'); $('#custom-n').focus(); return; }
   Sound.play('click');
-  if (state.mode === 'ai') {
-    const me = '你', ai = '电脑';
-    state.players = state.firstAi
-      ? [{ name: ai, isAI: true }, { name: me, isAI: false }]
-      : [{ name: me, isAI: false }, { name: ai, isAI: true }];
-  } else {
-    const n1 = $('#p1-name').value.trim() || '玩家 1';
-    const n2 = $('#p2-name').value.trim() || '玩家 2';
-    state.players = [{ name: n1, isAI: false }, { name: n2, isAI: false }];
-  }
+  state.players = readPlayers();
   startGame();
 });
 
+/* ---------- 游戏流程 ---------- */
 function startGame() {
   state.low = 0;
   state.high = state.N;
@@ -153,13 +183,14 @@ function startGame() {
   clearTimeout(state.aiTimer);
   $('#history-list').innerHTML = '';
   $('#history-empty').hidden = false;
+  $('#announce').textContent = '';
+  $('#input-hint').textContent = '';
   showScreen('game');
   document.body.classList.remove('exploded');
   render();
-  maybeAiTurn();
+  nextTurn();
 }
 
-/* ---------- 游戏屏 ---------- */
 $('#btn-guess').addEventListener('click', submitGuess);
 $('#guess-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitGuess(); });
 $('#btn-quit').addEventListener('click', () => {
@@ -196,14 +227,17 @@ function handleGuess(g) {
   let dir;
   if (g === state.target) {
     state.history.push({ name: cur.name, g, before, after: { low: state.low, high: state.high }, dir: 'bomb' });
+    announce(`${cur.name} 输入了 ${g.toLocaleString()} —— 正是炸弹数字！`);
     return endGame(cur, '直接踩中炸弹！');
   }
   if (g < state.target) { state.low = g; dir = 'lo'; }
   else { state.high = g; dir = 'hi'; }
   state.history.push({ name: cur.name, g, before, after: { low: state.low, high: state.high }, dir });
   Sound.play('tick');
+  // 报数播报：输入了 23 → 23 到 100
+  announce(`${cur.name} 输入了 ${g.toLocaleString()} → 范围变为 ${state.low.toLocaleString()} 到 ${state.high.toLocaleString()}`);
 
-  // 只剩炸弹一个数可报：下一个轮到的人被迫踩雷，直接结束（如目标 10，前手报 9，另一人报 11）
+  // 只剩炸弹一个数可报：下一个轮到的人被迫踩雷，直接结束
   if (state.high - state.low - 1 === 1) {
     render();
     const forced = state.players[(state.turn + 1) % state.players.length];
@@ -213,34 +247,51 @@ function handleGuess(g) {
   state.turn = (state.turn + 1) % state.players.length;
   if (state.turn === 0) state.round++;
   render();
-  maybeAiTurn();
+  nextTurn();
 }
 
-/* ---------- 电脑策略（不偷看炸弹，只做生存与拆分） ---------- */
-function maybeAiTurn() {
+function announce(text) {
+  const el = $('#announce');
+  el.textContent = text;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+
+/* ---------- 回合调度：电脑自动报数，真人等待输入 ---------- */
+function nextTurn() {
   const cur = state.players[state.turn];
-  if (!cur || !cur.isAI || state.over) return;
+  if (state.over || !cur) return;
   const banner = $('#turn-banner');
-  banner.classList.add('thinking');
-  banner.textContent = `电脑思考中…`;
-  $('#btn-guess').disabled = true;
-  state.aiTimer = setTimeout(() => {
-    if (state.over) return;
-    $('#btn-guess').disabled = false;
+  const input = $('#guess-input');
+  const btn = $('#btn-guess');
+  if (cur.isAI) {
+    banner.classList.add('thinking');
+    banner.textContent = `🤖 ${cur.name} 思考中…`;
+    btn.disabled = true;
+    input.disabled = true;
+    state.aiTimer = setTimeout(() => {
+      if (state.over) return;
+      const c = state.high - state.low - 1; // 剩余可报数量
+      let g;
+      if (c === 2) {
+        g = Math.random() < .5 ? state.low + 1 : state.high - 1; // 二选一赌一把
+      } else {
+        // 取中位并加扰动，把区间拆平
+        const mid = state.low + Math.ceil(c / 2);
+        const jitter = Math.min(2, Math.max(-2, Math.round((Math.random() - .5) * 4)));
+        g = Math.min(state.high - 1, Math.max(state.low + 1, mid + jitter));
+      }
+      handleGuess(g);
+    }, 620 + Math.random() * 450);
+  } else {
     banner.classList.remove('thinking');
-    const c = state.high - state.low - 1; // 剩余可报数量
-    let g;
-    if (c === 2) {
-      // 二选一，赌一把
-      g = Math.random() < .5 ? state.low + 1 : state.high - 1;
-    } else {
-      // 取中位并加扰动，尽量把区间拆平
-      const mid = state.low + Math.ceil(c / 2);
-      const jitter = Math.min(2, Math.max(-2, Math.round((Math.random() - .5) * 4)));
-      g = Math.min(state.high - 1, Math.max(state.low + 1, mid + jitter));
-    }
-    handleGuess(g);
-  }, 650 + Math.random() * 500);
+    banner.textContent = `轮到 ${cur.name}（真人）报数`;
+    btn.disabled = false;
+    input.disabled = false;
+    input.placeholder = `报一个 ${state.low + 1} ~ ${state.high - 1} 之间的数`;
+    input.focus();
+  }
 }
 
 /* ---------- 渲染 ---------- */
@@ -252,14 +303,14 @@ function render() {
   range.classList.add('pulse');
   $('#rest-count').textContent = (state.high - state.low - 1).toLocaleString();
   $('#round-num').textContent = state.round;
-  const cur = state.players[state.turn];
-  if (!cur) return;
-  const banner = $('#turn-banner');
-  if (!cur.isAI && !banner.classList.contains('thinking')) {
-    banner.textContent = `轮到 ${cur.name} 报数`;
-    $('#btn-guess').disabled = false;
-  }
-  $('#guess-input').placeholder = `报一个 ${state.low + 1} ~ ${state.high - 1} 之间的数`;
+
+  // 座位条
+  const strip = $('#players-strip');
+  strip.innerHTML = state.players.map((p, i) => `
+    <span class="pchip ${i === state.turn ? 'active' : ''} ${p.isAI ? 'ai' : 'human'}">
+      ${p.isAI ? '🤖' : '🧑'} ${p.name}
+    </span>`).join('');
+
   // 记录（最新在前）
   const list = $('#history-list');
   list.innerHTML = state.history.slice().reverse().map(h => `
@@ -268,8 +319,8 @@ function render() {
       <span class="num">${h.g.toLocaleString()}</span>
       <span class="dir ${h.dir === 'lo' ? 'lo' : 'hi'}">${
         h.dir === 'bomb' ? '💥 炸弹！' :
-        h.dir === 'lo' ? `偏小 → 下界变 ${h.after.low}` :
-                         `偏大 → 上界变 ${h.after.high}`
+        h.dir === 'lo' ? `偏小 → ${h.after.low} 到 ${h.after.high}` :
+                         `偏大 → ${h.after.low} 到 ${h.after.high}`
       }</span>
     </li>`).join('');
   $('#history-empty').hidden = state.history.length > 0;
@@ -280,10 +331,11 @@ function endGame(loser, reason) {
   state.over = true;
   clearTimeout(state.aiTimer);
   $('#btn-guess').disabled = true;
+  $('#guess-input').disabled = true;
   Sound.play('boom');
   document.body.classList.add('exploded');
-  const winner = state.players.find(p => p !== loser);
-  if (winner && !winner.isAI && loser.isAI) setTimeout(() => Sound.play('win'), 650);
+  const survivors = state.players.filter(p => p !== loser);
+  if (survivors.some(p => !p.isAI) && loser.isAI) setTimeout(() => Sound.play('win'), 650);
 
   $('#boom-title').textContent = reason;
   $('#boom-title').classList.toggle('safe-forced', reason.includes('被迫'));
@@ -291,7 +343,7 @@ function endGame(loser, reason) {
   $('#boom-target').textContent = state.target.toLocaleString();
   $('#boom-stats').innerHTML = `
     共报数 ${state.history.length} 次 · 范围从 0~${state.N.toLocaleString()} 收紧到 ${state.low.toLocaleString()}~${state.high.toLocaleString()}<br>
-    获胜方：${winner ? winner.name : '—'} · 模式：${state.mode === 'ai' ? '人机对战' : '双人同屏'}
+    幸存者：${survivors.map(p => p.name).join('、')} · 阵容：${state.players.filter(p => !p.isAI).length} 真人 + ${state.players.filter(p => p.isAI).length} 电脑
   `;
   render();
   setTimeout(() => showScreen('boom'), 300);
@@ -316,3 +368,6 @@ syncSoundBtn();
 window.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'm' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) soundBtn.click();
 });
+
+/* ---------- 初始化 ---------- */
+renderPlayerRows();

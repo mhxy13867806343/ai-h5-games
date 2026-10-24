@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#12100e">
-<meta name="description" content="数字炸弹：0 到 N 之间藏着炸弹数字，轮流报数收紧范围，踩中或被迫只剩炸弹的人输。支持人机对战与双人同屏。">
+<meta name="description" content="数字炸弹：0 到 N 之间藏着炸弹数字，2~5 人轮流报数收紧范围（任意真人/电脑组合），踩中或被迫只剩炸弹的人输。">
 <title>数字炸弹 · Number Bomb</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d1a16'/%3E%3Ccircle cx='16' cy='18' r='9' fill='%23e04b3a'/%3E%3Crect x='11' y='4' width='10' height='6' rx='2' fill='%23c8aa6d'/%3E%3Cpath d='M21 6l6-3' stroke='%23f0e6d2' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
@@ -21,15 +21,23 @@
 <section id="screen-setup" class="screen active">
   <div class="setup-card">
     <h1>0 到 N 之间，藏着一颗炸弹</h1>
-    <p class="rules">轮流在<b>当前范围内</b>报一个数：报小了，下界变为你报的数；报大了，上界变为你报的数。
-    谁<b>直接踩中炸弹数字</b>，或轮到时<b>只剩炸弹一个数可报</b>，谁就输。</p>
+    <p class="rules">2~5 人轮流在<b>当前范围内</b>报一个数：报小了，下界变为你报的数；报大了，上界变为你报的数。
+    谁<b>直接踩中炸弹数字</b>，或轮到时<b>只剩炸弹一个数可报</b>，谁就输。每个座位可单独设为真人或电脑。</p>
 
     <div class="field">
-      <label>模式</label>
-      <div class="seg" id="mode-seg">
-        <button data-mode="ai" class="active">🤖 人机对战</button>
-        <button data-mode="pvp">👥 双人同屏</button>
+      <label>人数</label>
+      <div class="seg" id="count-seg">
+        <button data-count="2">2 人</button>
+        <button data-count="3" class="active">3 人</button>
+        <button data-count="4">4 人</button>
+        <button data-count="5">5 人</button>
       </div>
+    </div>
+
+    <div class="field">
+      <label>玩家座位（勾选 🤖 = 该座位由电脑出战，不勾 = 真人输入）</label>
+      <div id="player-rows"></div>
+      <p class="seat-tip" id="seat-tip">当前阵容：3 人 · 1 真人 + 2 电脑</p>
     </div>
 
     <div class="field">
@@ -40,23 +48,6 @@
         <button data-n="custom">自定义…</button>
       </div>
       <input id="custom-n" type="number" min="10" max="999999" placeholder="输入 N（10 ~ 999999）" hidden>
-    </div>
-
-    <div class="field" id="field-names-pvp" hidden>
-      <label>玩家名字</label>
-      <div class="names-row">
-        <input id="p1-name" type="text" maxlength="8" placeholder="玩家 1" value="玩家 1">
-        <span>VS</span>
-        <input id="p2-name" type="text" maxlength="8" placeholder="玩家 2" value="玩家 2">
-      </div>
-    </div>
-
-    <div class="field" id="field-first">
-      <label>谁先报数</label>
-      <div class="seg" id="first-seg">
-        <button data-first="player" class="active">我先来</button>
-        <button data-first="ai">电脑先来</button>
-      </div>
     </div>
 
     <button id="btn-start" class="btn-start">💣 开始游戏</button>
@@ -75,7 +66,10 @@
     <div class="round-chip">第 <b id="round-num">1</b> 轮</div>
   </div>
 
-  <div class="turn-banner" id="turn-banner">轮到 你 报数</div>
+  <div class="players-strip" id="players-strip"></div>
+
+  <div class="turn-banner" id="turn-banner">轮到 玩家 1 报数</div>
+  <div class="announce" id="announce" aria-live="polite"></div>
 
   <div class="input-row" id="input-row">
     <input id="guess-input" type="number" inputmode="numeric" placeholder="报一个数" aria-label="报数">
@@ -95,7 +89,7 @@
   <div class="boom-card">
     <div class="boom-icon" id="boom-icon">💥</div>
     <div class="boom-title" id="boom-title">踩中炸弹！</div>
-    <div class="boom-loser" id="boom-loser">你 输了</div>
+    <div class="boom-loser" id="boom-loser">玩家 1 输了</div>
     <div class="boom-target">炸弹数字是 <b id="boom-target">—</b></div>
     <div class="boom-stats" id="boom-stats"></div>
     <div class="boom-actions">
