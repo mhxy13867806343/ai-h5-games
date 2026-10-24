@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff4dd">
+<title>Tibo 的 Codex 28 天挑战 | Codex Resets</title>
+<meta name="description" content="Tibo（@thsottiaux）的 28 天 Codex 挑战每日记录：产品改进 / 重置 / 等待中，列表与日历两种视图。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fff4dd'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='14' fill='%23c9611f' font-family='Georgia' font-weight='bold'%3E28%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="tibo-page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M9 22L16 8l7 14" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Codex Resets</a>
+    <div class="top-actions">
+      <button id="theme-toggle" class="icon-btn" aria-label="切换主题">🌙</button>
+      <a class="nav-home" href="index.html">← <span id="back-label">返回首页</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 挑战头图 -->
+  <section class="panel ch-hero">
+    <h1 class="ch-title">Tibo 的 <span>28 天挑战</span></h1>
+    <aside class="ch-score">
+      <div class="ch-rings"><i></i><i></i></div>
+      <div class="ch-sheet">
+        <span class="ch-time-label" id="ch-where">Tibo 那边</span>
+        <span class="ch-date" id="ch-date">—</span>
+        <span class="ch-cal-label" id="ch-daylabel">挑战日</span>
+        <div class="ch-day-num" id="ch-day">—</div>
+        <div class="ch-clock">
+          <time id="ch-time">--:--</time>
+          <span class="ch-zone">PT</span>
+          <span class="ch-zone-label" id="ch-zone-label">Tibo 那边 · 美西时间</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- 进度 + 视图切换 + 图例 -->
+  <section class="panel">
+    <div class="ch-progress"><span id="ch-progress-label">—</span></div>
+    <div class="ch-toolbar">
+      <h2 class="ch-sec-title" id="log-title">每日记录</h2>
+      <div class="seg" id="view-seg">
+        <button data-view="list" class="active">☰ 列表</button>
+        <button data-view="calendar">▦ 日历</button>
+      </div>
+      <ul class="legend ch-legend">
+        <li><i class="cell st-imp"></i><span id="lg-imp">产品改进</span></li>
+        <li><i class="cell st-reset"></i><span id="lg-reset">重置</span></li>
+        <li><i class="cell st-mixed"></i><span id="lg-mixed">重置 + 产品改进</span></li>
+        <li><i class="cell st-open"></i><span id="lg-open">等待 Tibo</span></li>
+        <li><i class="cell st-up"></i><span id="lg-up">未开始</span></li>
+      </ul>
+    </div>
+
+    <!-- 28 格条带 -->
+    <div class="ch-strip" id="ch-strip"></div>
+
+    <!-- 列表视图 -->
+    <ol class="ch-list" id="view-list"></ol>
+
+    <!-- 日历视图 -->
+    <div class="ch-calendar" id="view-calendar" hidden>
+      <div class="cal-head">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  数据快照：codex-resets.com/zh-CN/tibo-28（2026-10-24）· 挑战原始来源
+  <a href="https://x.com/thsottiaux" target="_blank" rel="noopener">@thsottiaux</a> ·
+  <a href="index.html">返回重置追踪首页</a> · <a href="../index.html">返回大厅</a>
+</footer>
+<div class="tip" id="ch-tip" hidden></div>
+
+<script>
+/* 28 天挑战数据（2026-10-24 快照）：1=产品改进 2=重置 3=重置+产品改进 null=未公布 */
+const CH_DAYS = {
+  1: 1, 2: 3, 3: 3, 4: 1, 5: 1, 6: 2, 7: 1, 8: 2, 9: 1, 10: 2,
+  11: 1, 12: 1, 13: 2, 14: 1, 15: 2, 16: 1, 17: 2, 18: 2, 19: 1,
+};
+const START = new Date('2026-10-05T00:00:00-07:00'); // 挑战开始（美西）
+const TOTAL = 28;
+</script>
+<script src="tibo28.js"></script>
+</body>
+</html>

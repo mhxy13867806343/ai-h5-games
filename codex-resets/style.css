@@ -226,3 +226,82 @@ a { color: var(--accent); text-decoration: none; }
   .latest-rel { font-size: 1.9rem; }
   .grid-col .cell { width: 11px; height: 11px; }
 }
+
+/* ============ Tibo 28 天挑战页 ============ */
+.ch-hero { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 26px 28px; }
+.ch-title { font-family: Georgia, serif; font-size: 1.9rem; color: var(--text-bright); line-height: 1.25; }
+.ch-title span { color: var(--accent); }
+.ch-score { display: flex; gap: 14px; align-items: center; }
+.ch-rings { position: relative; width: 58px; height: 58px; }
+.ch-rings i {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 3px solid var(--accent); opacity: .8;
+}
+.ch-rings i:last-child { inset: 9px; border-color: var(--cell-bank); animation: pulse 2.4s infinite; }
+.ch-sheet { display: flex; flex-direction: column; gap: 2px; }
+.ch-time-label, .ch-cal-label, .ch-zone-label { font-size: .64rem; color: var(--text); letter-spacing: 1px; }
+.ch-date { font-size: .82rem; color: var(--text-bright); font-weight: 700; }
+.ch-day-num {
+  font-family: Georgia, serif; font-size: 2.6rem; font-weight: 800;
+  color: var(--accent); line-height: 1;
+}
+.ch-clock { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.ch-clock time { font-family: Georgia, serif; font-size: 1.3rem; color: var(--text-bright); font-weight: 700; }
+.ch-zone { font-size: .7rem; color: var(--accent); font-weight: 700; }
+
+.ch-progress { margin-bottom: 14px; }
+.ch-progress span { font-size: .84rem; font-weight: 700; color: var(--text-bright); }
+.ch-toolbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.ch-sec-title { font-size: 1rem; color: var(--text-bright); letter-spacing: 1px; }
+.ch-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: .7rem; list-style: none; }
+.ch-legend li { display: flex; align-items: center; gap: 5px; }
+
+.cell.st-imp { background: var(--accent); }
+.cell.st-reset { background: var(--cell-bank); }
+.cell.st-mixed { background: linear-gradient(135deg, var(--accent) 50%, var(--cell-bank) 50%); }
+.cell.st-open { background: transparent; border: 2px dashed var(--accent); animation: pulse 1.6s infinite; }
+.cell.st-up { background: var(--cell0); }
+
+/* 28 格条带 */
+.ch-strip { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 18px; }
+.ch-cell {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .76rem; font-weight: 700; color: var(--text-bright);
+  transition: transform .1s; cursor: default;
+}
+.ch-cell:hover { transform: scale(1.15); outline: 1.5px solid var(--accent); }
+.ch-cell.st-open { color: var(--accent); }
+.ch-cell.st-up { color: var(--text); }
+
+/* 列表视图 */
+.ch-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.ch-row {
+  display: grid; grid-template-columns: 44px 90px 1fr; align-items: center; gap: 10px;
+  padding: 9px 14px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--line);
+  font-size: .84rem;
+}
+.ch-row.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.ch-row-num { font-family: Georgia, serif; font-weight: 800; color: var(--text); }
+.ch-row.today .ch-row-num { color: var(--accent); }
+.ch-row-date { color: var(--text); font-size: .78rem; }
+.ch-row-type { display: flex; align-items: center; gap: 8px; color: var(--text-bright); font-weight: 600; }
+.ch-row-type .cell { width: 15px; height: 15px; }
+
+/* 日历视图 */
+.cal-head { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+.cal-head span { text-align: center; font-size: .68rem; color: var(--text); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cal-blank { display: block; }
+.cal-cell {
+  border-radius: 10px; padding: 8px 6px; text-align: center;
+  border: 1px solid var(--line); background: var(--panel2);
+  display: flex; flex-direction: column; gap: 3px; min-height: 52px; justify-content: center;
+}
+.cal-cell .cal-date { font-size: .7rem; color: var(--text); }
+.cal-cell .cal-day { font-size: .78rem; font-weight: 800; color: var(--text-bright); }
+.cal-cell.st-imp .cal-day { color: var(--accent); }
+.cal-cell.st-reset .cal-day { color: var(--cell-bank); }
+.cal-cell.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.cal-cell.st-up { opacity: .55; }
+.cal-cell.st-open { border-style: dashed; }
