@@ -109,15 +109,16 @@ body {
 .stat-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); }
 .stat-row b { width: 14px; text-align: right; color: var(--text-bright); font-size: .72rem; }
 .btn-lock {
-  margin-top: auto; padding: 14px; cursor: pointer;
-  font-size: 1rem; font-weight: 700; letter-spacing: 6px;
+  margin-top: 14px; padding: 16px; cursor: pointer;
+  font-size: 1.05rem; font-weight: 700; letter-spacing: 6px;
   color: #081018; background: linear-gradient(180deg, var(--gold-bright), var(--gold) 45%, #96712f);
   border: none; border-radius: 3px;
+  box-shadow: 0 0 18px rgba(200,170,109,.35);
   transition: filter .15s;
 }
 .btn-lock:hover { filter: brightness(1.12); }
 .btn-lock:disabled { filter: grayscale(.8) brightness(.6); cursor: not-allowed; }
-.pv-note { font-size: .68rem; color: #5b6472; text-align: center; }
+.pv-note { font-size: .68rem; color: #5b6472; text-align: center; margin-top: 6px; }
 
 /* ---------- 屏2 · 加载 ---------- */
 #screen-loading { align-items: center; justify-content: center; gap: 22px; }

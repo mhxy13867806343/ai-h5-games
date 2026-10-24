@@ -188,6 +188,7 @@ function renderGrid() {
     label.textContent = h.name;
     cell.append(img, label);
     cell.addEventListener('click', () => selectChampion(h));
+    cell.addEventListener('dblclick', () => { selectChampion(h); startLoading(); });
     frag.appendChild(cell);
   });
   grid.appendChild(frag);
@@ -216,7 +217,7 @@ function selectChampion(h) {
         <b>${v}</b>
       </div>`).join('')}
     <button class="btn-lock" id="btn-confirm">确认选择</button>
-    <p class="pv-note">对手将随机选择另一位英雄</p>
+    <p class="pv-note">双击英雄可直接开局 · 对手将随机选择另一位英雄</p>
   `;
   $('#btn-confirm').addEventListener('click', () => {
     if (!state.picked) return;
