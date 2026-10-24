@@ -97,11 +97,18 @@ function newDeck() {
   return d;
 }
 function cardPoints(c) { if (c.rank === 'A') return 11; if (['J', 'Q', 'K'].includes(c.rank)) return 10; return Number(c.rank); }
-function handValue(cards) {
+/* A 可算 1 或 11：自动取更优（不爆的最大值）；soft = 仍有 A 按 11 计，存在两种有效点数 */
+function handSoftTotal(cards) {
   let total = 0, aces = 0;
   for (const c of cards) { total += cardPoints(c); if (c.rank === 'A') aces++; }
   while (total > 21 && aces > 0) { total -= 10; aces--; }
-  return total;
+  return { total, soft: aces > 0 };
+}
+function handValue(cards) { return handSoftTotal(cards).total; }
+/* 软牌显示双取值：A+10 → “11 / 21”，A+6 → “7 / 17” */
+function handDisplay(cards) {
+  const { total, soft } = handSoftTotal(cards);
+  return soft ? `${total - 10} / ${total}` : `${total}`;
 }
 function cardText(c) { return `${c.rank}${c.suit}`; }
 
@@ -617,8 +624,8 @@ async function dealerTurn() {
   state.reveal = state.dealerIdx;
   renderSeats();
   Sound.play('card');
-  msg(`庄家 ${d.name} 亮牌：${d.cards.map(cardText).join(' ')}（${handValue(d.cards)} 点）`);
-  log(`庄家 ${d.name} 亮牌：${d.cards.map(cardText).join(' ')}（${handValue(d.cards)} 点）`);
+  msg(`庄家 ${d.name} 亮牌：${d.cards.map(cardText).join(' ')}（${handDisplay(d.cards)} 点）`);
+  log(`庄家 ${d.name} 亮牌：${d.cards.map(cardText).join(' ')}（${handDisplay(d.cards)} 点）`);
   await sleep(1000);
   if (state.session !== mySession) return;
 
@@ -674,8 +681,8 @@ async function dealerTurn() {
     const c = state.deck.pop();
     d.cards.push(c);
     Sound.play('card');
-    msg(`庄家要牌 → ${cardText(c)}（${handValue(d.cards)} 点）`);
-    log(`庄家要牌 ${cardText(c)} → ${handValue(d.cards)} 点`);
+    msg(`庄家要牌 → ${cardText(c)}（${handDisplay(d.cards)} 点）`);
+    log(`庄家要牌 ${cardText(c)} → ${handDisplay(d.cards)} 点`);
     renderSeats();
     await sleep(850);
     if (state.session !== mySession) return;
@@ -736,13 +743,13 @@ function settle() {
     return `
     <div class="rrow">
       <span class="who">${p.name}</span>
-      <span class="detail">${p.cards.map(cardText).join(' ')} · ${handValue(p.cards)} 点${p.status === 'bj' ? ' · Blackjack' : ''}${p.status === 'tiger' ? ' · 小老虎' : ''}${p.status === 'bust' ? ' · 爆牌' : ''} · 底注 ${bet}</span>
+      <span class="detail">${p.cards.map(cardText).join(' ')} · ${handDisplay(p.cards)} 点${p.status === 'bj' ? ' · Blackjack' : ''}${p.status === 'tiger' ? ' · 小老虎' : ''}${p.status === 'bust' ? ' · 爆牌' : ''} · 底注 ${bet}</span>
       <span class="verdict ${verdict}">${verdict === 'win' ? '赢' : verdict === 'lose' ? '输' : '平'}<span class="delta ${dcls}">${dtxt}</span></span>
     </div>`;
   }).join('') + `
     <div class="rrow dealer-row">
       <span class="who">${d.name}（庄）</span>
-      <span class="detail">${d.cards.map(cardText).join(' ')} · ${handValue(d.cards)} 点${d.status === 'bj' ? ' · Blackjack' : ''}${d.status === 'tiger' ? ' · 小老虎' : ''}${d.status === 'bust' ? ' · 爆牌' : ''}</span>
+      <span class="detail">${d.cards.map(cardText).join(' ')} · ${handDisplay(d.cards)} 点${d.status === 'bj' ? ' · Blackjack' : ''}${d.status === 'tiger' ? ' · 小老虎' : ''}${d.status === 'bust' ? ' · 爆牌' : ''}</span>
       <span class="verdict push">庄<span class="delta ${dealerDelta > 0 ? 'up' : dealerDelta < 0 ? 'down' : 'flat'}">${dealerDelta > 0 ? '+' + dealerDelta : dealerDelta}</span></span>
     </div>`;
   renderScoreboard();
@@ -821,7 +828,7 @@ function renderSeats(highlight = true) {
   d.cards.forEach(c => dWrap.appendChild(cardEl(c, !isRevealed(state.dealerIdx))));
   $('#dealer-total').textContent = d.cards.length
     ? (isRevealed(state.dealerIdx)
-        ? `${handValue(d.cards)} 点${d.status === 'bj' ? ' · Blackjack' : ''}${d.status === 'tiger' ? ' · 小老虎' : ''}${d.status === 'bust' ? ' · 爆牌' : ''}`
+        ? `${handDisplay(d.cards)} 点${d.status === 'bj' ? ' · Blackjack' : ''}${d.status === 'tiger' ? ' · 小老虎' : ''}${d.status === 'bust' ? ' · 爆牌' : ''}`
         : `${d.cards.length} 张暗牌`)
     : '—';
   // 座位
@@ -839,7 +846,7 @@ function renderSeats(highlight = true) {
     seat.appendChild(cardsHtml);
     const total = document.createElement('div');
     total.className = 'seat-total';
-    total.textContent = isRevealed(i) && p.cards.length ? `${handValue(p.cards)} 点` : (p.cards.length ? '🔒' : '');
+    total.textContent = isRevealed(i) && p.cards.length ? `${handDisplay(p.cards)} 点` : (p.cards.length ? '🔒' : '');
     seat.appendChild(total);
     seat.insertAdjacentHTML('beforeend', statusBadge(p));
     // 筹码行
