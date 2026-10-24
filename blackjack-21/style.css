@@ -250,6 +250,31 @@ input:focus { border-color: var(--gold); }
   .card { width: 56px; height: 80px; }
 }
 
+/* 起始筹码配置 */
+.chip-uniform-row { display: flex; align-items: center; gap: 8px; font-size: .85rem; }
+.chip-uniform-row input {
+  width: 110px; padding: 8px 10px; background: #081712; border: 1px solid var(--line);
+  border-radius: 4px; color: var(--text-bright); font-size: .9rem; outline: none;
+}
+.chip-uniform-row input:focus { border-color: var(--gold); }
+.chip-random-box { display: flex; flex-direction: column; gap: 8px; }
+.chip-random-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-pill {
+  font-size: .78rem; padding: 5px 12px; border-radius: 14px;
+  background: rgba(8,23,18,.7); border: 1px solid var(--line); color: var(--text);
+}
+.chip-pill b { color: var(--gold-bright); }
+.chip-custom-box { display: flex; flex-direction: column; gap: 6px; }
+.chip-crow { display: flex; align-items: center; gap: 10px; }
+.chip-crow .cname { font-size: .82rem; color: var(--text-bright); min-width: 76px; }
+.chip-crow input {
+  flex: 1; max-width: 160px; padding: 7px 10px; background: #081712;
+  border: 1px solid var(--line); border-radius: 4px; color: var(--text-bright);
+  font-size: .85rem; outline: none;
+}
+.chip-crow input:focus { border-color: var(--gold); }
+.chip-crow .chint { font-size: .7rem; color: #7d9184; }
+
 /* ---------- 下注屏 ---------- */
 .bet-card {
   width: min(560px, 100%);

@@ -21,10 +21,32 @@
 <section id="screen-setup" class="screen active">
   <div class="setup-card">
     <h1>21 点 · 掷骰定庄</h1>
-    <p class="rules">每人 <b>1000 筹码</b>。开局<b>掷骰子</b>决定庄家，从庄家开始<b>逐张发牌</b>，每人两张。
+    <p class="rules">开局<b>掷骰子</b>决定庄家，从庄家开始<b>逐张发牌</b>，每人两张。
     轮流<b>要牌 / 停牌</b>：超过 21 点即爆牌出局；<b>两张恰 21 点为 Blackjack</b>；
     <b>凑满 5 张且 ≤18 点为“小老虎”</b>特殊牌型。庄家最后行动，<b>17 点起停牌</b>，比点定胜负。
     <b>只有轮到的本人能看到自己的牌</b>，别人的牌保密，结算才摊牌。输赢按底注结算：普通胜 ×1，Blackjack ×1.5，小老虎 ×2。</p>
+
+    <div class="field">
+      <label>起始筹码（每人最低 1000，可统一 / 随机 / 逐人调配）</label>
+      <div class="seg" id="chip-mode-seg">
+        <button data-mode="uniform" class="active">💵 统一额度</button>
+        <button data-mode="random">🎲 随机分配</button>
+        <button data-mode="custom">✏️ 逐人调配</button>
+      </div>
+      <div id="chip-uniform-row" class="chip-uniform-row">
+        <span>每人</span>
+        <input id="chip-uniform" type="number" min="1000" step="100" value="1000">
+        <span>筹码</span>
+      </div>
+      <div id="chip-random-box" class="chip-random-box" hidden>
+        <div id="chip-random-list" class="chip-random-list"></div>
+        <button id="chip-reroll" class="btn-ghost" type="button">🎲 重新随机</button>
+      </div>
+      <div id="chip-custom-box" class="chip-custom-box" hidden></div>
+      <p class="seat-tip" id="chip-summary"></p>
+    </div>
+
+    <button id="btn-start" class="btn-start">🎲 掷骰开局</button>
 
     <div class="field">
       <label>人数</label>
@@ -41,8 +63,6 @@
       <div id="player-rows"></div>
       <p class="seat-tip" id="seat-tip"></p>
     </div>
-
-    <button id="btn-start" class="btn-start">🎲 掷骰开局</button>
   </div>
 </section>
 
@@ -76,7 +96,7 @@
     </div>
     <p class="bet-warn" id="bet-warn" hidden></p>
     <button id="btn-deal" class="btn-start">🃏 确认下注，开始发牌</button>
-    <button id="btn-reset-chips2" class="btn-ghost" style="align-self:center">💰 重置筹码（每人 1000）</button>
+    <button id="btn-reset-chips2" class="btn-ghost" style="align-self:center">💰 重置筹码（恢复起始额度）</button>
   </div>
 </section>
 

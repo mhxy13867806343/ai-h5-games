@@ -62,6 +62,10 @@ document.addEventListener('pointerdown', () => Sound.ensure(), { once: true });
 /* ---------- 状态 ---------- */
 const state = {
   count: 4,
+  chipMode: 'uniform',  // uniform | random | custom
+  startChips: [],       // 起始筹码配置（重置筹码按此恢复）
+  randomChips: [],      // 随机模式当前值
+  customChips: [],      // 逐人调配当前值
   players: [],        // [{name, isAI, cards, status, result}] status: playing|stand|bust|bj|tiger
   dealerIdx: 0,
   deck: [],
@@ -141,6 +145,76 @@ function syncSeatTip() {
   $('#seat-tip').textContent = `当前阵容：${ps.length} 人 · ${humans} 真人 + ${ps.length - humans} 电脑` +
     (humans === 0 ? '（全员电脑，观战模式）' : '');
 }
+/* ---------- 起始筹码配置（统一 / 随机 / 逐人，最低 1000） ---------- */
+const MIN_CHIP = 1000;
+function syncChipConfig({ rebuild = false } = {}) {
+  const n = state.count;
+  // 尺寸对齐
+  while (state.randomChips.length < n) state.randomChips.push(rollChip());
+  state.randomChips.length = n;
+  while (state.customChips.length < n) state.customChips.push(MIN_CHIP);
+  state.customChips.length = n;
+
+  if (state.chipMode === 'uniform') {
+    const input = $('#chip-uniform');
+    const v = Math.max(MIN_CHIP, Math.floor(Number(input.value) || MIN_CHIP));
+    input.value = v;
+    state.uniformChips = v;
+    state.startChips = Array(n).fill(v);
+  } else if (state.chipMode === 'random') {
+    state.startChips = state.randomChips.slice();
+    $('#chip-random-list').innerHTML = state.startChips
+      .map((v, i) => `<span class="chip-pill">P${i + 1} <b>${v.toLocaleString()}</b></span>`).join('');
+  } else {
+    // 逐人调配：重建输入框（保留已填值）
+    const box = $('#chip-custom-box');
+    box.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const row = document.createElement('div');
+      row.className = 'chip-crow';
+      row.innerHTML = `
+        <span class="cname">P${i + 1}</span>
+        <input type="number" min="${MIN_CHIP}" step="100" value="${state.customChips[i]}" data-chip-idx="${i}">
+        <span class="chint">≥ 1000</span>`;
+      box.appendChild(row);
+    }
+    box.querySelectorAll('input[data-chip-idx]').forEach(input => {
+      input.addEventListener('change', () => {
+        const i = Number(input.dataset.chipIdx);
+        const v = Math.max(MIN_CHIP, Math.floor(Number(input.value) || MIN_CHIP));
+        input.value = v;
+        state.customChips[i] = v;
+        state.startChips = state.customChips.slice();
+        updateChipSummary();
+      });
+    });
+    state.startChips = state.customChips.slice();
+  }
+  updateChipSummary();
+}
+function rollChip() { return 1000 + 50 * Math.floor(Math.random() * 181); } // 1000 ~ 10000（50 步进）
+function updateChipSummary() {
+  const modeZh = { uniform: '统一', random: '随机', custom: '逐人' }[state.chipMode];
+  $('#chip-summary').textContent = `${modeZh}额度 · 起始筹码：${state.startChips.map(v => v.toLocaleString()).join(' / ')}（最低 ${MIN_CHIP}）`;
+}
+$('#chip-mode-seg').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-mode]');
+  if (!btn) return;
+  Sound.play('click');
+  state.chipMode = btn.dataset.mode;
+  document.querySelectorAll('#chip-mode-seg button').forEach(b => b.classList.toggle('active', b === btn));
+  $('#chip-uniform-row').hidden = state.chipMode !== 'uniform';
+  $('#chip-random-box').hidden = state.chipMode !== 'random';
+  $('#chip-custom-box').hidden = state.chipMode !== 'custom';
+  syncChipConfig({ rebuild: true });
+});
+$('#chip-uniform').addEventListener('change', () => syncChipConfig());
+$('#chip-reroll').addEventListener('click', () => {
+  Sound.play('dice');
+  state.randomChips = state.randomChips.map(rollChip);
+  syncChipConfig();
+});
+
 $('#count-seg').addEventListener('click', e => {
   const btn = e.target.closest('button[data-count]');
   if (!btn) return;
@@ -148,13 +222,15 @@ $('#count-seg').addEventListener('click', e => {
   state.count = Number(btn.dataset.count);
   document.querySelectorAll('#count-seg button').forEach(b => b.classList.toggle('active', b === btn));
   renderPlayerRows();
+  syncChipConfig({ rebuild: true });
 });
 $('#btn-start').addEventListener('click', () => {
   Sound.play('click');
+  syncChipConfig(); // 以最新配置为准
   const ps = readPlayers();
   state.players = ps.map(p => ({ ...p, cards: [], status: 'waiting', result: null }));
   state.scores = ps.map(() => 0);
-  state.chips = ps.map(() => 1000); // 每人 1000 筹码
+  state.chips = state.startChips.slice(); // 按配置的起始筹码
   state.bets = ps.map(() => 0);
   state.finalWinner = null;
   state.session++;
@@ -253,7 +329,9 @@ $('#btn-join').addEventListener('click', () => {
   if (state.players.some(p => p.name === name)) name += '·新';
   state.players.push({ name, isAI, cards: [], status: 'waiting', result: null });
   state.scores.push(0);
-  state.chips.push(1000);   // 新玩家自带 1000 筹码
+  const joinChips = state.chipMode === 'uniform' ? (state.uniformChips || MIN_CHIP) : MIN_CHIP;
+  state.startChips.push(joinChips);
+  state.chips.push(joinChips);   // 新玩家按额度入座（最低 1000）
   state.bets.push(0);
   $('#join-name').value = '';
   $('#join-ai').checked = false;
@@ -286,7 +364,7 @@ $('#btn-deal').addEventListener('click', () => {
 });
 
 function resetChips() {
-  state.chips = state.players.map(() => 1000);
+  state.chips = state.startChips.slice(); // 按设置页配置恢复，而非固定 1000
   state.finalWinner = null;
   Sound.play('click');
   $('#bet-warn').hidden = true;
@@ -812,3 +890,4 @@ window.addEventListener('keydown', e => {
 
 /* ---------- 初始化 ---------- */
 renderPlayerRows();
+syncChipConfig();
