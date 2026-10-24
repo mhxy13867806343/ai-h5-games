@@ -16,7 +16,7 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (22)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (23)</button>
         <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (7)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (4)</button>
@@ -25,6 +25,7 @@
         <button class="folder-tab" onclick="filterFolder('chronicle-77')">📜 chronicle-77 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('pelican-coast-ride')">🚲 pelican-coast-ride 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('lol-rift-duel')">🛡️ lol-rift-duel 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('number-bomb')">💣 number-bomb 专区 (1)</button>
       </div>
 
       <!-- Layout Switcher Bar -->
@@ -798,10 +799,44 @@
         </div>
       </div>
 
+      <!-- 数字炸弹 -->
+      <div class="card" data-folder="number-bomb" data-url="number-bomb/index.html" data-name="数字炸弹">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#e8734c; background:rgba(232,115,76,0.15); border-color:rgba(232,115,76,0.3);">📂 number-bomb</span>
+              <span class="tag">派对游戏</span>
+            </div>
+            <h2>💣 数字炸弹 · Number Bomb</h2>
+            <p>0 到 N 之间藏着炸弹数字，轮流报数收紧范围：报小了下界变你报的数，报大了上界变你报的数。直接踩中炸弹、或只剩炸弹一个数可报的人输。支持人机对战与双人同屏。</p>
+            <div class="meta"><span>经典规则</span><span>人机/双人</span><span>N 可自定义</span><span>合成音效</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="number-bomb/index.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('number-bomb', '数字炸弹', 'number-bomb/index.html', 'number-bomb/style.css', 'number-bomb/app.js')">📄 源码</button>
+            <button class="card-btn" onclick="CodeViewerDownloader.downloadZip({ id: 'number-bomb', name: '数字炸弹', htmlUrl: 'number-bomb/index.html', extraFiles: ['number-bomb/style.css', 'number-bomb/app.js'] })">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>💣 试玩预览 · 《数字炸弹》</span>
+            <div class="preview-actions">
+              <a href="number-bomb/index.html" class="preview-play-btn">💣 点击进入游戏</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel 8 大源码文件夹分类筛选与一键分享
+      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel / number-bomb 9 大源码文件夹分类筛选与一键分享
     </div>
   </div>
 
