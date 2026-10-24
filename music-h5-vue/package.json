@@ -1,0 +1,27 @@
+{
+  "name": "music-h5-vue",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5174",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "pinia": "^2.1.7",
+    "vant": "^4.9.0",
+    "vue": "^3.4.0",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@unocss/preset-uno": "^0.58.5",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "postcss-px-to-viewport": "^1.1.1",
+    "typescript": "^5.3.3",
+    "unocss": "^0.58.5",
+    "vite": "^5.0.0",
+    "vue-tsc": "^1.8.27"
+  }
+}

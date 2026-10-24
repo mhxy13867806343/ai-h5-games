@@ -16,7 +16,7 @@
       <!-- 3 Main Source Folders Filter Bar -->
       <div class="folder-bar">
         <span class="folder-title">📂 源码文件夹分类 (Source Folders)：</span>
-        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (26)</button>
+        <button class="folder-tab active" onclick="filterFolder('all')">🌐 全部项目 (27)</button>
         <button class="folder-tab" onclick="filterFolder('antigravity-game')">🚀 antigravity-game 专区 (7)</button>
         <button class="folder-tab" onclick="filterFolder('hy3-game')">⚡ hy3-game 专区 (6)</button>
         <button class="folder-tab" onclick="filterFolder('traeWork-game')">🛠️ traeWork-game 专区 (4)</button>
@@ -29,6 +29,7 @@
         <button class="folder-tab" onclick="filterFolder('blackjack-21')">🂡 blackjack-21 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('lpl-arena')">🏆 lpl-arena 专区 (1)</button>
         <button class="folder-tab" onclick="filterFolder('codex-resets')">⏳ codex-resets 专区 (1)</button>
+        <button class="folder-tab" onclick="filterFolder('music')">🎵 music 专区 (1)</button>
       </div>
 
       <!-- Layout Switcher Bar -->
@@ -938,10 +939,44 @@
         </div>
       </div>
 
+      <!-- 云音乐四端 -->
+      <div class="card" data-folder="music" data-url="music/index.html" data-name="云音乐四端">
+        <div class="card-main">
+          <div>
+            <div class="tags-row">
+              <span class="folder-badge" style="color:#ff6b6b; background:rgba(255,107,107,0.15); border-color:rgba(255,107,107,0.3);">📂 music</span>
+              <span class="tag">音乐 App 四端复刻</span>
+            </div>
+            <h2>🎵 云音乐 · 四端复刻</h2>
+            <p>网易云音乐多端复刻（只用免登录接口，数据来自 musicapi.cn）：Vue3+Vant+UnoCSS 的 H5 端、React18+antd-mobile+Hooks 的 H5 端（均可在线预览）、uniapp(Vue3) 与 Taro(React) 两套微信小程序源码。五页面：轮播/歌单/榜单/搜索/歌词播放器。</p>
+            <div class="meta"><span>Vue3+Vant</span><span>React18+antd-mobile</span><span>uniapp</span><span>Taro</span></div>
+          </div>
+        </div>
+        <div class="card-right">
+          <a class="play" href="music/index.html">直接玩 →</a>
+          <div class="card-actions">
+            <button class="card-btn preview-btn" onclick="openGamePreview(this)">👁️ 预览</button>
+            <button class="card-btn share-btn" onclick="openShareModal(this)">🔗 分享</button>
+            <button class="card-btn" onclick="openCodeModal('music', '云音乐四端', 'music/index.html', 'music-h5-vue/src/api/index.ts', 'music-h5-react/src/App.tsx')">📄 源码</button>
+            <button class="card-btn" onclick="CodeViewerDownloader.downloadZip({ id: 'music', name: '云音乐四端导航', htmlUrl: 'music/index.html' })">💾 下载</button>
+          </div>
+        </div>
+        <div class="card-preview-overlay">
+          <div class="preview-header">
+            <span>🎵 试玩预览 · 《云音乐四端》</span>
+            <div class="preview-actions">
+              <a href="music/index.html" class="preview-play-btn">🎵 点击进入</a>
+              <button class="preview-close-btn" onclick="closePreview(this)">✕ 关闭</button>
+            </div>
+          </div>
+          <div class="preview-body"></div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer">
-      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel / number-bomb / blackjack-21 / lpl-arena / codex-resets 12 大源码文件夹分类筛选与一键分享
+      AI H5 Games 在线复刻大厅 · 支持按 📂 antigravity-game / hy3-game / traeWork-game / roadster-sky-run / interactive-calendar / chronicle-77 / pelican-coast-ride / lol-rift-duel / number-bomb / blackjack-21 / lpl-arena / codex-resets / music 13 大源码文件夹分类筛选与一键分享
     </div>
   </div>
 

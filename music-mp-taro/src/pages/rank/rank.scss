@@ -1,0 +1,8 @@
+.page { padding: 24rpx; }
+.rank-card { display: flex; align-items: center; gap: 24rpx; background: #2a2a2e; border-radius: 24rpx; padding: 20rpx; margin-bottom: 20rpx; }
+.rank-cover { width: 130rpx; height: 130rpx; border-radius: 18rpx; background: #1c1c1e; }
+.rank-name { font-size: 30rpx; font-weight: 700; }
+.rank-freq { font-size: 22rpx; color: #8e8e93; margin-top: 8rpx; }
+.rank-info { flex: 1; }
+.arrow { color: #8e8e93; }
+.empty { text-align: center; color: #8e8e93; padding: 80rpx 0; }

@@ -1,0 +1,38 @@
+/**
+ * uni.scss — 全局 SCSS 变量与混入。
+ * uni-app 编译时会自动将本文件注入到每个 <style lang="scss"> 块顶部。
+ * 深色网易云风格：#1c1c1e 底 / #ff3a3a 主色。
+ */
+
+/* 背景色 */
+$uni-bg-page: #121212; // 页面底色
+$uni-bg-card: #1c1c1e; // 卡片 / 导航
+$uni-bg-elevated: #2c2c2e; // 浮层 / 按钮底
+
+/* 主题色 */
+$uni-primary: #ff3a3a;
+$uni-primary-dark: #d02e2e;
+
+/* 文字 */
+$uni-text-main: #f5f5f7;
+$uni-text-sub: #8a8a8e;
+$uni-text-desc: #b0b0b5;
+
+/* 边框与圆角 */
+$uni-border-color: rgba(255, 255, 255, 0.08);
+$uni-radius: 16rpx;
+$uni-radius-lg: 24rpx;
+
+/* 单行/多行省略混入 */
+@mixin ellipsis($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $lines;
+    overflow: hidden;
+  }
+}

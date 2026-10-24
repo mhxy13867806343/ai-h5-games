@@ -1,0 +1,33 @@
+{
+  "name": "music-mp-taro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "网易云音乐微信小程序（Taro + React + TS，免登录接口）",
+  "scripts": {
+    "dev:weapp": "taro build --type weapp --watch",
+    "build:weapp": "taro build --type weapp"
+  },
+  "dependencies": {
+    "@tarojs/components": "3.6.34",
+    "@tarojs/helper": "3.6.34",
+    "@tarojs/plugin-framework-react": "3.6.34",
+    "@tarojs/plugin-platform-weapp": "3.6.34",
+    "@tarojs/react": "3.6.34",
+    "@tarojs/runtime": "3.6.34",
+    "@tarojs/shared": "3.6.34",
+    "@tarojs/taro": "3.6.34",
+    "dayjs": "^1.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@tarojs/cli": "3.6.34",
+    "@tarojs/webpack5-runner": "3.6.34",
+    "@types/react": "^18.2.43",
+    "@types/webpack-env": "^1.18.3",
+    "babel-preset-taro": "3.6.34",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0"
+  }
+}

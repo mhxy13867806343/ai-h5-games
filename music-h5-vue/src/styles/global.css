@@ -1,0 +1,13 @@
+body {
+  background: #1c1c1e;
+  color: #f5f5f7;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+.van-tabbar { background: #101012 !important; border-top: 1px solid #2a2a2e; }
+.van-tabbar-item { background: transparent; color: #8e8e93; }
+.van-tabbar-item--active { color: #ff3a3a !important; background: transparent !important; }
+.page { padding-bottom: 120px; min-height: 100vh; }
+.section-title { font-size: 17px; font-weight: 700; margin: 18px 4px 12px; display: flex; justify-content: space-between; align-items: center; }
+.section-title a { font-size: 12px; color: #8e8e93; font-weight: 400; }

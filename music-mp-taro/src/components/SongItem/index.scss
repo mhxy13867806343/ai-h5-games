@@ -1,0 +1,101 @@
+.song-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 8rpx;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__index {
+    width: 64rpx;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 28rpx;
+    color: #6c6c70;
+    font-variant-numeric: tabular-nums;
+
+    &--active {
+      color: #ff3a3a;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    display: block;
+    font-size: 30rpx;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--active {
+      color: #ff3a3a;
+    }
+  }
+
+  &__meta {
+    display: block;
+    margin-top: 6rpx;
+    font-size: 24rpx;
+    color: #8e8e93;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__duration {
+    margin-left: 20rpx;
+    flex-shrink: 0;
+    font-size: 24rpx;
+    color: #6c6c70;
+  }
+
+  /* 播放中的「跳动条」动画，代替播放图标 */
+  &__eq {
+    display: flex;
+    align-items: flex-end;
+    margin-left: 20rpx;
+    height: 28rpx;
+    flex-shrink: 0;
+  }
+
+  &__eq-bar {
+    width: 6rpx;
+    margin-left: 6rpx;
+    border-radius: 3rpx;
+    background: #ff3a3a;
+    animation: song-item-eq 0.9s ease-in-out infinite;
+
+    &:nth-child(1) {
+      height: 30%;
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      height: 100%;
+      animation-delay: 0.3s;
+    }
+
+    &:nth-child(3) {
+      height: 55%;
+      animation-delay: 0.6s;
+    }
+  }
+}
+
+@keyframes song-item-eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}

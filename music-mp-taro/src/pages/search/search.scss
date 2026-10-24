@@ -1,0 +1,16 @@
+.page { padding: 24rpx; }
+.search-bar { display: flex; gap: 20rpx; align-items: center; }
+.input { flex: 1; background: #2a2a2e; border-radius: 999rpx; padding: 18rpx 28rpx; font-size: 26rpx; color: #f5f5f7; }
+.ph { color: #8e8e93; }
+.btn { color: #ff3a3a; font-weight: 700; }
+.sec-title { font-size: 30rpx; font-weight: 700; margin: 32rpx 0 20rpx; }
+.tags { display: flex; flex-wrap: wrap; gap: 18rpx; }
+.tag { padding: 12rpx 28rpx; background: #2a2a2e; border-radius: 999rpx; font-size: 24rpx; }
+.tag.dim { color: #8e8e93; }
+.song-list { margin-top: 20rpx; }
+.song-row { display: flex; align-items: center; padding: 18rpx 0; border-bottom: 1rpx solid rgba(255,255,255,.06); }
+.song-info { flex: 1; min-width: 0; }
+.song-name { font-size: 28rpx; }
+.song-meta { font-size: 22rpx; color: #8e8e93; margin-top: 4rpx; }
+.song-play { color: #ff3a3a; font-size: 30rpx; }
+.empty { text-align: center; color: #8e8e93; padding: 80rpx 0; }

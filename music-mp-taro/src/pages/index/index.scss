@@ -1,0 +1,19 @@
+.page { padding: 24rpx 0 40rpx; }
+.banner { white-space: nowrap; padding: 0 24rpx; }
+.banner-img { width: 700rpx; height: 280rpx; border-radius: 24rpx; margin-right: 20rpx; display: inline-block; }
+.sec-title { font-size: 34rpx; font-weight: 700; margin: 36rpx 24rpx 20rpx; }
+.pl-scroll { white-space: nowrap; padding: 0 24rpx; }
+.pl-card { width: 216rpx; display: inline-block; margin-right: 24rpx; vertical-align: top; }
+.pl-cover { width: 216rpx; height: 216rpx; border-radius: 20rpx; background: #2a2a2e; }
+.ar-card { width: 140rpx; display: inline-block; margin-right: 24rpx; text-align: center; }
+.ar-avatar { width: 120rpx; height: 120rpx; border-radius: 50%; background: #2a2a2e; }
+.pl-name { font-size: 24rpx; margin-top: 12rpx; line-height: 1.4; height: 68rpx; overflow: hidden; white-space: normal; }
+.pl-count { font-size: 20rpx; color: #8e8e93; }
+.song-list { padding: 0 24rpx; }
+.song-row { display: flex; align-items: center; padding: 18rpx 0; border-bottom: 1rpx solid rgba(255,255,255,.06); }
+.song-idx { width: 52rpx; color: #8e8e93; font-weight: 700; }
+.song-idx.hot { color: #ff3a3a; }
+.song-info { flex: 1; min-width: 0; }
+.song-name { font-size: 28rpx; }
+.song-meta { font-size: 22rpx; color: #8e8e93; margin-top: 4rpx; }
+.song-play { color: #ff3a3a; font-size: 30rpx; }

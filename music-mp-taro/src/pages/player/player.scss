@@ -1,0 +1,18 @@
+.page { display: flex; flex-direction: column; align-items: center; padding: 50rpx 40rpx; }
+.disc { width: 420rpx; height: 420rpx; border-radius: 50%; overflow: hidden; border: 14rpx solid #101012; }
+.disc.spin .cover { animation: spin 24s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.cover { width: 100%; height: 100%; }
+.title { font-size: 38rpx; font-weight: 800; margin-top: 40rpx; text-align: center; }
+.artist { font-size: 26rpx; color: #8e8e93; margin-top: 10rpx; }
+.notice { margin-top: 20rpx; font-size: 22rpx; color: #ff9f0a; background: #2a2a2e; border-radius: 12rpx; padding: 10rpx 24rpx; }
+.lyrics { height: 320rpx; width: 100%; margin-top: 30rpx; text-align: center; }
+.lyric-line { font-size: 26rpx; color: #6b6b70; line-height: 2.1; }
+.lyric-line.on { color: #f5f5f7; font-weight: 700; font-size: 28rpx; }
+.progress { display: flex; align-items: center; gap: 16rpx; width: 100%; margin-top: 30rpx; }
+.time { font-size: 20rpx; color: #8e8e93; }
+.slider { flex: 1; margin: 0; }
+.controls { display: flex; align-items: center; gap: 80rpx; margin-top: 40rpx; }
+.ctrl { font-size: 56rpx; }
+.ctrl.main { width: 120rpx; height: 120rpx; border-radius: 50%; background: #ff3a3a; display: flex; align-items: center; justify-content: center; }
+.empty { text-align: center; color: #8e8e93; padding: 200rpx 0; }

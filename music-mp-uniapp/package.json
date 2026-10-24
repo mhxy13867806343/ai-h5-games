@@ -1,0 +1,28 @@
+{
+  "name": "music-mp-uniapp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "网易云音乐微信小程序复刻（uniapp + Vue3 + TypeScript，仅免登录接口，快照回退）",
+  "scripts": {
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-5030320261023001",
+    "@dcloudio/uni-components": "3.0.0-5030320261023001",
+    "@dcloudio/uni-ui": "^1.5.12",
+    "dayjs": "^1.11.23",
+    "vue": "^3.4.21",
+    "vue-i18n": "^9.1.9"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "^3.4.32",
+    "@dcloudio/uni-cli-shared": "3.0.0-5030320261023001",
+    "@dcloudio/uni-h5": "3.0.0-5030320261023001",
+    "@dcloudio/uni-mp-weixin": "3.0.0-5030320261023001",
+    "@dcloudio/vite-plugin-uni": "3.0.0-5030320261023001",
+    "sass": "^1.77.8",
+    "typescript": "^5.4.5",
+    "vite": "5.2.8"
+  }
+}

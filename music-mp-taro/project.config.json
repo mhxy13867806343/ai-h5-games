@@ -1,0 +1,7 @@
+{
+  "miniprogramRoot": "dist/",
+  "projectname": "music-mp-taro",
+  "appid": "touristappid",
+  "setting": { "urlCheck": false, "es6": false, "postcss": false, "minified": false },
+  "compileType": "miniprogram"
+}

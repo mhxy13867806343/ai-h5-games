@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1c1c1e">
+<title>云音乐 · 四端复刻导航</title>
+<meta name="description" content="网易云音乐四端复刻：Vue H5 / React H5 / uniapp 小程序 / Taro 小程序，全部基于免登录接口。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23ff3a3a'/%3E%3Cpath d='M20 11a6 6 0 1 0 2 4.5V8c3 .8 5 2 5 2' fill='none' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: radial-gradient(900px 500px at 15% -10%, #2a2a30 0%, transparent 55%), #1c1c1e;
+  color: #f5f5f7; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+}
+header { text-align: center; padding: 46px 20px 10px; }
+header h1 { font-size: 1.7rem; letter-spacing: 2px; }
+header p { color: #8e8e93; font-size: .85rem; margin-top: 10px; line-height: 1.8; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; padding: 26px 20px 60px; max-width: 980px; width: 100%; }
+a.card {
+  background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 18px; padding: 22px;
+  text-decoration: none; color: #f5f5f7; transition: all .18s; display: flex; flex-direction: column; gap: 10px;
+}
+a.card:hover { transform: translateY(-4px); border-color: #ff3a3a; }
+.card .ico { font-size: 1.6rem; }
+.card b { font-size: 1.05rem; }
+.card span { font-size: .8rem; color: #8e8e93; line-height: 1.7; }
+.card .go { color: #ff3a3a; font-size: .82rem; font-weight: 700; }
+.card.src code { background: #1c1c1e; padding: 2px 8px; border-radius: 6px; font-size: .74rem; color: #c7c7cc; }
+footer { color: #58585d; font-size: .74rem; padding: 20px; text-align: center; line-height: 2; }
+footer a { color: #8e8e93; }
+.badge { display: inline-block; font-size: .64rem; padding: 3px 10px; border: 1px solid #ff3a3a55; color: #ff6b6b; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎵 云音乐 · 四端复刻</h1>
+  <p>同一套免登录接口 · 四种技术栈实现<br>
+  数据源：<b style="color:#ff6b6b">musicapi.cn</b> 公共实例（CORS 开放，感谢推荐）+ 内置快照兜底 · 部分歌曲因版权无法播放属正常现象</p>
+</header>
+<div class="grid">
+  <a class="card" href="music-h5-vue/">
+    <div class="ico">💚</div>
+    <b>Vue 3 H5 端 <span class="badge">可预览</span></b>
+    <span>Vite + TS + Pinia + Vue Router + Vant 4 + UnoCSS + dayjs<br>五页面：轮播/歌单/榜单/搜索/播放器（歌词滚动）</span>
+    <span class="go">在线体验 →</span>
+    <span class="src">源码 <code>music-h5-vue/</code></span>
+  </a>
+  <a class="card" href="music-h5-react/">
+    <div class="ico">💙</div>
+    <b>React 18 H5 端 <span class="badge">可预览</span></b>
+    <span>Vite + TS + 自定义 Hooks + React Router 6 + Ant Design Mobile + UnoCSS + dayjs<br>同五页面，useSyncExternalStore 全局播放器</span>
+    <span class="go">在线体验 →</span>
+    <span class="src">源码 <code>music-h5-react/</code></span>
+  </a>
+  <a class="card" href="https://github.com/mhxy13867806343/ai-h5-games/tree/main/music-mp-uniapp" target="_blank" rel="noopener">
+    <div class="ico">🟢</div>
+    <b>uniapp 小程序端（Vue 3）</b>
+    <span>uniapp + &lt;script setup lang="ts"&gt; 组合式 + uni-ui + dayjs<br>五页面 + tabBar，微信开发者工具导入即跑</span>
+    <span class="go">查看源码 →</span>
+    <span class="src">目录 <code>music-mp-uniapp/</code></span>
+  </a>
+  <a class="card" href="https://github.com/mhxy13867806343/ai-h5-games/tree/main/music-mp-taro" target="_blank" rel="noopener">
+    <div class="ico">🔵</div>
+    <b>Taro 小程序端（React）</b>
+    <span>Taro 3 + React 18 + TS + 自定义 Hooks + dayjs<br>五页面 + tabBar，npm run dev:weapp 生成 dist</span>
+    <span class="go">查看源码 →</span>
+    <span class="src">目录 <code>music-mp-taro/</code></span>
+  </a>
+</div>
+<footer>
+  接口契约与快照见 <a href="music-shared/API.md">music-shared/API.md</a> ·
+  免登录接口（轮播/歌单/榜单/歌手/新歌/搜索/歌词/播放地址）·
+  <a href="../index.html">← 返回大厅</a>
+</footer>
+</body>
+</html>
