@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5175",
-    "build": "tsc --noEmit && vite build",
+    "dev": "vite dev.html --port 5175",
+    "build": "tsc --noEmit && vite build && cp dist/index.html index.html && rm -rf assets && cp -R dist/assets assets",
     "preview": "vite preview"
   },
   "dependencies": {
