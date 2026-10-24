@@ -17,6 +17,8 @@ const I18N = {
     challengeTitle: 'Tibo 的 28 天挑战', challengeDesc: '每天一次改进，或者一次完整重置。', challengeCta: '查看每日进展 →',
     statCount: '重置次数', statAvg: '平均重置间隔 / 平均等待', statLongest: '最长等待',
     gridTitle: 'Codex 重置历史', legendNone: '未重置', legendReset: '已重置',
+    legendRegular: '常规', legendBanked: '备用',
+    typeRegular: '已重置 · 常规', typeBanked: '已重置 · 备用', typeNone: '未重置',
     logTitle: 'Codex 重置公告', logSub: '每次公告，都留有记录',
     reachTitle: '触达 Codex 用户', reachDesc: '本页面是学习交流复刻，广告位仅为样式展示。',
     showAll: n => `查看全部 ${n} 次重置 ↓`, hideAll: '收起 ↑',
@@ -31,6 +33,8 @@ const I18N = {
     challengeTitle: "Tibo's 28-day challenge", challengeDesc: 'One improvement a day, or a full reset.', challengeCta: 'See daily progress →',
     statCount: 'Resets', statAvg: 'Avg interval / avg wait', statLongest: 'Longest wait',
     gridTitle: 'Codex reset history', legendNone: 'No reset', legendReset: 'Reset',
+    legendRegular: 'Regular', legendBanked: 'Banked',
+    typeRegular: 'Reset · regular', typeBanked: 'Reset · banked', typeNone: 'No reset',
     logTitle: 'Codex reset announcements', logSub: 'Every announcement, on record',
     reachTitle: 'Reach Codex users', reachDesc: 'Educational recreation; ad slots are decorative.',
     showAll: n => `View all ${n} resets ↓`, hideAll: 'Collapse ↑',
@@ -45,6 +49,8 @@ const I18N = {
     challengeTitle: 'Tibo 的 28 天挑戰', challengeDesc: '每天一次改進，或者一次完整重置。', challengeCta: '查看每日進展 →',
     statCount: '重置次數', statAvg: '平均重置間隔 / 平均等待', statLongest: '最長等待',
     gridTitle: 'Codex 重置歷史', legendNone: '未重置', legendReset: '已重置',
+    legendRegular: '常規', legendBanked: '備用',
+    typeRegular: '已重置 · 常規', typeBanked: '已重置 · 備用', typeNone: '未重置',
     logTitle: 'Codex 重置公告', logSub: '每次公告，都留有記錄',
     reachTitle: '觸達 Codex 用戶', reachDesc: '本頁面為學習交流復刻，廣告位僅為樣式展示。',
     showAll: n => `查看全部 ${n} 次重置 ↓`, hideAll: '收起 ↑',
@@ -59,6 +65,8 @@ const I18N = {
     challengeTitle: 'Tibo の 28 日間チャレンジ', challengeDesc: '毎日ひとつの改善、または完全リセット。', challengeCta: '日々の進捗 →',
     statCount: 'リセット回数', statAvg: '平均間隔 / 平均待機', statLongest: '最長待機',
     gridTitle: 'Codex リセット履歴', legendNone: '未リセット', legendReset: 'リセット',
+    legendRegular: '通常', legendBanked: '繰越',
+    typeRegular: 'リセット · 通常', typeBanked: 'リセット · 繰越', typeNone: '未リセット',
     logTitle: 'Codex リセット告知', logSub: 'すべての告知を記録',
     reachTitle: 'Codex ユーザーにリーチ', reachDesc: '学習用の復刻です。広告枠は装飾です。',
     showAll: n => `全 ${n} 回を見る ↓`, hideAll: '折りたたむ ↑',
@@ -73,6 +81,8 @@ const I18N = {
     challengeTitle: 'Tibo의 28일 챌린지', challengeDesc: '하루 한 번의 개선, 또는 완전한 리셋.', challengeCta: '일일 진행 보기 →',
     statCount: '리셋 횟수', statAvg: '평균 간격 / 평균 대기', statLongest: '최장 대기',
     gridTitle: 'Codex 리셋 히스토리', legendNone: '리셋 없음', legendReset: '리셋',
+    legendRegular: '정기', legendBanked: '적립',
+    typeRegular: '리셋 · 정기', typeBanked: '리셋 · 적립', typeNone: '리셋 없음',
     logTitle: 'Codex 리셋 공지', logSub: '모든 공지가 기록됩니다',
     reachTitle: 'Codex 사용자에게 도달', reachDesc: '학습용 복제 페이지입니다.',
     showAll: n => `전체 ${n}회 보기 ↓`, hideAll: '접기 ↑',
@@ -200,12 +210,12 @@ function renderGrid() {
     colEl.className = 'grid-col';
     col.forEach(c => {
       const cell = document.createElement('i');
-      cell.className = `cell l${c.l}`;
+      cell.className = `cell ${c.l ? (c.t === 'banked' ? 'l1b' : 'l1') : 'l0'}`;
       cell.dataset.date = c.d;
       cell.addEventListener('mouseenter', e => {
         const r = cell.getBoundingClientRect();
         tip.hidden = false;
-        tip.textContent = `${c.d} · ${c.l ? t('resetOn') : t('noReset')}`;
+        tip.textContent = `${c.d} · ${c.l ? (c.t === 'banked' ? t('typeBanked') : t('typeRegular')) : t('typeNone')}`;
         tip.style.left = (r.left + r.width / 2) + 'px';
         tip.style.top = r.top + 'px';
       });

@@ -11,6 +11,7 @@
   --accent-soft: rgba(201, 97, 31, .12);
   --cell0: #f2e3bd;
   --cell1: #c9611f;
+  --cell-bank: #7a9a3a;
   --shadow: 0 10px 26px rgba(96, 70, 20, .12);
 }
 html[data-theme="dark"] {
@@ -24,6 +25,7 @@ html[data-theme="dark"] {
   --accent-soft: rgba(240, 133, 60, .14);
   --cell0: #2c2418;
   --cell1: #f0853c;
+  --cell-bank: #a3c25e;
   --shadow: 0 10px 26px rgba(0, 0, 0, .4);
 }
 body {
@@ -145,6 +147,7 @@ a { color: var(--accent); text-decoration: none; }
 .cell { width: 13px; height: 13px; border-radius: 4px; display: inline-block; }
 .cell.l0 { background: var(--cell0); }
 .cell.l1 { background: var(--cell1); }
+.cell.l1b { background: var(--cell-bank); }
 .grid-scroll { overflow-x: auto; padding-bottom: 6px; }
 .grid { display: flex; gap: 4px; }
 .grid-col { display: flex; flex-direction: column; gap: 4px; }
