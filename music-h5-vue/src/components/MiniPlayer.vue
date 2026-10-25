@@ -5,6 +5,7 @@
       <div class="mini-name">{{ player.current.name }}</div>
       <div class="mini-artist">{{ player.current.artist }}</div>
     </div>
+    <span class="mini-btn" @click.stop="player.prev()">⏮</span>
     <span class="mini-btn" @click.stop="player.toggle()">{{ player.playing ? '⏸' : '▶' }}</span>
     <span class="mini-btn" @click.stop="player.next()">⏭</span>
   </div>

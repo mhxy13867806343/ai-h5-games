@@ -1,7 +1,7 @@
-import { Slider, Tooltip } from 'antd';
-import { PlayCircleFilled, PauseCircleFilled, StepBackwardFilled, StepForwardFilled } from '@ant-design/icons';
+import { Slider, Tooltip, Drawer, Tabs } from 'antd';
+import { PlayCircleFilled, PauseCircleFilled, StepBackwardFilled, StepForwardFilled, UnorderedListOutlined, FileTextOutlined } from '@ant-design/icons';
 import { usePlayer } from '../hooks/usePlayer';
-import { useState } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -11,6 +11,22 @@ const fmt = (s: number) => dayjs.duration((s || 0) * 1000).format('mm:ss');
 export default function PlayerBar() {
   const player = usePlayer();
   const [seek, setSeek] = useState<number | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const lyricBoxRef = useRef<HTMLDivElement>(null);
+
+  const activeLyric = useMemo(() => {
+    let idx = -1;
+    player.lyrics.forEach((l, i) => { if (l.time <= player.currentTime + 0.3) idx = i; });
+    return idx;
+  }, [player.currentTime, player.lyrics, player.version]);
+
+  useEffect(() => {
+    const box = lyricBoxRef.current;
+    if (!box) return;
+    const el = box.children[activeLyric] as HTMLElement | undefined;
+    if (el) box.scrollTo({ top: el.offsetTop - box.clientHeight / 2 + el.clientHeight / 2, behavior: 'smooth' });
+  }, [activeLyric, drawerOpen]);
+
   if (!player.current) return null;
   const cur = seek ?? player.currentTime;
   const max = player.duration || player.current.duration || 0;
@@ -31,6 +47,10 @@ export default function PlayerBar() {
       </Tooltip>
       <StepBackwardFilled className="text-xl text-white cursor-pointer" onClick={() => player.prev()} />
       <StepForwardFilled className="text-xl text-white cursor-pointer" onClick={() => player.next()} />
+      <FileTextOutlined className="text-lg cursor-pointer" style={{ color: '#c7c7cc' }}
+                        title="歌词" onClick={() => setDrawerOpen(true)} />
+      <UnorderedListOutlined className="text-lg cursor-pointer" style={{ color: '#c7c7cc' }}
+                             title="播放列表" onClick={() => setDrawerOpen(true)} />
       <span className="text-xs text-np-sub w-10 text-right">{fmt(cur)}</span>
       <Slider className="flex-1" min={0} max={max || 100}
               value={cur} onChange={(v: number) => setSeek(v)}
@@ -38,6 +58,46 @@ export default function PlayerBar() {
               tooltip={{ open: false }} />
       <span className="text-xs text-np-sub w-10">{fmt(max)}</span>
       {player.unavailable && <span className="text-xs text-yellow-500">该歌曲暂无版权</span>}
+
+      <Drawer title={`${player.current.name} - ${player.current.artist}`} placement="right" width={420}
+              open={drawerOpen} onClose={() => setDrawerOpen(false)} styles={{ body: { padding: 0 } }}>
+        <Tabs
+          items={[
+            {
+              key: 'lyrics', label: '歌词',
+              children: (
+                <div ref={lyricBoxRef} className="h-[70vh] overflow-y-auto text-center py-6" style={{ scrollbarWidth: 'thin' }}>
+                  {player.lyrics.length ? player.lyrics.map((l, i) => (
+                    <p key={i} onClick={() => player.seekPlay(l.time)}
+                       className={`leading-9 cursor-pointer transition-all ${i === activeLyric ? 'text-white font-bold text-base' : 'text-np-sub'}`}>
+                      {l.text || '♪'}
+                    </p>
+                  )) : <p className="text-np-sub">纯音乐 / 暂无歌词</p>}
+                </div>
+              ),
+            },
+            {
+              key: 'queue', label: `播放列表(${player.list.length})`,
+              children: (
+                <div className="h-[70vh] overflow-y-auto">
+                  {player.list.map((q, i) => (
+                    <div key={q.id + '-' + i}
+                         className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg ${q.id === player.current?.id ? 'bg-netease-red/10' : 'hover:bg-white/5'}`}
+                         onClick={() => player.playIndex(i)}>
+                      <span className="w-6 font-serif text-np-sub">{i + 1}</span>
+                      <img src={q.cover} className="w-9 h-9 rounded object-cover" alt="" />
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-sm truncate ${q.id === player.current?.id ? 'text-netease-red font-bold' : 'text-white'}`}>{q.name}</div>
+                        <div className="text-xs text-np-sub truncate">{q.artist}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ),
+            },
+          ]}
+        />
+      </Drawer>
     </div>
   );
 }

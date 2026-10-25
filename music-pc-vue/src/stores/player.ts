@@ -108,5 +108,11 @@ export const usePlayerStore = defineStore('player', {
       const a = this.audio();
       if (this.url) a.currentTime = t;
     },
+    /** 跳转到指定时间并继续播放（点歌词用） */
+    seekPlay(t: number) {
+      this.seek(t);
+      const a = this.audio();
+      if (this.url && a.paused) a.play().catch(() => {});
+    },
   },
 });

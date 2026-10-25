@@ -16,6 +16,7 @@ export default function MiniPlayer() {
         <div className="text-[13px] truncate">{player.current.name}</div>
         <div className="text-[10px] text-netease-sub truncate">{player.current.artist}</div>
       </div>
+      <span className="text-lg text-netease-red px-0.5" onClick={e => { e.stopPropagation(); player.prev(); }}>⏮</span>
       <span className="text-xl text-netease-red px-1" onClick={e => { e.stopPropagation(); player.toggle(); }}>
         {player.playing ? '⏸' : '▶'}
       </span>

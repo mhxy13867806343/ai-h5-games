@@ -7,7 +7,8 @@
     <div class="song-artist">{{ player.current.artist }}</div>
 
     <div class="lyrics" ref="lyricBox">
-      <p v-for="(l, i) in player.lyrics" :key="i" :class="{ on: i === activeLyric }" :ref="el => setLyricRef(el as HTMLElement, i)">{{ l.text || '♪' }}</p>
+      <p v-for="(l, i) in player.lyrics" :key="i" :class="{ on: i === activeLyric }" :ref="el => setLyricRef(el as HTMLElement, i)"
+           @click="player.seekPlay(l.time)">{{ l.text || '♪' }}</p>
       <p v-if="!player.lyrics.length" class="on">纯音乐 / 暂无歌词</p>
     </div>
 
@@ -24,7 +25,26 @@
       <span class="ctrl" @click="player.prev()">⏮</span>
       <span class="ctrl main" @click="player.toggle()">{{ player.playing ? '⏸' : '▶' }}</span>
       <span class="ctrl" @click="player.next()">⏭</span>
+      <span class="ctrl list" @click="showQueue = true">☰<i>{{ player.list.length }}</i></span>
     </div>
+
+    <!-- 播放列表弹窗（App 同款底部弹层） -->
+    <van-popup v-model:show="showQueue" position="bottom" round style="max-height: 62vh">
+      <div class="queue">
+        <div class="queue-head">
+          <b>当前播放</b><span>{{ player.list.length }} 首</span>
+        </div>
+        <div class="queue-body">
+          <div v-for="(q, i) in player.list" :key="q.id + '-' + i"
+               class="queue-row" :class="{ on: q.id === player.current?.id }"
+               @click="player.playIndex(i); showQueue = false">
+            <span class="q-idx">{{ i + 1 }}</span>
+            <span class="q-name">{{ q.name }}</span>
+            <span class="q-artist">{{ q.artist }}</span>
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
   <div v-else class="page" style="display:grid;place-items:center">
     <van-empty description="还没有播放的歌曲，去首页挑一首吧" />
@@ -39,6 +59,7 @@ import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 const player = usePlayerStore();
+const showQueue = ref(false);
 const progress = ref(0);
 const lyricBox = ref<HTMLElement>();
 const lyricEls: HTMLElement[] = [];
@@ -86,4 +107,19 @@ onBeforeUnmount(() => { lyricEls.length = 0; });
 .ctrl { font-size: 30px; }
 .ctrl.main { width: 66px; height: 66px; border-radius: 50%; background: #ff3a3a; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 26px rgba(255,58,58,.4); }
 .load { margin-top: 10px; }
+.ctrl.list { position: relative; font-size: 26px; }
+.ctrl.list i { position: absolute; top: -4px; right: -10px; font-style: normal; font-size: 10px; color: #ff3a3a; }
+.lyrics p.on { cursor: pointer; }
+.lyrics p { cursor: pointer; }
+.queue { padding: 6px 0 10px; }
+.queue-head { display: flex; align-items: baseline; gap: 8px; padding: 10px 18px; border-bottom: 1px solid #2a2a2e; }
+.queue-head b { color: #f5f5f7; font-size: 15px; }
+.queue-head span { font-size: 11px; color: #8e8e93; }
+.queue-body { max-height: 46vh; overflow-y: auto; }
+.queue-row { display: flex; align-items: center; gap: 10px; padding: 11px 18px; font-size: 13px; }
+.queue-row.on { background: rgba(255,58,58,.1); }
+.queue-row.on .q-name { color: #ff3a3a; font-weight: 700; }
+.queue-row .q-idx { width: 22px; color: #6b6b70; font-family: Georgia, serif; }
+.queue-row .q-name { color: #f5f5f7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
+.queue-row .q-artist { color: #8e8e93; font-size: 11px; flex: 1; text-align: right; }
 </style>

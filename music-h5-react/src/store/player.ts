@@ -98,6 +98,12 @@ class PlayerCore {
   next() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i + 1) % this.list.length); } }
   prev() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i - 1 + this.list.length) % this.list.length); } }
   seek(t: number) { const a = this.ensureAudio(); if (this.url) a.currentTime = t; }
+  /** 跳转到指定时间并继续播放（点歌词用） */
+  seekPlay(t: number) {
+    this.seek(t);
+    const a = this.ensureAudio();
+    if (this.url && a.paused) a.play();
+  }
 }
 
 function parseLrc(lrc: string): LyricLine[] {
