@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>AI 资源导航 · 资讯 / 工具 / 充值 / 音效</title>
+<meta name="description" content="AI 资源导航：AI 资讯、AI 工具、AI 充值订阅、音效素材站点收录。数据驱动——编辑 data.json 即可增删改条目，页面自动更新。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1020'/%3E%3Cpath d='M8 22l4-10 4 10m-6.5-4h5M19 12h6m-6 0v10m0-10c4 0 6 2 6 5s-2 5-6 5' fill='none' stroke='%237aa2ff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1 id="site-title">AI 资源导航</h1>
+    <p id="site-subtitle">…</p>
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="搜索名称 / 描述 / 标签…" autocomplete="off" aria-label="搜索">
+      <span class="search-icon">🔍</span>
+    </div>
+    <p class="hint">数据驱动：增删改 <code>data.json</code>，页面自动更新 · 编辑后刷新即可</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="cat-tabs" id="cat-tabs" aria-label="分类筛选"></nav>
+  <div class="count-line" id="count-line" role="status" aria-live="polite"></div>
+  <div id="content"></div>
+</main>
+
+<footer class="footer" id="footer"></footer>
+
+<!-- file:// 直开时的兜底数据（与 data.json 同内容） -->
+<script src="data-fallback.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

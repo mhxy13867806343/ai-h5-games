@@ -32,6 +32,7 @@
 | 22 | **Codex Resets** (额度重置追踪) | `codex-resets` | codex-resets.com 复刻 · 66 次公告/网格图 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/codex-resets/) |
 | 23 | **云音乐四端** (Music ×4) | `music` | Vue/React H5 + uniapp/Taro 小程序 · 免登录接口 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/music/) |
 | 24 | **云音乐 PC 双端** (Music PC ×2) | `music-pc` | React+antd / Vue+Element Plus 桌面版 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/music-pc-react/) |
+| 25 | **AI 资源导航** (AI Nav) | `ai-nav` | 数据驱动导航站 · JSON 增删改即生效 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/ai-nav/) |
 
 ---
 
