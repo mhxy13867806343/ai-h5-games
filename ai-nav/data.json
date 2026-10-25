@@ -120,6 +120,16 @@
             "充值",
             "订阅"
           ]
+        },
+        {
+          "name": "Zyu.io 第三方充值",
+          "url": "https://zyu.io/",
+          "desc": "第三方 AI 会员/虚拟商品商店：Gemini 会员、Muse 词元、Duolingo、TG、X、Prime Video 等兑换商品",
+          "tags": [
+            "第三方",
+            "兑换码",
+            "多平台"
+          ]
         }
       ]
     },
