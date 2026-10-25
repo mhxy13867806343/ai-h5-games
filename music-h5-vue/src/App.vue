@@ -10,6 +10,8 @@
     <van-tabbar route safe-area-inset-bottom>
       <van-tabbar-item replace to="/"><span class="tab-ico">🎵</span>首页</van-tabbar-item>
       <van-tabbar-item replace to="/rank"><span class="tab-ico">🏆</span>排行榜</van-tabbar-item>
+      <van-tabbar-item replace to="/artists"><span class="tab-ico">🎤</span>歌手</van-tabbar-item>
+      <van-tabbar-item replace to="/mv"><span class="tab-ico">🎬</span>MV</van-tabbar-item>
       <van-tabbar-item replace to="/search"><span class="tab-ico">🔍</span>搜索</van-tabbar-item>
     </van-tabbar>
   </div>

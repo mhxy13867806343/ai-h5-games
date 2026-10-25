@@ -2,6 +2,8 @@ import { Slider, Tooltip, Drawer, Tabs } from 'antd';
 import { PlayCircleFilled, PauseCircleFilled, StepBackwardFilled, StepForwardFilled, UnorderedListOutlined, FileTextOutlined } from '@ant-design/icons';
 import { usePlayer } from '../hooks/usePlayer';
 import { useMemo, useRef, useEffect, useState } from 'react';
+import { message } from 'antd';
+import { api2 } from '../api';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -12,6 +14,8 @@ export default function PlayerBar() {
   const player = usePlayer();
   const [seek, setSeek] = useState<number | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [comments, setComments] = useState<any[]>([]);
+  const [hotComments, setHotComments] = useState<any[]>([]);
   const lyricBoxRef = useRef<HTMLDivElement>(null);
 
   const activeLyric = useMemo(() => {
@@ -19,6 +23,14 @@ export default function PlayerBar() {
     player.lyrics.forEach((l, i) => { if (l.time <= player.currentTime + 0.3) idx = i; });
     return idx;
   }, [player.currentTime, player.lyrics, player.version]);
+
+  useEffect(() => {
+    if (!player.current) return;
+    const id = player.current.id;
+    setComments([]); setHotComments([]);
+    api2.commentMusic(id, 20).then(r => setComments(r.comments || [])).catch(() => {});
+    api2.commentHot(id).then(r => setHotComments(r.hotComments || [])).catch(() => {});
+  }, [player.current?.id]);
 
   useEffect(() => {
     const box = lyricBoxRef.current;
@@ -63,6 +75,32 @@ export default function PlayerBar() {
               open={drawerOpen} onClose={() => setDrawerOpen(false)} styles={{ body: { padding: 0 } }}>
         <Tabs
           items={[
+            {
+              key: 'comments', label: '评论', children: (
+                <div className="h-[70vh] overflow-y-auto">
+                  <b className="text-white block mb-2">热门评论</b>
+                  {hotComments.map(c => (
+                    <div key={c.commentId} className="flex gap-2.5 py-2 border-b border-white/5">
+                      <img src={c.user?.avatarUrl} className="w-8 h-8 rounded-full object-cover shrink-0" alt="" />
+                      <div className="min-w-0">
+                        <div className="text-xs text-np-sub">{c.user?.nickname} <span className="text-np-red ml-2">♥ {c.likedCount}</span></div>
+                        <div className="text-sm text-[#d8d8dc] leading-relaxed">{c.content}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <b className="text-white block mt-4 mb-2">最新评论</b>
+                  {comments.map(c => (
+                    <div key={c.commentId} className="flex gap-2.5 py-2 border-b border-white/5">
+                      <img src={c.user?.avatarUrl} className="w-8 h-8 rounded-full object-cover shrink-0" alt="" />
+                      <div className="min-w-0">
+                        <div className="text-xs text-np-sub">{c.user?.nickname} <span className="text-np-red ml-2">♥ {c.likedCount}</span></div>
+                        <div className="text-sm text-[#d8d8dc] leading-relaxed">{c.content}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ),
+            },
             {
               key: 'lyrics', label: '歌词',
               children: (

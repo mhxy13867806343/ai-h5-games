@@ -2,6 +2,7 @@ import { useMemo, useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Slider, NoticeBar, DotLoading, Empty, Popup } from 'antd-mobile';
 import { usePlayer } from '../hooks/usePlayer';
+import { api2 } from '../api';
 import dayjs from 'dayjs';
 import dur from 'dayjs/plugin/duration';
 dayjs.extend(dur);
@@ -11,6 +12,16 @@ const fmt = (s: number) => dayjs.duration((s || 0) * 1000).format('mm:ss');
 export default function Player() {
   const player = usePlayer();
   const nav = useNavigate();
+  const [comments, setComments] = useState<any[]>([]);
+  const [hotComments, setHotComments] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!player.current) return;
+    const id = player.current.id;
+    setComments([]); setHotComments([]);
+    api2.commentMusic(id, 20).then(r => setComments(r.comments || [])).catch(() => {});
+    api2.commentHot(id).then(r => setHotComments(r.hotComments || [])).catch(() => {});
+  }, [player.current?.id]);
   const [queueOpen, setQueueOpen] = useState(false);
   const lyricBoxRef = useRef<HTMLDivElement>(null);
 
@@ -71,6 +82,33 @@ export default function Player() {
         </div>
         <span>{fmt(player.duration || player.current.duration)}</span>
       </div>
+
+      {player.lyrics.length === 0 && player.loadingUrl && <DotLoading color="primary" />}
+
+      {(hotComments.length > 0 || comments.length > 0) && (
+        <div className="w-full text-left mt-5">
+          <div className="text-sm font-bold text-white mb-2">热门评论</div>
+          {hotComments.slice(0, 5).map(c => (
+            <div key={c.commentId} className="flex gap-2.5 py-2 border-b border-white/5">
+              <img src={c.user?.avatarUrl} className="w-7 h-7 rounded-full object-cover shrink-0" alt="" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-netease-sub">{c.user?.nickname} <span className="text-netease-red ml-2">♥ {c.likedCount}</span></div>
+                <div className="text-[13px] text-[#d8d8dc] leading-relaxed">{c.content}</div>
+              </div>
+            </div>
+          ))}
+          <div className="text-sm font-bold text-white mb-2 mt-4">最新评论</div>
+          {comments.slice(0, 10).map(c => (
+            <div key={c.commentId} className="flex gap-2.5 py-2 border-b border-white/5">
+              <img src={c.user?.avatarUrl} className="w-7 h-7 rounded-full object-cover shrink-0" alt="" />
+              <div className="min-w-0">
+                <div className="text-[11px] text-netease-sub">{c.user?.nickname} <span className="text-netease-red ml-2">♥ {c.likedCount}</span></div>
+                <div className="text-[13px] text-[#d8d8dc] leading-relaxed">{c.content}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="flex items-center gap-9 mt-6">
         <span className="text-3xl" onClick={() => player.prev()}>⏮</span>

@@ -32,6 +32,27 @@
             <p v-if="!player.lyrics.length" class="lyric-line on">纯音乐 / 暂无歌词</p>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="评论">
+          <div class="h-[72vh] overflow-y-auto">
+            <b class="text-white block mb-2">热门评论</b>
+            <div v-for="c in hotComments" :key="c.commentId" class="flex gap-2.5 py-2 border-b border-white/5">
+              <img :src="c.user?.avatarUrl" class="w-8 h-8 rounded-full object-cover shrink-0" alt="" />
+              <div class="min-w-0">
+                <div class="text-xs text-np-sub">{{ c.user?.nickname }} <span class="text-np-red ml-2">♥ {{ c.likedCount }}</span></div>
+                <div class="text-sm text-[#d8d8dc] leading-relaxed">{{ c.content }}</div>
+              </div>
+            </div>
+            <b class="text-white block mt-4 mb-2">最新评论</b>
+            <div v-for="c in comments" :key="c.commentId" class="flex gap-2.5 py-2 border-b border-white/5">
+              <img :src="c.user?.avatarUrl" class="w-8 h-8 rounded-full object-cover shrink-0" alt="" />
+              <div class="min-w-0">
+                <div class="text-xs text-np-sub">{{ c.user?.nickname }} <span class="text-np-red ml-2">♥ {{ c.likedCount }}</span></div>
+                <div class="text-sm text-[#d8d8dc] leading-relaxed">{{ c.content }}</div>
+              </div>
+            </div>
+            <el-empty v-if="!comments.length && !hotComments.length" description="暂无评论" />
+          </div>
+        </el-tab-pane>
         <el-tab-pane :label="`播放列表(${player.list.length})`">
           <div class="h-[72vh] overflow-y-auto">
             <div v-for="(q, i) in player.list" :key="q.id + '-' + i"
@@ -54,6 +75,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import { api2 } from '../api';
 import { usePlayerStore } from '../stores/player';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -65,6 +87,15 @@ const drawerOpen = ref(false);
 const lyricBoxRef = ref<HTMLElement>();
 const cur = computed(() => seek.value ?? player.currentTime);
 const fmt = (s: number) => dayjs.duration((s || 0) * 1000).format('mm:ss');
+
+const comments = ref<any[]>([]);
+const hotComments = ref<any[]>([]);
+watch(() => player.current?.id, id => {
+  if (!id) return;
+  comments.value = []; hotComments.value = [];
+  api2.commentMusic(id, 20).then(r => comments.value = r.comments || []).catch(() => {});
+  api2.commentHot(id).then(r => hotComments.value = r.hotComments || []).catch(() => {});
+});
 
 const activeLyric = computed(() => {
   let idx = -1;

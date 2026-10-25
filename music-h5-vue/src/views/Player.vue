@@ -21,6 +21,19 @@
       <span>{{ fmt(player.duration || player.current.duration) }}</span>
     </div>
 
+    <div class="comments" v-if="hotComments.length || comments.length">
+      <div class="c-title">热门评论</div>
+      <div v-for="c in hotComments.slice(0, 5)" :key="c.commentId" class="c-row">
+        <img :src="c.user?.avatarUrl" class="c-avatar" alt="" />
+        <div><div class="c-head">{{ c.user?.nickname }} <span class="c-like">♥ {{ c.likedCount }}</span></div><div class="c-text">{{ c.content }}</div></div>
+      </div>
+      <div class="c-title">最新评论</div>
+      <div v-for="c in comments.slice(0, 10)" :key="c.commentId" class="c-row">
+        <img :src="c.user?.avatarUrl" class="c-avatar" alt="" />
+        <div><div class="c-head">{{ c.user?.nickname }} <span class="c-like">♥ {{ c.likedCount }}</span></div><div class="c-text">{{ c.content }}</div></div>
+      </div>
+    </div>
+
     <div class="controls">
       <span class="ctrl" @click="player.prev()">⏮</span>
       <span class="ctrl main" @click="player.toggle()">{{ player.playing ? '⏸' : '▶' }}</span>
@@ -54,12 +67,15 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { usePlayerStore } from '../stores/player';
+import { api2 } from '../api';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 const player = usePlayerStore();
 const showQueue = ref(false);
+const comments = ref<any[]>([]);
+const hotComments = ref<any[]>([]);
 const progress = ref(0);
 const lyricBox = ref<HTMLElement>();
 const lyricEls: HTMLElement[] = [];
@@ -72,6 +88,13 @@ const activeLyric = computed(() => {
   let idx = -1;
   player.lyrics.forEach((l, i) => { if (l.time <= t + 0.3) idx = i; });
   return idx;
+});
+
+watch(() => player.current?.id, id => {
+  if (!id) return;
+  comments.value = []; hotComments.value = [];
+  api2.commentMusic(id, 20).then(r => comments.value = r.comments || []).catch(() => {});
+  api2.commentHot(id).then(r => hotComments.value = r.hotComments || []).catch(() => {});
 });
 
 watch(() => player.currentTime, t => {
@@ -122,4 +145,13 @@ onBeforeUnmount(() => { lyricEls.length = 0; });
 .queue-row .q-idx { width: 22px; color: #6b6b70; font-family: Georgia, serif; }
 .queue-row .q-name { color: #f5f5f7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
 .queue-row .q-artist { color: #8e8e93; font-size: 11px; flex: 1; text-align: right; }
+
+<style scoped>
+.comments { width: 100%; margin-top: 18px; text-align: left; }
+.c-title { font-size: 13px; font-weight: 700; color: #f5f5f7; margin: 12px 0 8px; }
+.c-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #2a2a2e; }
+.c-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.c-head { font-size: 11px; color: #8e8e93; }
+.c-like { color: #ff3a3a; margin-left: 8px; }
+.c-text { font-size: 13px; color: #d8d8dc; line-height: 1.6; margin-top: 2px; }
 </style>

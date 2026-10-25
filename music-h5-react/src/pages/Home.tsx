@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavBar } from 'antd-mobile';
-import { api, songArtists, songDuration, songCover, type Song } from '../api';
+import { api, api2, songArtists, songDuration, songCover, type Song } from '../api';
 import { usePlayer } from '../hooks/usePlayer';
 import dayjs from 'dayjs';
 import dur from 'dayjs/plugin/duration';
@@ -14,6 +14,7 @@ export default function Home() {
   const nav = useNavigate();
   const player = usePlayer();
   const [banners, setBanners] = useState<{ pic: string }[]>([]);
+  const [balls, setBalls] = useState<{ iconUrl: string; name: string }[]>([]);
   const [playlists, setPlaylists] = useState<any[]>([]);
   const [newSongs, setNewSongs] = useState<Song[]>([]);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -34,6 +35,7 @@ export default function Home() {
     (async () => {
       const [b, p, n] = await Promise.allSettled([api.banner(), api.topPlaylist(12), api.newSongs()]);
       if (b.status === 'fulfilled') setBanners(b.value.banners.map((x: any) => ({ pic: x.pic || x.imageUrl || x.bigImageUrl || '' })).slice(0, 6));
+      api2.dragonBall().then(r => setBalls((r.data || []).slice(0, 5))).catch(() => {});
       if (p.status === 'fulfilled') setPlaylists(p.value.playlists);
       if (n.status === 'fulfilled') setNewSongs(n.value.data);
     })();
@@ -57,6 +59,22 @@ export default function Home() {
           ))}
         </div>
       </div>
+
+      <div className="flex gap-2.5 px-3 mt-4">
+        <button className="flex-1 py-2 rounded-xl bg-netease-card text-xs" onClick={() => nav('/recommend')}>🔥 推荐</button>
+        <button className="flex-1 py-2 rounded-xl bg-netease-card text-xs" onClick={() => nav('/playlist-cat')}>📂 歌单分类</button>
+      </div>
+
+      {balls.length > 0 && (
+        <div className="flex gap-4 px-4 mt-4">
+          {balls.map(b => (
+            <div key={b.name} className="flex-1 text-center">
+              <img src={b.iconUrl} className="w-12 h-12 rounded-full object-cover bg-netease-card mx-auto" alt="" />
+              <div className="text-[10px] text-netease-sub mt-1">{b.name}</div>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="sec-title">热门歌单</div>
       <div className="flex gap-3 overflow-x-auto px-3">

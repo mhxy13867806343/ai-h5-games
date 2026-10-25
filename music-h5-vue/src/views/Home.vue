@@ -7,6 +7,17 @@
       </van-swipe-item>
     </van-swipe>
 
+    <div class="quick-row">
+      <router-link to="/recommend" class="quick-btn">🔥 推荐</router-link>
+      <router-link to="/playlist-cat" class="quick-btn">📂 歌单分类</router-link>
+    </div>
+
+    <div class="ball-row" v-if="dragonBalls.length">
+      <div v-for="d in dragonBalls" :key="d.name" class="ball">
+        <img :src="d.iconUrl" alt="" /><span>{{ d.name }}</span>
+      </div>
+    </div>
+
     <div class="section-title">热门歌单 <router-link to="/rank">更多榜单 →</router-link></div>
     <div class="pl-scroll">
       <div v-for="p in playlists" :key="p.id" class="pl-card" @click="$router.push(`/playlist/${p.id}`)">
@@ -38,7 +49,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { api, songArtists, songDuration, songCover, type Song } from '../api';
+import { api, api2, songArtists, songDuration, songCover, type Song } from '../api';
 import { usePlayerStore } from '../stores/player';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -47,6 +58,7 @@ dayjs.extend(duration);
 defineOptions({ name: 'HomePage' });
 
 const banners = ref<{ pic: string }[]>([]);
+const dragonBalls = ref<{ iconUrl: string; name: string }[]>([]);
 const playlists = ref<any[]>([]);
 const newSongs = ref<Song[]>([]);
 const loading = ref(true);
@@ -65,6 +77,7 @@ async function playNewSong(s: Song) {
 onMounted(async () => {
   const [b, p, n] = await Promise.allSettled([api.banner(), api.topPlaylist(12), api.newSongs()]);
   if (b.status === 'fulfilled') banners.value = b.value.banners.map((x: any) => ({ pic: x.pic || x.imageUrl || x.bigImageUrl || '' })).slice(0, 6);
+  api2.dragonBall().then(r => dragonBalls.value = (r.data || []).slice(0, 5)).catch(() => {});
   if (p.status === 'fulfilled') playlists.value = p.value.playlists;
   if (n.status === 'fulfilled') newSongs.value = n.value.data;
   loading.value = false;
@@ -85,4 +98,12 @@ onMounted(async () => {
 .play-btn { color: #ff3a3a; font-size: 16px; }
 :deep(.van-cell) { background: transparent; }
 :deep(.van-cell__title) { flex: 1; }
+
+<style scoped>
+.quick-row { display: flex; gap: 10px; padding: 0 12px; margin-bottom: 4px; }
+.quick-btn { flex: 1; text-align: center; padding: 9px 0; background: #2a2a2e; border-radius: 10px; font-size: 12px; color: #f5f5f7; text-decoration: none; }
+.ball-row { display: flex; gap: 14px; padding: 10px 14px 0; }
+.ball { flex: 1; text-align: center; }
+.ball img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #2a2a2e; }
+.ball span { font-size: 10px; color: #8e8e93; display: block; margin-top: 4px; }
 </style>

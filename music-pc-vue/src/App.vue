@@ -9,6 +9,10 @@
       <el-menu :default-active="route.path" router background-color="transparent" text-color="#9db4c4" active-text-color="#e8464f">
         <el-menu-item index="/"><span>🏠 发现音乐</span></el-menu-item>
         <el-menu-item index="/rank"><span>🔥 排行榜</span></el-menu-item>
+        <el-menu-item index="/artists"><span>🎤 歌手</span></el-menu-item>
+        <el-menu-item index="/mv"><span>🎬 MV</span></el-menu-item>
+        <el-menu-item index="/recommend"><span>🔥 推荐</span></el-menu-item>
+        <el-menu-item index="/playlist-cat"><span>📂 歌单分类</span></el-menu-item>
         <el-menu-item index="/search"><span>🔍 搜索音乐</span></el-menu-item>
       </el-menu>
       <div class="foot-note">免登录接口 · musicapi.cn</div>
