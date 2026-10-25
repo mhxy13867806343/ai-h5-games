@@ -33,7 +33,7 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const [b, p, n] = await Promise.allSettled([api.banner(), api.topPlaylist(12), api.newSongs()]);
-      if (b.status === 'fulfilled') setBanners(b.value.banners.slice(0, 6));
+      if (b.status === 'fulfilled') setBanners(b.value.banners.map((x: any) => ({ pic: x.pic || x.imageUrl || x.bigImageUrl || '' })).slice(0, 6));
       if (p.status === 'fulfilled') setPlaylists(p.value.playlists);
       if (n.status === 'fulfilled') setNewSongs(n.value.data);
     })();

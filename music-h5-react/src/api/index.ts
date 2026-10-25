@@ -23,7 +23,7 @@ async function fetchJson(base: string, path: string, qs: string): Promise<any> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 12000);
   try {
-    const res = await fetch(`${base}/${path}${qs}`, { signal: ctrl.signal });
+    const res = await fetch(`${base}/${path}${qs ? '?' + qs : ''}`, { signal: ctrl.signal });
     const text = await res.text();
     if (!res.ok || text.startsWith('<')) throw new Error(`bad response ${res.status}`);
     return JSON.parse(text);

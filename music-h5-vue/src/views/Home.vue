@@ -64,7 +64,7 @@ async function playNewSong(s: Song) {
 
 onMounted(async () => {
   const [b, p, n] = await Promise.allSettled([api.banner(), api.topPlaylist(12), api.newSongs()]);
-  if (b.status === 'fulfilled') banners.value = b.value.banners.slice(0, 6);
+  if (b.status === 'fulfilled') banners.value = b.value.banners.map((x: any) => ({ pic: x.pic || x.imageUrl || x.bigImageUrl || '' })).slice(0, 6);
   if (p.status === 'fulfilled') playlists.value = p.value.playlists;
   if (n.status === 'fulfilled') newSongs.value = n.value.data;
   loading.value = false;
