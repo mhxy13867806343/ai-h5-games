@@ -1,0 +1,1 @@
+const r=t=>{const o=Math.floor((t||0)/1e3),a=Math.floor(o/60),e=o%60;return`${String(a).padStart(2,"0")}:${String(e).padStart(2,"0")}`},s=t=>t==null?"":t>=1e8?(t/1e8).toFixed(1)+"亿":t>=1e4?(t/1e4).toFixed(1)+"万":String(t);export{r as a,s as f};

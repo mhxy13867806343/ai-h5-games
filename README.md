@@ -31,6 +31,7 @@
 | 21 | **LPL ARENA** (赛事数据中心) | `lpl-arena` | lpl.qq.com 复刻 · 赛程/积分榜/战队 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/lpl-arena/) |
 | 22 | **Codex Resets** (额度重置追踪) | `codex-resets` | codex-resets.com 复刻 · 66 次公告/网格图 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/codex-resets/) |
 | 23 | **云音乐四端** (Music ×4) | `music` | Vue/React H5 + uniapp/Taro 小程序 · 免登录接口 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/music/) |
+| 24 | **云音乐 PC 双端** (Music PC ×2) | `music-pc` | React+antd / Vue+Element Plus 桌面版 | [在线查看](https://mhxy13867806343.github.io/ai-h5-games/music-pc-react/) |
 
 ---
 
