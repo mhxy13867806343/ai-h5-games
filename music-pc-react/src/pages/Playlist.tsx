@@ -49,7 +49,7 @@ export default function PlaylistPage() {
                   <b className="text-white">{v}</b>
                 </span>) },
             { title: '歌手', key: 'ar', render: (_: any, r: Song) => songArtists(r) },
-            { title: '专辑', key: 'al', render: (_: any, r: Song) => r.al?.name || '-', ellipsis: true },
+            { title: '专辑', key: 'al', render: (_: any, r: Song) => r.al?.name || r.album?.name || '-', ellipsis: true },
             { title: '时长', key: 'dt', width: 90, render: (_: any, r: Song) => dayjs.duration(songDuration(r)).format('mm:ss') },
           ]}
         />

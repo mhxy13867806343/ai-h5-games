@@ -13,7 +13,7 @@
       </div>
     </div>
     <el-table v-else :data="results" size="small" style="width: 100%; background: transparent"
-              @row-click="(r: any, _c: any, i: number) => play(i)" :row-style="{ cursor: 'pointer' }">
+              @row-click="(r: any) => play(results.indexOf(r) === -1 ? 0 : results.indexOf(r))" :row-style="{ cursor: 'pointer' }">
       <el-table-column label="#" width="60">
         <template #default="{ $index }">{{ $index + 1 }}</template>
       </el-table-column>
@@ -24,10 +24,10 @@
         <template #default="{ row }">{{ songArtists(row) }}</template>
       </el-table-column>
       <el-table-column label="专辑" show-overflow-tooltip>
-        <template #default="{ row }">{{ row.al?.name || row.album?.name || '-' }}</template>
+        <template #default="{ row }">{{ albumName(row) }}</template>
       </el-table-column>
       <el-table-column label="时长" width="90">
-        <template #default="{ row }">{{ fmtTime(row.dt || row.duration) }}</template>
+        <template #default="{ row }">{{ fmtTime(songDuration(row)) }}</template>
       </el-table-column>
     </el-table>
     <el-empty v-if="searched && !results.length" description="没有找到相关歌曲" />
@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { api, songArtists, songDuration, songCover, type Song } from '../api';
+const albumName = (r: Song) => r.al?.name || r.album?.name || '-';
 import { usePlayerStore } from '../stores/player';
 import { fmtTime } from '../utils/format';
 

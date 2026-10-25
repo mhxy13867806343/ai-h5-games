@@ -13,3 +13,12 @@ app.use(createPinia());
 app.use(router);
 app.use(ElementPlus, { locale: zhCn });
 app.mount('#app');
+
+// 移动端/部分浏览器音频解锁
+window.addEventListener('pointerdown', () => {
+  try {
+    const a = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+    a.volume = 0;
+    a.play().then(() => a.pause()).catch(() => {});
+  } catch { /* ignore */ }
+}, { once: true });

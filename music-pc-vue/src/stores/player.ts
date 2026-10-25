@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ElMessage } from 'element-plus';
 import { api } from '../api';
 
 export interface LyricLine { time: number; text: string }
@@ -24,6 +25,7 @@ export const usePlayerStore = defineStore('player', {
     loadingUrl: false,
     unavailable: false,
     _audio: null as HTMLAudioElement | null,
+    skipCount: 0,
   }),
   actions: {
     audio() {
@@ -40,6 +42,7 @@ export const usePlayerStore = defineStore('player', {
     },
     async playList(songs: { id: number; name: string; artist: string; cover: string; duration: number }[], index = 0) {
       this.list = songs;
+      this.skipCount = 0;
       await this.playIndex(index);
     },
     async playIndex(i: number) {
@@ -63,10 +66,19 @@ export const usePlayerStore = defineStore('player', {
       this.loadingUrl = false;
       const a = this.audio();
       if (this.url) {
+        this.skipCount = 0;
         a.src = this.url;
-        a.play().catch(() => {});
+        a.play().catch(() => { this.unavailable = true; ElMessage.warning('播放被浏览器拦截，请再点一次'); });
       } else {
         a.pause();
+        this.skipCount += 1;
+        if (this.skipCount < this.list.length) {
+          ElMessage.warning(`《${song.name}》暂无版权，自动切下一首`);
+          this.next();
+        } else {
+          this.skipCount = 0;
+          ElMessage.warning('这个列表的歌都没版权，换个歌单试试');
+        }
       }
     },
     async playSong(song: { id: number; name: string; artist: string; cover: string; duration: number }) {
@@ -74,7 +86,10 @@ export const usePlayerStore = defineStore('player', {
     },
     toggle() {
       const a = this.audio();
-      if (!this.url) return;
+      if (!this.url) {
+        if (this.current) this.next();
+        return;
+      }
       if (a.paused) a.play().catch(() => {});
       else a.pause();
     },

@@ -1,4 +1,5 @@
 /** 轻量全局播放器（模块级单例 + 订阅） */
+import { message } from 'antd';
 export interface PlaySong { id: number; name: string; artist: string; cover: string; duration: number }
 export interface LyricLine { time: number; text: string }
 
@@ -15,6 +16,7 @@ class PlayerCore {
   loadingUrl = false;
   unavailable = false;
   audio: HTMLAudioElement | null = null;
+  skipCount = 0;
   version = 0;
   listeners = new Set<Listener>();
 
@@ -36,6 +38,7 @@ class PlayerCore {
 
   async playList(songs: PlaySong[], index = 0) {
     this.list = songs;
+    this.skipCount = 0;
     await this.playIndex(index);
   }
 
@@ -63,14 +66,33 @@ class PlayerCore {
     this.lyrics = lrcRes?.lrc?.lyric ? parseLrc(lrcRes.lrc.lyric) : [];
     this.loadingUrl = false;
     const a = this.ensureAudio();
-    if (this.url) { a.src = this.url; a.play().catch(() => {}); }
-    else a.pause();
+    if (this.url) {
+      this.skipCount = 0;
+      a.src = this.url;
+      a.play().catch(() => {
+        this.unavailable = true;
+        message.warning('播放被浏览器拦截，请再点一次');
+      });
+    } else {
+      a.pause();
+      this.skipCount += 1;
+      if (this.skipCount < this.list.length) {
+        message.warning(`《${song.name}》暂无版权，自动切下一首`);
+        this.next();
+      } else {
+        this.skipCount = 0;
+        message.warning('这个列表的歌都没版权，换个歌单试试');
+      }
+    }
     this.emit();
   }
 
   toggle() {
     const a = this.ensureAudio();
-    if (!this.url) return;
+    if (!this.url) {
+      if (this.current) this.next();
+      return;
+    }
     if (a.paused) a.play().catch(() => {}); else a.pause();
   }
   next() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i + 1) % this.list.length); } }

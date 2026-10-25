@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5184",
-    "build": "vite build && cp dist/index.html index.html && rm -rf assets && cp -R dist/assets assets",
+    "build": "vite build && mv dist/template.html dist/index.html && rm -rf assets && cp -R dist/assets assets && cp dist/index.html index.html",
     "preview": "vite preview"
   },
   "dependencies": {

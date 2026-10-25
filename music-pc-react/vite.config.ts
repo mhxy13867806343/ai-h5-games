@@ -5,4 +5,5 @@ import UnoCSS from 'unocss/vite';
 export default defineConfig({
   base: './',
   plugins: [react(), UnoCSS()],
+  build: { rollupOptions: { input: { main: 'template.html' } } },
 });

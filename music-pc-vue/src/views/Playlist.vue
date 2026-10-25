@@ -9,14 +9,14 @@
       </div>
     </div>
     <el-table v-loading="loading" :data="tracks" size="small" style="width: 100%; background: transparent"
-              @row-click="(r: any, _c: any, i: number) => play(i)" :row-style="{ cursor: 'pointer' }">
+              @row-click="(r: any) => play(tracks.indexOf(r) === -1 ? 0 : tracks.indexOf(r))" :row-style="{ cursor: 'pointer' }">
       <el-table-column label="#" width="60">
         <template #default="{ $index }">{{ $index + 1 }}</template>
       </el-table-column>
       <el-table-column label="歌曲">
         <template #default="{ row }">
           <div class="flex items-center gap-2">
-            <img :src="row.al?.picUrl" class="w-9 h-9 rounded" alt="" />
+            <img :src="songCover(row)" class="w-9 h-9 rounded" alt="" />
             <b class="text-white">{{ row.name }}</b>
           </div>
         </template>
@@ -25,10 +25,10 @@
         <template #default="{ row }">{{ songArtists(row) }}</template>
       </el-table-column>
       <el-table-column label="专辑" show-overflow-tooltip>
-        <template #default="{ row }">{{ row.al?.name || '-' }}</template>
+        <template #default="{ row }">{{ albumName(row) }}</template>
       </el-table-column>
       <el-table-column label="时长" width="90">
-        <template #default="{ row }">{{ fmtTime(row.dt) }}</template>
+        <template #default="{ row }">{{ fmtTime(songDuration(row)) }}</template>
       </el-table-column>
     </el-table>
     <el-empty v-if="!loading && !tracks.length" description="曲目暂不可用（接口限流或歌单过新）" />
@@ -39,6 +39,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { api, songArtists, songDuration, songCover, type Song, type Playlist } from '../api';
+const albumName = (r: Song) => r.al?.name || r.album?.name || '-';
 import { usePlayerStore } from '../stores/player';
 import { fmtTime } from '../utils/format';
 
