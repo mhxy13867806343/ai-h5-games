@@ -51,6 +51,16 @@
       "icon": "🛠️",
       "items": [
         {
+          "name": "DeepSeek",
+          "url": "https://www.deepseek.com/",
+          "desc": "深度求索官方助手，推理能力强、价格实惠",
+          "tags": [
+            "对话",
+            "推理",
+            "国产"
+          ]
+        },
+        {
           "name": "Devs.li",
           "url": "https://devs.li/",
           "desc": "开发者 AI 工具导航，编程/效率工具一站直达",
@@ -160,6 +170,31 @@
           "tags": [
             "社区",
             "CC授权"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code",
+      "name": "代码托管",
+      "icon": "🧑‍💻",
+      "items": [
+        {
+          "name": "GitHub",
+          "url": "https://github.com/",
+          "desc": "全球最大代码托管平台，AI 开源项目大本营",
+          "tags": [
+            "代码",
+            "开源"
+          ]
+        },
+        {
+          "name": "Gitee",
+          "url": "https://gitee.com/",
+          "desc": "国内代码托管平台（码云），访问快、私有库免费",
+          "tags": [
+            "代码",
+            "国内"
           ]
         }
       ]
