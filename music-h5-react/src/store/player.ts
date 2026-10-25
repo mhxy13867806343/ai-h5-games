@@ -4,9 +4,13 @@ export interface LyricLine { time: number; text: string }
 
 type Listener = () => void;
 
+const restoredQueue = (() => {
+  try { return JSON.parse(localStorage.getItem('react_music_queue') || '{}'); } catch { return { list: [], current: null }; }
+})();
+
 class PlayerCore {
-  current: PlaySong | null = null;
-  list: PlaySong[] = [];
+  current: PlaySong | null = (restoredQueue.current || null);
+  list: PlaySong[] = (restoredQueue.list || []);
   playing = false;
   currentTime = 0;
   duration = 0;
@@ -16,6 +20,9 @@ class PlayerCore {
   unavailable = false;
   audio: HTMLAudioElement | null = null;
   skipCount = 0;
+  savedLists: { name: string; songs: PlaySong[] }[] = (() => {
+    try { return JSON.parse(localStorage.getItem('react_saved_lists') || '[]'); } catch { return []; }
+  })();
   version = 0;
   listeners = new Set<Listener>();
 
@@ -60,6 +67,7 @@ class PlayerCore {
     ]);
     void api;
     if (this.current?.id !== song.id) return;
+    this.persist();
     this.url = urlRes?.data?.[0]?.url || '';
     this.unavailable = !this.url;
     this.lyrics = lrcRes?.lrc?.lyric ? parseLrc(lrcRes.lrc.lyric) : [];
@@ -90,7 +98,10 @@ class PlayerCore {
   toggle() {
     const a = this.ensureAudio();
     if (!this.url) {
-      if (this.current) this.next(); // 无版权：直接切下一首
+      if (this.current) {
+        const i = this.list.findIndex(x => x.id === this.current?.id);
+        this.playIndex(i === -1 ? 0 : i); // 恢复队列后重新取播放地址
+      }
       return;
     }
     if (a.paused) a.play().catch(() => {}); else a.pause();
@@ -98,6 +109,25 @@ class PlayerCore {
   next() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i + 1) % this.list.length); } }
   prev() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i - 1 + this.list.length) % this.list.length); } }
   seek(t: number) { const a = this.ensureAudio(); if (this.url) a.currentTime = t; }
+  persist() {
+    try { localStorage.setItem('react_music_queue', JSON.stringify({ list: this.list, current: this.current })); } catch { /* ignore */ }
+  }
+  saveQueueAs(name: string) {
+    if (!this.list.length || !name.trim()) return;
+    this.savedLists = [{ name: name.trim(), songs: [...this.list] }, ...this.savedLists].slice(0, 20);
+    localStorage.setItem('react_saved_lists', JSON.stringify(this.savedLists));
+
+    this.emit();
+  }
+  loadSavedList(name: string) {
+    const l = this.savedLists.find(x => x.name === name);
+    if (l) this.playList(l.songs.map(x => ({ ...x })), 0);
+  }
+  removeSavedList(name: string) {
+    this.savedLists = this.savedLists.filter(x => x.name !== name);
+    localStorage.setItem('react_saved_lists', JSON.stringify(this.savedLists));
+    this.emit();
+  }
   /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
   addList(songs: PlaySong[]) {
     const exist = new Set(this.list.map(s => s.id));

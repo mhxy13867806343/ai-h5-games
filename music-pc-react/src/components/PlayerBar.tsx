@@ -1,4 +1,4 @@
-import { Slider, Tooltip, Drawer, Tabs } from 'antd';
+import { Slider, Tooltip, Drawer, Tabs, Input, Button, Tag } from 'antd';
 import { PlayCircleFilled, PauseCircleFilled, StepBackwardFilled, StepForwardFilled, UnorderedListOutlined, FileTextOutlined } from '@ant-design/icons';
 import { usePlayer } from '../hooks/usePlayer';
 import { useMemo, useRef, useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ export default function PlayerBar() {
   const player = usePlayer();
   const [seek, setSeek] = useState<number | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [listName, setListName] = useState('');
   const [comments, setComments] = useState<any[]>([]);
   const [hotComments, setHotComments] = useState<any[]>([]);
   const lyricBoxRef = useRef<HTMLDivElement>(null);
@@ -118,6 +119,21 @@ export default function PlayerBar() {
               key: 'queue', label: `播放列表(${player.list.length})`,
               children: (
                 <div className="h-[70vh] overflow-y-auto">
+                <div className="flex items-center gap-2 mb-3">
+                  <Input size="small" value={listName} onChange={e => setListName(e.target.value)} placeholder="保存当前队列…" maxLength={10} style={{ flex: 1 }} />
+                  <Button size="small" type="primary" disabled={!listName.trim()}
+                          onClick={() => { player.saveQueueAs(listName); setListName(''); }}>保存</Button>
+                </div>
+                {player.savedLists.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {player.savedLists.map(l => (
+                      <Tag key={l.name} closable onClose={() => player.removeSavedList(l.name)}
+                           style={{ cursor: 'pointer' }} onClick={() => player.loadSavedList(l.name)}>
+                        {l.name}（{l.songs.length}）
+                      </Tag>
+                    ))}
+                  </div>
+                )}
                   {player.list.map((q, i) => (
                     <div key={q.id + '-' + i}
                          className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-lg ${q.id === player.current?.id ? 'bg-netease-red/10' : 'hover:bg-white/5'}`}

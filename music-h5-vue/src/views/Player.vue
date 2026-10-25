@@ -46,6 +46,13 @@
       <div class="queue">
         <div class="queue-head">
           <b>当前播放</b><span>{{ player.list.length }} 首</span>
+          <input v-model="listName" class="q-input" placeholder="保存为列表…" maxlength="10" />
+          <button class="q-save" :disabled="!listName.trim()" @click="player.saveQueueAs(listName); listName = ''">保存</button>
+        </div>
+        <div v-if="player.savedLists.length" class="saved-chips">
+          <span v-for="l in player.savedLists" :key="l.name" class="saved-chip" @click="player.loadSavedList(l.name); showQueue = false">
+            {{ l.name }}（{{ l.songs.length }}）<i @click.stop="player.removeSavedList(l.name)">×</i>
+          </span>
         </div>
         <div class="queue-body">
           <div v-for="(q, i) in player.list" :key="q.id + '-' + i"
@@ -74,6 +81,7 @@ dayjs.extend(duration);
 
 const player = usePlayerStore();
 const showQueue = ref(false);
+const listName = ref('');
 const comments = ref<any[]>([]);
 const hotComments = ref<any[]>([]);
 const progress = ref(0);
@@ -154,4 +162,13 @@ onBeforeUnmount(() => { lyricEls.length = 0; });
 .c-head { font-size: 11px; color: #8e8e93; }
 .c-like { color: #ff3a3a; margin-left: 8px; }
 .c-text { font-size: 13px; color: #d8d8dc; line-height: 1.6; margin-top: 2px; }
+</style>
+
+<style scoped>
+.q-input { flex: 1; min-width: 0; background: #2a2a2e; border: none; border-radius: 8px; padding: 6px 10px; color: #f5f5f7; font-size: 12px; outline: none; }
+.q-save { background: #ff3a3a; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; }
+.q-save:disabled { opacity: .4; }
+.saved-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 18px 0; }
+.saved-chip { font-size: 11px; color: #f5f5f7; background: #2a2a2e; border-radius: 12px; padding: 4px 10px; cursor: pointer; }
+.saved-chip i { font-style: normal; color: #8e8e93; margin-left: 4px; }
 </style>

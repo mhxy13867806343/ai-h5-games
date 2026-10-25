@@ -23,6 +23,7 @@ export default function Player() {
     api2.commentHot(id).then(r => setHotComments(r.hotComments || [])).catch(() => {});
   }, [player.current?.id]);
   const [queueOpen, setQueueOpen] = useState(false);
+  const [listName, setListName] = useState('');
   const lyricBoxRef = useRef<HTMLDivElement>(null);
 
   const activeLyric = useMemo(() => {
@@ -124,9 +125,25 @@ export default function Player() {
       {/* 播放列表弹窗（App 同款底部弹层） */}
       <Popup visible={queueOpen} onMaskClick={() => setQueueOpen(false)} bodyStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, maxHeight: '62vh', overflow: 'auto', background: '#1a1a20' }}>
         <div className="p-4">
-          <div className="flex items-baseline gap-2 border-b border-white/10 pb-2 mb-2">
+          <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-2">
             <b className="text-white">当前播放</b><span className="text-xs text-netease-sub">{player.list.length} 首</span>
+            <input value={listName} onChange={e => setListName(e.target.value)} placeholder="保存为列表…" maxLength={10}
+                   className="flex-1 min-w-0 bg-netease-card rounded-lg px-2.5 py-1.5 text-xs text-white outline-none" />
+            <button className="text-xs px-2.5 py-1.5 rounded-lg bg-netease-red text-white disabled:opacity-40"
+                    disabled={!listName.trim()}
+                    onClick={() => { player.saveQueueAs(listName); setListName(''); }}>保存</button>
           </div>
+          {player.savedLists.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {player.savedLists.map(l => (
+                <span key={l.name} className="text-[11px] bg-netease-card rounded-full px-2.5 py-1 cursor-pointer"
+                      onClick={() => { player.loadSavedList(l.name); setQueueOpen(false); }}>
+                  {l.name}（{l.songs.length}）
+                  <i className="not-italic text-netease-sub ml-1" onClick={e => { e.stopPropagation(); player.removeSavedList(l.name); }}>×</i>
+                </span>
+              ))}
+            </div>
+          )}
           {player.list.map((q, i) => (
             <div key={q.id + '-' + i}
                  className={`flex items-center gap-2.5 py-2.5 px-3 text-sm ${q.id === player.current?.id ? 'bg-netease-red/10' : ''}`}

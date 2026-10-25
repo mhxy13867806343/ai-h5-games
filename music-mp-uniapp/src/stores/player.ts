@@ -34,7 +34,7 @@ export interface PlayerState {
 }
 
 const state = reactive<PlayerState>({
-  queue: [],
+  queue: (() => { try { return JSON.parse(uni.getStorageSync('music_queue') || '[]'); } catch { return []; } })() as Song[],
   current: null,
   playing: false,
   playable: true,
@@ -156,6 +156,10 @@ function replay() {
  * 点到当前正在播的歌时从头播放（列表行为）。
  */
 /** 批量添加到播放队列（不打断当前播放，按 id 去重） */
+function persistQueue() {
+  try { uni.setStorageSync('music_queue', JSON.stringify(state.queue)); } catch { /* ignore */ }
+}
+
 function addAllToQueue(songs: Song[]) {
   const exist = new Set(state.queue.map(s => s.id))
   const add = songs.filter(s => !exist.has(s.id))
@@ -164,11 +168,12 @@ function addAllToQueue(songs: Song[]) {
     return
   }
   state.queue = [...state.queue, ...add]
+  persistQueue()
   uni.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' })
 }
 
 function play(song: Song, queue?: Song[]) {
-  if (queue && queue.length) state.queue = queue
+  if (queue && queue.length) { state.queue = queue; persistQueue() }
   if (state.current && state.current.id === song.id) {
     replay()
     return

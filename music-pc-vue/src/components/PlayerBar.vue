@@ -54,7 +54,17 @@
           </div>
         </el-tab-pane>
         <el-tab-pane :label="`播放列表(${player.list.length})`">
-          <div class="h-[72vh] overflow-y-auto">
+          <div class="flex items-center gap-2 mb-3">
+            <el-input v-model="listName" size="small" placeholder="保存当前队列…" maxlength="10" />
+            <el-button size="small" type="primary" :disabled="!listName.trim()" @click="player.saveQueueAs(listName); listName = ''">保存</el-button>
+          </div>
+          <div v-if="player.savedLists.length" class="flex flex-wrap gap-2 mb-3">
+            <el-tag v-for="l in player.savedLists" :key="l.name" closable class="cursor-pointer"
+                    @click="player.loadSavedList(l.name)" @close="player.removeSavedList(l.name)">
+              {{ l.name }}（{{ l.songs.length }}）
+            </el-tag>
+          </div>
+          <div class="h-[60vh] overflow-y-auto">
             <div v-for="(q, i) in player.list" :key="q.id + '-' + i"
                  class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer"
                  :class="q.id === player.current?.id ? 'bg-np-red/10' : 'hover:bg-white/5'"
@@ -84,6 +94,7 @@ dayjs.extend(duration);
 const player = usePlayerStore();
 const seek = ref<number | null>(null);
 const drawerOpen = ref(false);
+const listName = ref('');
 const lyricBoxRef = ref<HTMLElement>();
 const cur = computed(() => seek.value ?? player.currentTime);
 const fmt = (s: number) => dayjs.duration((s || 0) * 1000).format('mm:ss');

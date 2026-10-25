@@ -13,10 +13,14 @@ function parseLrc(lrc: string): LyricLine[] {
   return out.sort((a, b) => a.time - b.time);
 }
 
+const restoredQueue = (() => {
+  try { return JSON.parse(localStorage.getItem('pcvue_music_queue') || '{}'); } catch { return { list: [], current: null }; }
+})();
+
 export const usePlayerStore = defineStore('player', {
   state: () => ({
-    current: null as null | { id: number; name: string; artist: string; cover: string; duration: number },
-    list: [] as { id: number; name: string; artist: string; cover: string; duration: number }[],
+    current: (restoredQueue.current || null) as null | { id: number; name: string; artist: string; cover: string; duration: number },
+    list: (restoredQueue.list || []) as { id: number; name: string; artist: string; cover: string; duration: number }[],
     playing: false,
     currentTime: 0,
     duration: 0,
@@ -26,6 +30,7 @@ export const usePlayerStore = defineStore('player', {
     unavailable: false,
     _audio: null as HTMLAudioElement | null,
     skipCount: 0,
+    savedLists: JSON.parse(localStorage.getItem('pcvue_saved_lists') || '[]') as { name: string; songs: { id: number; name: string; artist: string; cover: string; duration: number }[] }[],
   }),
   actions: {
     audio() {
@@ -43,6 +48,7 @@ export const usePlayerStore = defineStore('player', {
     async playList(songs: { id: number; name: string; artist: string; cover: string; duration: number }[], index = 0) {
       this.list = songs;
       this.skipCount = 0;
+      this.persist();
       await this.playIndex(index);
     },
     async playIndex(i: number) {
@@ -52,6 +58,7 @@ export const usePlayerStore = defineStore('player', {
       const song = this.list[idx];
       this.current = song;
       this.currentTime = 0;
+      this.persist();
       this.unavailable = false;
       this.loadingUrl = true;
       // 歌词与播放地址并行
@@ -87,7 +94,10 @@ export const usePlayerStore = defineStore('player', {
     toggle() {
       const a = this.audio();
       if (!this.url) {
-        if (this.current) this.next();
+        if (this.current) {
+          const i = this.list.findIndex(x => x.id === this.current?.id);
+          this.playIndex(i === -1 ? 0 : i);
+        }
         return;
       }
       if (a.paused) a.play().catch(() => {});
@@ -107,6 +117,23 @@ export const usePlayerStore = defineStore('player', {
     seek(t: number) {
       const a = this.audio();
       if (this.url) a.currentTime = t;
+    },
+    persist() {
+      localStorage.setItem('pcvue_music_queue', JSON.stringify({ list: this.list, current: this.current }));
+    },
+    saveQueueAs(name: string) {
+      if (!this.list.length || !name.trim()) return;
+      this.savedLists = [{ name: name.trim(), songs: [...this.list] }, ...this.savedLists].slice(0, 20);
+      localStorage.setItem('pcvue_saved_lists', JSON.stringify(this.savedLists));
+      ElMessage.success(`已保存列表「${name.trim()}」`);
+    },
+    loadSavedList(name: string) {
+      const l = this.savedLists.find(x => x.name === name);
+      if (l) this.playList(l.songs.map(x => ({ ...x })), 0);
+    },
+    removeSavedList(name: string) {
+      this.savedLists = this.savedLists.filter(x => x.name !== name);
+      localStorage.setItem('pcvue_saved_lists', JSON.stringify(this.savedLists));
     },
     /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
     addList(songs: { id: number; name: string; artist: string; cover: string; duration: number }[]) {

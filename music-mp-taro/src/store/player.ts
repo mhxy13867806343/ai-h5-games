@@ -17,7 +17,7 @@ function parseLrc(lrc: string): LyricLine[] {
 
 class PlayerCore {
   current: PlaySong | null = null;
-  list: PlaySong[] = [];
+  list: PlaySong[] = (() => { try { return JSON.parse(Taro.getStorageSync('taro_music_queue') || '[]'); } catch { return []; } })();
   playing = false;
   currentTime = 0;
   duration = 0;
@@ -45,7 +45,16 @@ class PlayerCore {
     return this.audio;
   }
 
-  async playList(songs: PlaySong[], index = 0) { this.list = songs; await this.playIndex(index); }
+  async playList(songs: PlaySong[], index = 0) { this.list = songs; try { Taro.setStorageSync('taro_music_queue', JSON.stringify(this.list)); } catch { /* ignore */ } await this.playIndex(index); }
+  addList(songs: PlaySong[]) {
+    const exist = new Set(this.list.map(s => s.id));
+    const add = songs.filter(s => !exist.has(s.id));
+    if (!add.length) { Taro.showToast({ title: '这些歌都已经在播放列表里啦', icon: 'none' }); this.emit(); return; }
+    this.list = [...this.list, ...add];
+    try { Taro.setStorageSync('taro_music_queue', JSON.stringify(this.list)); } catch { /* ignore */ }
+    Taro.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' });
+    this.emit();
+  }
   /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
   addList(songs: PlaySong[]) {
     const exist = new Set(this.list.map(s => s.id));
