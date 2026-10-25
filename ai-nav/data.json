@@ -196,6 +196,33 @@
             "代码",
             "国内"
           ]
+        },
+        {
+          "name": "云效 Codeup",
+          "url": "https://codeup.aliyun.com/",
+          "desc": "阿里云一站式代码托管与企业级 DevOps（云效）",
+          "tags": [
+            "阿里云",
+            "企业"
+          ]
+        },
+        {
+          "name": "OpenI 启智",
+          "url": "https://openi.pcl.ac.cn/",
+          "desc": "鹏城实验室开源 AI 开发协作平台，含启智飞腾算力",
+          "tags": [
+            "AI",
+            "开源"
+          ]
+        },
+        {
+          "name": "CNB 云原生构建",
+          "url": "https://cnb.cool/",
+          "desc": "云原生代码平台，托管 + CI/CD + AI 辅助开发",
+          "tags": [
+            "云原生",
+            "CI/CD"
+          ]
         }
       ]
     },
