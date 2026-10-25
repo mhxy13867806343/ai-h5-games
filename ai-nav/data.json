@@ -198,6 +198,75 @@
           ]
         }
       ]
+    },
+    {
+      "id": "translate",
+      "name": "翻译工具",
+      "icon": "🌐",
+      "items": [
+        {
+          "name": "百度翻译",
+          "url": "https://fanyi.baidu.com/mtpe-individual/transText?ext_channel=BingSearch#/",
+          "desc": "老牌机翻，中英互译质量稳定，支持文档翻译",
+          "tags": [
+            "中英",
+            "文档"
+          ]
+        },
+        {
+          "name": "Google 翻译",
+          "url": "https://translate.google.com/?hl=zh-CN&sl=auto&tl=en&op=translate",
+          "desc": "支持 130+ 语言，自动检测源语言",
+          "tags": [
+            "多语言",
+            "自动检测"
+          ]
+        },
+        {
+          "name": "有道翻译",
+          "url": "https://fanyi.youdao.com/#/AITranslate",
+          "desc": "网易出品，AI 翻译+词典，例句丰富",
+          "tags": [
+            "词典",
+            "AI"
+          ]
+        },
+        {
+          "name": "DeepL 翻译",
+          "url": "https://www.deepl.com/zh/translator/l/en/zh",
+          "desc": "公认译文质量最高的机翻，英中翻译尤其自然",
+          "tags": [
+            "高质量",
+            "英中"
+          ]
+        },
+        {
+          "name": "搜狗翻译",
+          "url": "https://fanyi.sogou.com/text",
+          "desc": "搜狗出品，支持文本/文档/网页翻译",
+          "tags": [
+            "文档"
+          ]
+        },
+        {
+          "name": "必应翻译",
+          "url": "https://www.bing.com/translator?setlang=zh-cn",
+          "desc": "微软出品，网页整页翻译方便",
+          "tags": [
+            "微软",
+            "网页"
+          ]
+        },
+        {
+          "name": "金山词霸",
+          "url": "https://www.iciba.com/",
+          "desc": "老牌查词词典，词汇释义与例句详细",
+          "tags": [
+            "查词",
+            "词典"
+          ]
+        }
+      ]
     }
   ]
 }
