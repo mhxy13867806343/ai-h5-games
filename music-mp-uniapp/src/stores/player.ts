@@ -155,6 +155,18 @@ function replay() {
  * 播放一首歌；可选传入所在列表作为播放队列。
  * 点到当前正在播的歌时从头播放（列表行为）。
  */
+/** 批量添加到播放队列（不打断当前播放，按 id 去重） */
+function addAllToQueue(songs: Song[]) {
+  const exist = new Set(state.queue.map(s => s.id))
+  const add = songs.filter(s => !exist.has(s.id))
+  if (!add.length) {
+    uni.showToast({ title: '这些歌都已经在播放列表里啦', icon: 'none' })
+    return
+  }
+  state.queue = [...state.queue, ...add]
+  uni.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' })
+}
+
 function play(song: Song, queue?: Song[]) {
   if (queue && queue.length) state.queue = queue
   if (state.current && state.current.id === song.id) {
@@ -212,7 +224,7 @@ export function usePlayer() {
     state,
     /** 播放进度 0~1 */
     progress: computed(() => (state.duration > 0 ? Math.min(state.currentTime / state.duration, 1) : 0)),
-    play,
+    play, addAllToQueue,
     playAt,
     toggle,
     next,

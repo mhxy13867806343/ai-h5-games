@@ -1,5 +1,5 @@
 /** 轻量全局播放器（模块级单例 + 订阅） */
-import { message } from 'antd';
+import { message as TOAST } from 'antd';
 export interface PlaySong { id: number; name: string; artist: string; cover: string; duration: number }
 export interface LyricLine { time: number; text: string }
 
@@ -71,17 +71,17 @@ class PlayerCore {
       a.src = this.url;
       a.play().catch(() => {
         this.unavailable = true;
-        message.warning('播放被浏览器拦截，请再点一次');
+        TOAST.warning('播放被浏览器拦截，请再点一次');
       });
     } else {
       a.pause();
       this.skipCount += 1;
       if (this.skipCount < this.list.length) {
-        message.warning(`《${song.name}》暂无版权，自动切下一首`);
+        TOAST.warning(`《${song.name}》暂无版权，自动切下一首`);
         this.next();
       } else {
         this.skipCount = 0;
-        message.warning('这个列表的歌都没版权，换个歌单试试');
+        TOAST.warning('这个列表的歌都没版权，换个歌单试试');
       }
     }
     this.emit();
@@ -98,6 +98,19 @@ class PlayerCore {
   next() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i + 1) % this.list.length); } }
   prev() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i - 1 + this.list.length) % this.list.length); } }
   seek(t: number) { const a = this.ensureAudio(); if (this.url) a.currentTime = t; }
+  /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
+  addList(songs: PlaySong[]) {
+    const exist = new Set(this.list.map(s => s.id));
+    const add = songs.filter(s => !exist.has(s.id));
+    if (!add.length) {
+      TOAST.info('这些歌都已经在播放列表里啦');
+      this.emit();
+      return;
+    }
+    this.list = [...this.list, ...add];
+    TOAST.success(`已添加 ${add.length} 首到播放列表`);
+    this.emit();
+  }
   /** 跳转到指定时间并继续播放（点歌词用） */
   seekPlay(t: number) {
     this.seek(t);

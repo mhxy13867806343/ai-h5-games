@@ -11,3 +11,7 @@
 .song-meta { font-size: 22rpx; color: #8e8e93; margin-top: 4rpx; }
 .song-play { color: #8e8e93; }
 .empty { text-align: center; color: #8e8e93; padding: 80rpx 0; }
+
+.action-row { display: flex; gap: 20rpx; margin-bottom: 24rpx; }
+.act-btn { font-size: 24rpx; padding: 10rpx 30rpx; border-radius: 999rpx; border: 1rpx solid #ff3a3a; color: #ff3a3a; }
+.act-btn.primary { background: #ff3a3a; color: #fff; }

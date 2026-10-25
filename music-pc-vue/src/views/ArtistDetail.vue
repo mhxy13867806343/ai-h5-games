@@ -9,6 +9,7 @@
     </div>
     <el-tabs v-model="tab">
       <el-tab-pane label="热门50">
+        <el-button size="small" type="primary" plain style="margin-bottom: 10px" @click="addAllTop">＋ 添加 50 首到列表</el-button>
         <el-table :data="topSongs" size="small" @row-click="(r: any) => playTop(r)" :row-style="{ cursor: 'pointer' }">
           <el-table-column label="#" width="60"><template #default="{ $index }"><b :style="{ color: $index < 3 ? '#e8464f' : '#8e8e93' }">{{ $index + 1 }}</b></template></el-table-column>
           <el-table-column label="歌曲"><template #default="{ row }"><b class="text-white">{{ row.name }}</b></template></el-table-column>
@@ -66,6 +67,9 @@ const mvs = ref<any[]>([]);
 const descs = ref<any[]>([]);
 const tab = ref('0');
 
+const addAllTop = () => {
+  player.addList(topSongs.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+};
 const playTop = (r: Song) => {
   player.playList(topSongs.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })), topSongs.value.indexOf(r));
   router.push('/player');

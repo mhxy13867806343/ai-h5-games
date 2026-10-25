@@ -30,6 +30,9 @@ export default function ArtistDetail() {
     api.artistSongs(aid, 50).then(r => setAllSongs(r.songs || [])).catch(() => {});
   }, [aid]);
 
+  const addAllTop = () => {
+    player.addList(topSongs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+  };
   const playList = (songs: Song[], i: number) => {
     player.playList(songs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })), i);
     nav('/player');
@@ -49,6 +52,10 @@ export default function ArtistDetail() {
       )}
       <Tabs>
         <Tabs.Tab title="热门50">
+          <button className="m-3 px-3 py-1.5 rounded-full border border-netease-red text-netease-red text-xs"
+                  onClick={() => player.addList(topSongs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })))}>
+            ＋ 添加 50 首到列表
+          </button>
           {topSongs.map((s, i) => (
             <div key={s.id} className="flex items-center gap-2 px-4 py-2.5 border-b border-white/5" onClick={() => playList(topSongs, i)}>
               <span className={`w-6 font-serif ${i < 3 ? 'text-netease-red' : 'text-netease-sub'}`}>{i + 1}</span>

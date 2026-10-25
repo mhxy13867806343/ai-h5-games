@@ -21,6 +21,12 @@ export default function PlaylistPage() {
     })();
   }, [id]);
 
+  const addAll = () => {
+    player.addList(tracks.map(s => ({
+      id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000,
+    })));
+  };
+
   const play = (i: number) => {
     player.playList(tracks.map(s => ({
       id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000,
@@ -31,6 +37,10 @@ export default function PlaylistPage() {
     <View className="page">
       {pl && (
         <View className="head">
+          <View className="action-row">
+            <View className="act-btn primary" onClick={() => { play(0); }}>▶ 播放全部</View>
+            <View className="act-btn" onClick={addAll}>＋ 添加全部</View>
+          </View>
           <Image src={pl.coverImgUrl} mode="aspectFill" className="head-cover" />
           <View className="head-info">
             <View className="title">{pl.name}</View>

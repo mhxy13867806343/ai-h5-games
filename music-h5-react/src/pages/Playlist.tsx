@@ -36,11 +36,20 @@ export default function Playlist() {
     <div className="page-pad">
       <NavBar onBack={() => nav(-1)}>歌单</NavBar>
       {pl && (
-        <div className="flex gap-3.5 p-4">
+        <div className="flex gap-3.5 p-4 items-start">
+          <div className="relative shrink-0">
+            <img src={pl.coverImgUrl} className="w-[110px] h-[110px] rounded-2xl object-cover bg-netease-card" alt="" />
+          </div>
           <img src={pl.coverImgUrl} className="w-[110px] h-[110px] rounded-2xl object-cover bg-netease-card" alt="" />
           <div className="flex-1 min-w-0">
             <div className="text-base font-bold">{pl.name}</div>
-            <div className="text-xs text-netease-sub my-1.5">{pl.trackCount || tracks.length} 首</div>
+            <div className="text-xs text-netease-sub my-1.5 flex items-center gap-2">
+              {pl.trackCount || tracks.length} 首
+              <button className="px-2 py-0.5 rounded-full border border-netease-red text-netease-red text-[10px]"
+                      onClick={() => player.addList(tracks.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })))}>
+                ＋ 添加全部
+              </button>
+            </div>
             {pl.description && <div className="text-[11px] text-netease-sub leading-relaxed line-clamp-3">{pl.description}</div>}
           </div>
         </div>

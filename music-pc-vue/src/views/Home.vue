@@ -17,7 +17,10 @@
       </el-card>
     </div>
 
-    <h3 class="text-white text-lg mb-4">新歌速递</h3>
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-white text-lg">新歌速递</h3>
+      <el-button size="small" type="primary" plain @click="addAllNews">＋ 添加全部到列表</el-button>
+    </div>
     <el-table :data="newSongs" size="small" style="width: 100%; background: transparent" @row-click="(r: any) => play(newSongs.indexOf(r) === -1 ? 0 : newSongs.indexOf(r))"
               :row-style="{ cursor: 'pointer' }">
       <el-table-column label="#" width="60">
@@ -65,6 +68,9 @@ onMounted(async () => {
   if (n.status === 'fulfilled') newSongs.value = n.value.data;
 });
 
+function addAllNews() {
+  player.addList(newSongs.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+}
 function play(i: number) {
   player.playList(newSongs.value.map(s => ({
     id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000,

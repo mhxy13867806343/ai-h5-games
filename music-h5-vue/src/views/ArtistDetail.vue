@@ -10,6 +10,7 @@
     </div>
     <van-tabs v-model:active="tab" sticky>
       <van-tab title="热门50">
+        <div style="padding: 10px 16px 0"><van-button size="small" icon="plus" plain type="primary" @click="addAllTop">添加 50 首到列表</van-button></div>
         <van-cell-group inset :border="false">
           <van-cell v-for="(s, i) in topSongs" :key="s.id" :border="false" @click="playTop(i)">
             <template #title><span class="song-idx" :class="{ hot: i < 3 }">{{ i + 1 }}</span><span class="song-name">{{ s.name }}</span></template>
@@ -74,6 +75,9 @@ const tab = ref(0);
 const loading = ref(true);
 const fmtTime = (ms: number) => dayjs.duration(ms).format('mm:ss');
 
+function addAllTop() {
+  player.addList(topSongs.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+}
 function playTop(i: number) {
   player.playList(topSongs.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })), i);
   router.push('/player');

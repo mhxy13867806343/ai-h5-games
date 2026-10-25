@@ -98,6 +98,19 @@ class PlayerCore {
   next() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i + 1) % this.list.length); } }
   prev() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i - 1 + this.list.length) % this.list.length); } }
   seek(t: number) { const a = this.ensureAudio(); if (this.url) a.currentTime = t; }
+  /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
+  addList(songs: PlaySong[]) {
+    const exist = new Set(this.list.map(s => s.id));
+    const add = songs.filter(s => !exist.has(s.id));
+    if (!add.length) {
+      import('antd-mobile').then(({ Toast }) => Toast.show({ content: '这些歌都已经在播放列表里啦' }));
+      this.emit();
+      return;
+    }
+    this.list = [...this.list, ...add];
+    import('antd-mobile').then(({ Toast }) => Toast.show({ content: `已添加 ${add.length} 首到播放列表` }));
+    this.emit();
+  }
   /** 跳转到指定时间并继续播放（点歌词用） */
   seekPlay(t: number) {
     this.seek(t);

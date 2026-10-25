@@ -41,6 +41,9 @@ export default function Home() {
     })();
   }, []);
 
+  const addAllNews = () => {
+    player.addList(newSongs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+  };
   const playSong = async (s: Song) => {
     await player.playSong({
       id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000,
@@ -87,7 +90,9 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="sec-title">新歌速递</div>
+      <div className="sec-title flex items-center justify-between">新歌速递
+        <span className="text-xs text-netease-red cursor-pointer" onClick={() => player.addList(newSongs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })))}>＋ 添加全部</span>
+      </div>
       <div className="px-3">
         {newSongs.slice(0, 10).map((s, i) => (
           <div key={s.id} className="flex items-center gap-3 py-2.5 border-b border-white/5" onClick={() => playSong(s)}>

@@ -5,7 +5,9 @@
       <img :src="pl.coverImgUrl" class="pl-head-cover" />
       <div class="pl-head-info">
         <div class="pl-title">{{ pl.name }}</div>
-        <div class="pl-meta">{{ pl.trackCount || tracks.length }} 首</div>
+        <div class="pl-meta">{{ pl.trackCount || tracks.length }} 首
+          <van-button size="mini" icon="plus" type="primary" plain class="ml-2" @click="addAll">添加全部</van-button>
+        </div>
         <div class="pl-desc" v-if="pl.description">{{ pl.description.slice(0, 60) }}…</div>
       </div>
     </div>
@@ -40,6 +42,9 @@ const tracks = ref<Song[]>([]);
 const loading = ref(true);
 const fmtTime = (ms: number) => dayjs.duration(ms).format('mm:ss');
 
+function addAll() {
+  player.addList(tracks.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+}
 function play(i: number) {
   player.playList(tracks.value.map(s => ({
     id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000,

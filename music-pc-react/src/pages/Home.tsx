@@ -57,7 +57,13 @@ export default function Home() {
         ))}
       </div>
 
-      <Typography.Title level={4} style={{ color: '#f5f5f7' }}>新歌速递</Typography.Title>
+      <div className="flex items-center justify-between mb-3">
+        <Typography.Title level={4} style={{ color: '#f5f5f7', margin: 0 }}>新歌速递</Typography.Title>
+        <button className="px-3 py-1.5 rounded-full border border-np-red text-np-red text-xs"
+                onClick={() => player.addList(newSongs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })))}>
+          ＋ 添加全部到列表
+        </button>
+      </div>
       <Table
         rowKey="id" dataSource={newSongs} size="small" pagination={{ pageSize: 10 }}
         onRow={(record, index) => ({ onClick: () => index != null && play(index), style: { cursor: 'pointer' } })}

@@ -1,0 +1,1 @@
+import{B as o,C as e}from"./main-BfRb4_Nm.js";o.extend(e);const s=t=>t==null?"":t>=1e8?(t/1e8).toFixed(1)+"亿":t>=1e4?(t/1e4).toFixed(1)+"万":String(t),m=t=>o.duration(t||0).format("mm:ss");export{m as a,s as f};

@@ -37,6 +37,11 @@ function playAll() {
   uni.navigateTo({ url: `/pages/player/player?id=${tracks.value[0].id}` })
 }
 
+function addAll() {
+  if (!tracks.value.length) return
+  player.addAllToQueue(tracks.value)
+}
+
 function playSong(song: Song) {
   player.play(song, tracks.value)
   uni.navigateTo({ url: `/pages/player/player?id=${song.id}` })
@@ -70,6 +75,10 @@ function toggleDesc() {
         <view class="meta">
           <view class="name">{{ playlist?.name || '歌单' }}</view>
           <view v-if="playlist?.trackCount" class="count">共 {{ playlist.trackCount }} 首</view>
+          <view class="action-row">
+            <view class="act-btn primary" @click="playAll">▶ 播放全部</view>
+            <view class="act-btn" @click="addAll">＋ 添加全部</view>
+          </view>
           <view v-if="playlist?.playCount" class="count">{{ formatPlayCount(playlist.playCount) }} 次播放</view>
           <view v-if="playlist?.description" class="desc" :class="{ expanded: descExpanded }" @tap="toggleDesc">
             {{ playlist.description }}
@@ -146,6 +155,9 @@ function toggleDesc() {
   width: 100%;
   height: 100%;
 }
+.action-row { display: flex; gap: 16rpx; margin-top: 14rpx; }
+.act-btn { font-size: 24rpx; padding: 10rpx 26rpx; border-radius: 999rpx; border: 1rpx solid #ff3a3a; color: #ff3a3a; }
+.act-btn.primary { background: #ff3a3a; color: #fff; }
 .meta {
   flex: 1;
   min-width: 0;

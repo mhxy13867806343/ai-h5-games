@@ -5,7 +5,7 @@ import { api, api2, songArtists, songDuration, songCover, mvWebUrl, type Song } 
 import { usePlayer } from '../hooks/usePlayer';
 import { fmtTime } from '../utils/format';
 
-const songCols = (onRow: (r: Song, i?: number) => void) => [
+const songCols = [
   { title: '#', width: 60, render: (_: any, __: any, i: number) => <b style={{ color: i < 3 ? '#e8464f' : '#8e8e93' }}>{i + 1}</b> },
   { title: '歌曲', dataIndex: 'name', render: (v: string, r: Song) => (
       <span className="inline-flex items-center gap-2">
@@ -37,6 +37,7 @@ export default function ArtistDetail() {
   }, [aid]);
 
   const toMap = (songs: Song[]) => songs.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 }));
+  const addAllTop = () => player.addList(toMap(topSongs));
 
   return (
     <div>
@@ -51,13 +52,18 @@ export default function ArtistDetail() {
       )}
       <Tabs items={[
         { key: 'top', label: '热门50', children: (
-            <Table rowKey="id" dataSource={topSongs} size="small" pagination={false}
-                   onRow={(r, i) => ({ onClick: () => { if (i != null) player.playList(toMap(topSongs), i); } , style: { cursor: 'pointer' } })}
-                   columns={songCols(() => {})} />) },
+            <>
+              <button className="m-3 px-3 py-1.5 rounded-full border border-np-red text-np-red text-xs"
+                      onClick={addAllTop}>＋ 添加 50 首到列表</button>
+              <Table rowKey="id" dataSource={topSongs} size="small" pagination={false}
+                     onRow={(r, i) => ({ onClick: () => { if (i != null) player.playList(toMap(topSongs), i); }, style: { cursor: 'pointer' } })}
+                     columns={songCols} />
+            </>
+          ) },
         { key: 'all', label: '全部歌曲', children: (
             <Table rowKey="id" dataSource={allSongs} size="small" pagination={{ pageSize: 20 }}
-                   onRow={(r, i) => ({ onClick: () => { if (i != null) player.playList(toMap(allSongs), i); } , style: { cursor: 'pointer' } })}
-                   columns={songCols(() => {})} />) },
+                   onRow={(r, i) => ({ onClick: () => { if (i != null) player.playList(toMap(allSongs), i); }, style: { cursor: 'pointer' } })}
+                   columns={songCols} />) },
         { key: 'albums', label: '专辑', children: (
             <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
               {albums.map(a => (

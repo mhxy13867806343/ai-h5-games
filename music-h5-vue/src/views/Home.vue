@@ -27,7 +27,9 @@
       </div>
     </div>
 
-    <div class="section-title">新歌速递</div>
+    <div class="section-title">新歌速递
+      <span class="add-all" @click="addAllNews">＋ 添加全部</span>
+    </div>
     <van-cell-group inset :border="false">
       <van-cell
         v-for="(s, i) in newSongs.slice(0, 10)" :key="s.id" :border="false"
@@ -67,6 +69,9 @@ const player = usePlayerStore();
 const fmtCount = (n?: number) => n == null ? '' : n >= 1e8 ? (n / 1e8).toFixed(1) + '亿' : n >= 1e4 ? (n / 1e4).toFixed(1) + '万' : String(n);
 const fmtTime = (ms: number) => dayjs.duration(ms).format('mm:ss');
 
+async function addAllNews() {
+  player.addList(newSongs.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+}
 async function playNewSong(s: Song) {
   await player.playSong({
     id: s.id, name: s.name,

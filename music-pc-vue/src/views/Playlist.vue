@@ -4,7 +4,9 @@
       <img :src="pl.coverImgUrl" class="w-44 h-44 rounded-2xl object-cover" alt="" />
       <div>
         <h2 class="text-white text-2xl">{{ pl.name }}</h2>
-        <div class="text-np-sub text-sm my-2">{{ pl.trackCount || tracks.length }} 首</div>
+        <div class="text-np-sub text-sm my-2 flex items-center gap-2">{{ pl.trackCount || tracks.length }} 首
+        <el-button size="small" type="primary" plain @click="addAll">＋ 添加全部到列表</el-button>
+      </div>
         <p v-if="pl.description" class="text-np-sub text-xs max-w-2xl leading-relaxed">{{ pl.description }}</p>
       </div>
     </div>
@@ -57,6 +59,9 @@ onMounted(async () => {
   loading.value = false;
 });
 
+function addAll() {
+  player.addList(tracks.value.map(s => ({ id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000 })));
+}
 function play(i: number) {
   player.playList(tracks.value.map(s => ({
     id: s.id, name: s.name, artist: songArtists(s), cover: songCover(s), duration: songDuration(s) / 1000,

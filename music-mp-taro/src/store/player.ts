@@ -46,6 +46,15 @@ class PlayerCore {
   }
 
   async playList(songs: PlaySong[], index = 0) { this.list = songs; await this.playIndex(index); }
+  /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
+  addList(songs: PlaySong[]) {
+    const exist = new Set(this.list.map(s => s.id));
+    const add = songs.filter(s => !exist.has(s.id));
+    if (!add.length) { Taro.showToast({ title: '这些歌都已经在播放列表里啦', icon: 'none' }); this.emit(); return; }
+    this.list = [...this.list, ...add];
+    Taro.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' });
+    this.emit();
+  }
   async playSong(song: PlaySong) { await this.playList([song], 0); }
 
   async playIndex(i: number) {

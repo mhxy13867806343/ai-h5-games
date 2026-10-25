@@ -109,6 +109,14 @@ export const usePlayerStore = defineStore('player', {
       const a = this.audio();
       if (this.url) a.currentTime = t;
     },
+    /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
+    addList(songs: { id: number; name: string; artist: string; cover: string; duration: number }[]) {
+      const exist = new Set(this.list.map(s => s.id));
+      const add = songs.filter(s => !exist.has(s.id));
+      if (!add.length) { showToast('这些歌都已经在播放列表里啦'); return; }
+      this.list = [...this.list, ...add];
+      showToast(`已添加 ${add.length} 首到播放列表`);
+    },
     /** 跳转到指定时间并继续播放（点歌词用） */
     seekPlay(t: number) {
       this.seek(t);
