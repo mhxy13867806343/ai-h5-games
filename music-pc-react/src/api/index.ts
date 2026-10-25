@@ -26,7 +26,8 @@ async function fetchJson(base: string, path: string, qs: string): Promise<any> {
     const res = await fetch(`${base}/${path}${qs ? '?' + qs : ''}`, { signal: ctrl.signal });
     const text = await res.text();
     if (!res.ok || text.startsWith('<')) throw new Error(`bad response ${res.status}`);
-    return JSON.parse(text);
+    const httpsUpgrade = text.replace(/"http:\/\//g, '"https://'); // 图片/音频统一 https，避免 Mixed Content
+    return JSON.parse(httpsUpgrade);
   } finally { clearTimeout(timer); }
 }
 
