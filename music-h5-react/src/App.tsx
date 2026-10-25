@@ -17,6 +17,19 @@ const tabs = [
 ];
 
 export default function App() {
+  // 移动端音频解锁：首次触摸用静音音频激活播放权限（iOS Safari 等）
+  useEffect(() => {
+    const unlock = () => {
+      try {
+        const a = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        a.volume = 0;
+        a.play().then(() => a.pause()).catch(() => {});
+      } catch { /* ignore */ }
+      window.removeEventListener('pointerdown', unlock);
+    };
+    window.addEventListener('pointerdown', unlock);
+  }, []);
+
   // PC 端打开 H5 应用时 Toast 提示
   useEffect(() => {
     const isPC = window.innerWidth > 750 && !/Mobi|Android|iPhone|iPad|Harmony/i.test(navigator.userAgent);
