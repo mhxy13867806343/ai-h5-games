@@ -310,6 +310,288 @@
           ]
         }
       ]
+    },
+    {
+      "id": "games",
+      "name": "游戏",
+      "icon": "🎮",
+      "items": [
+        {
+          "name": "游民星空",
+          "url": "https://www.gamersky.com/",
+          "desc": "老牌游戏资讯门户，新闻/攻略/评测/下载",
+          "tags": [
+            "资讯",
+            "攻略"
+          ]
+        },
+        {
+          "name": "3DM 游戏网",
+          "url": "https://www.3dmgame.com/",
+          "desc": "知名游戏资讯站，新闻攻略与汉化补丁",
+          "tags": [
+            "资讯",
+            "汉化"
+          ]
+        },
+        {
+          "name": "小黑盒",
+          "url": "https://www.xiaoheihe.cn/",
+          "desc": "八千万玩家的游戏社区，资讯/百科/战绩查询",
+          "tags": [
+            "社区"
+          ]
+        },
+        {
+          "name": "TapTap",
+          "url": "https://www.taptap.cn/",
+          "desc": "手游下载与评分社区，玩家真实评价",
+          "tags": [
+            "手游",
+            "评分"
+          ]
+        },
+        {
+          "name": "Steam",
+          "url": "https://store.steampowered.com/",
+          "desc": "全球最大 PC 游戏发行平台",
+          "tags": [
+            "平台",
+            "正版"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "name": "音乐",
+      "icon": "🎵",
+      "items": [
+        {
+          "name": "网易云音乐",
+          "url": "https://music.163.com/",
+          "desc": "歌单与音乐社区见长，评论区出圈",
+          "tags": [
+            "在线听"
+          ]
+        },
+        {
+          "name": "QQ 音乐",
+          "url": "https://y.qq.com/",
+          "desc": "腾讯旗下，千万正版无损曲库",
+          "tags": [
+            "无损",
+            "正版"
+          ]
+        },
+        {
+          "name": "酷狗音乐",
+          "url": "https://www.kugou.com/",
+          "desc": "腾讯音乐旗下，曲库大音效丰富",
+          "tags": [
+            "在线听"
+          ]
+        },
+        {
+          "name": "Spotify",
+          "url": "https://open.spotify.com/",
+          "desc": "全球最大流媒体音乐平台",
+          "tags": [
+            "国际",
+            "流媒体"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "movie",
+      "name": "电影",
+      "icon": "🎬",
+      "items": [
+        {
+          "name": "豆瓣电影",
+          "url": "https://movie.douban.com/",
+          "desc": "国内最具影响力的影评社区与评分体系",
+          "tags": [
+            "评分",
+            "影评"
+          ]
+        },
+        {
+          "name": "猫眼电影",
+          "url": "https://www.maoyan.com/",
+          "desc": "在线购票/票房查询，购票后评分更真实",
+          "tags": [
+            "购票",
+            "票房"
+          ]
+        },
+        {
+          "name": "IMDb",
+          "url": "https://www.imdb.com/",
+          "desc": "全球最权威的电影资料与评分数据库",
+          "tags": [
+            "国际",
+            "资料库"
+          ]
+        },
+        {
+          "name": "烂番茄",
+          "url": "https://www.rottentomatoes.com/",
+          "desc": "美国影评媒体聚合评分（新鲜度体系）",
+          "tags": [
+            "国际",
+            "影评"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "software",
+      "name": "软件",
+      "icon": "💿",
+      "items": [
+        {
+          "name": "腾讯软件中心",
+          "url": "https://pc.qq.com/",
+          "desc": "10000+ 款免费软件，安全检测高速下载",
+          "tags": [
+            "下载",
+            "安全"
+          ]
+        },
+        {
+          "name": "少数派",
+          "url": "https://sspai.com/",
+          "desc": "高效工作与数字生活的优质应用推荐",
+          "tags": [
+            "推荐",
+            "评测"
+          ]
+        },
+        {
+          "name": "异次元软件世界",
+          "url": "https://www.iplaysoft.com/",
+          "desc": "老牌软件推荐站，图文评测用心",
+          "tags": [
+            "推荐"
+          ]
+        },
+        {
+          "name": "小众软件",
+          "url": "https://www.appinn.com/",
+          "desc": "发现小而美的免费工具，持续更新近 20 年",
+          "tags": [
+            "小众",
+            "免费"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "internet",
+      "name": "互联网",
+      "icon": "🌐",
+      "items": [
+        {
+          "name": "36 氪",
+          "url": "https://36kr.com/",
+          "desc": "科技创投媒体，互联网行业动态首发",
+          "tags": [
+            "科技",
+            "创投"
+          ]
+        },
+        {
+          "name": "虎嗅",
+          "url": "https://www.huxiu.com/",
+          "desc": "科技与商业深度分析",
+          "tags": [
+            "深度"
+          ]
+        },
+        {
+          "name": "爱范儿",
+          "url": "https://www.ifanr.com/",
+          "desc": "消费科技媒体，报道新产品新趋势",
+          "tags": [
+            "消费科技"
+          ]
+        },
+        {
+          "name": "极客公园",
+          "url": "https://www.geekpark.net/",
+          "desc": "聚焦创新者与产品的前沿科技媒体",
+          "tags": [
+            "前沿"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "devcomm",
+      "name": "开发社区",
+      "icon": "💻",
+      "items": [
+        {
+          "name": "掘金",
+          "url": "https://juejin.cn/",
+          "desc": "中文开发者技术内容分享平台，前端内容尤佳",
+          "tags": [
+            "技术",
+            "内容"
+          ]
+        },
+        {
+          "name": "开源中国",
+          "url": "https://www.oschina.net/",
+          "desc": "综合性开源技术社区，Gitee 同门",
+          "tags": [
+            "开源"
+          ]
+        },
+        {
+          "name": "V2EX",
+          "url": "https://v2ex.com/",
+          "desc": "创意工作者社区，程序员话题讨论热地",
+          "tags": [
+            "论坛"
+          ]
+        },
+        {
+          "name": "SegmentFault 思否",
+          "url": "https://segmentfault.com/",
+          "desc": "中文技术问答社区，国内最大黑客马拉松组织者",
+          "tags": [
+            "问答"
+          ]
+        },
+        {
+          "name": "博客园",
+          "url": "https://www.cnblogs.com/",
+          "desc": "2004 年创立的纯净技术博客社区",
+          "tags": [
+            "博客"
+          ]
+        },
+        {
+          "name": "Stack Overflow",
+          "url": "https://stackoverflow.com/",
+          "desc": "全球最大程序员问答社区",
+          "tags": [
+            "国际",
+            "问答"
+          ]
+        },
+        {
+          "name": "CSDN",
+          "url": "https://www.csdn.net/",
+          "desc": "国内老牌开发者社区，内容覆盖最广",
+          "tags": [
+            "老牌"
+          ]
+        }
+      ]
     }
   ]
 }
