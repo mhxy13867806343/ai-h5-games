@@ -644,6 +644,109 @@
           ]
         }
       ]
+    },
+    {
+      "id": "aicoding",
+      "name": "AI 编程",
+      "icon": "🤖",
+      "items": [
+        {
+          "name": "Claude Code",
+          "url": "https://claude.com/product/claude-code",
+          "desc": "Anthropic 官方终端编程 Agent，代码库级理解与自主改动",
+          "tags": [
+            "CLI",
+            "Agent"
+          ]
+        },
+        {
+          "name": "OpenAI Codex",
+          "url": "https://openai.com/codex/",
+          "desc": "OpenAI 官方编程 Agent，云端/本地双模式",
+          "tags": [
+            "OpenAI",
+            "Agent"
+          ]
+        },
+        {
+          "name": "Kiro",
+          "url": "https://kiro.dev/",
+          "desc": "AWS 出品的 spec 驱动 Agentic IDE",
+          "tags": [
+            "AWS",
+            "IDE"
+          ]
+        },
+        {
+          "name": "Cursor",
+          "url": "https://cursor.com/",
+          "desc": "最流行的 AI 代码编辑器，Tab 补全 + Agent 模式",
+          "tags": [
+            "编辑器",
+            "热门"
+          ]
+        },
+        {
+          "name": "GitHub Copilot",
+          "url": "https://github.com/features/copilot",
+          "desc": "GitHub 官方 AI 编程助手，深度集成 VS Code",
+          "tags": [
+            "GitHub",
+            "补全"
+          ]
+        },
+        {
+          "name": "Windsurf",
+          "url": "https://windsurf.com/",
+          "desc": "Codeium 团队出品的 Agentic IDE",
+          "tags": [
+            "IDE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ide",
+      "name": "IDE 编辑器",
+      "icon": "🧰",
+      "items": [
+        {
+          "name": "VS Code",
+          "url": "https://code.visualstudio.com/",
+          "desc": "微软免费开源编辑器，插件生态最全",
+          "tags": [
+            "微软",
+            "免费"
+          ]
+        },
+        {
+          "name": "WebStorm",
+          "url": "https://www.jetbrains.com/webstorm/",
+          "desc": "JetBrains 前端/JS 专用 IDE",
+          "tags": [
+            "JetBrains",
+            "前端"
+          ]
+        },
+        {
+          "name": "PyCharm",
+          "url": "https://www.jetbrains.com/pycharm/",
+          "desc": "JetBrains Python 专用 IDE，科学计算友好",
+          "tags": [
+            "JetBrains",
+            "Python"
+          ]
+        },
+        {
+          "name": "IntelliJ IDEA",
+          "url": "https://www.jetbrains.com/idea/",
+          "desc": "JetBrains Java/Kotlin 旗舰 IDE",
+          "tags": [
+            "JetBrains",
+            "Java"
+          ]
+        }
+      ]
     }
   ]
 }
