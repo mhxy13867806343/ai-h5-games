@@ -6,6 +6,7 @@ import './player.scss';
 
 export default function Player() {
   const player = usePlayer();
+  const [queueOpen, setQueueOpen] = useState(false);
   const [seeking, setSeeking] = useState(0);
   const cur = player.current;
 
@@ -29,7 +30,8 @@ export default function Player() {
 
       <ScrollView scrollY scrollIntoView={`lyric-${activeLyric}`} scrollWithAnimation className="lyrics">
         {player.lyrics.length ? player.lyrics.map((l, i) => (
-          <View key={i} id={`lyric-${i}`} className={`lyric-line ${i === activeLyric ? 'on' : ''}`}>{l.text || '♪'}</View>
+          <View key={i} id={`lyric-${i}`} className={`lyric-line ${i === activeLyric ? 'on' : ''}`}
+                onClick={() => player.seekPlay(l.time)}>{l.text || '♪'}</View>
         )) : <View className="lyric-line on">纯音乐 / 暂无歌词</View>}
       </ScrollView>
 
@@ -46,7 +48,34 @@ export default function Player() {
         <Text className="ctrl" onClick={() => player.prev()}>⏮</Text>
         <Text className="ctrl main" onClick={() => player.toggle()}>{player.playing ? '⏸' : '▶'}</Text>
         <Text className="ctrl" onClick={() => player.next()}>⏭</Text>
+        <Text className="ctrl" onClick={() => setQueueOpen(true)}>☰</Text>
       </View>
+
+      {queueOpen && (
+        <View className="queue-mask" onClick={() => setQueueOpen(false)}>
+          <View className="queue-panel" onClick={e => e.stopPropagation()}>
+            <View className="queue-head">
+              <Text className="queue-title">当前播放</Text>
+              <Text className="queue-count">{player.list.length} 首</Text>
+              <Text className="queue-close" onClick={() => setQueueOpen(false)}>×</Text>
+            </View>
+            <ScrollView scrollY className="queue-body">
+              {player.list.map((q, i) => (
+                <View key={q.id + '-' + i}
+                      className={`queue-row ${player.current?.id === q.id ? 'on' : ''}`}
+                      onClick={() => { player.playIndex(i); }}>
+                  <Text className="q-idx">{i + 1}</Text>
+                  <View className="q-info">
+                    <Text className={`q-name ${player.current?.id === q.id ? 'hot' : ''}`}>{q.name}</Text>
+                    <Text className="q-artist">{q.artist}</Text>
+                  </View>
+                  {player.current?.id === q.id && <Text className="q-playing">♪</Text>}
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

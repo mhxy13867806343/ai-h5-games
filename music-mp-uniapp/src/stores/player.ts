@@ -172,6 +172,12 @@ function addAllToQueue(songs: Song[]) {
   uni.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' })
 }
 
+/** 跳转到指定时间并继续播放（点歌词用） */
+function seekPlay(sec: number) {
+  seek(sec)
+  if (state.url && audio && audio.paused) audio.play()
+}
+
 function play(song: Song, queue?: Song[]) {
   if (queue && queue.length) { state.queue = queue; persistQueue() }
   if (state.current && state.current.id === song.id) {
@@ -229,7 +235,7 @@ export function usePlayer() {
     state,
     /** 播放进度 0~1 */
     progress: computed(() => (state.duration > 0 ? Math.min(state.currentTime / state.duration, 1) : 0)),
-    play, addAllToQueue,
+    play, addAllToQueue, seekPlay,
     playAt,
     toggle,
     next,

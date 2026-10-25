@@ -55,15 +55,6 @@ class PlayerCore {
     Taro.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' });
     this.emit();
   }
-  /** 批量添加到播放列表（不打断当前播放，按 id 去重） */
-  addList(songs: PlaySong[]) {
-    const exist = new Set(this.list.map(s => s.id));
-    const add = songs.filter(s => !exist.has(s.id));
-    if (!add.length) { Taro.showToast({ title: '这些歌都已经在播放列表里啦', icon: 'none' }); this.emit(); return; }
-    this.list = [...this.list, ...add];
-    Taro.showToast({ title: `已添加 ${add.length} 首`, icon: 'none' });
-    this.emit();
-  }
   async playSong(song: PlaySong) { await this.playList([song], 0); }
 
   async playIndex(i: number) {
@@ -93,6 +84,12 @@ class PlayerCore {
   next() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i + 1) % this.list.length); } }
   prev() { if (this.list.length) { const i = this.list.findIndex(s => s.id === this.current?.id); this.playIndex((i - 1 + this.list.length) % this.list.length); } }
   seek(t: number) { const a = this.ensureAudio(); if (this.url) a.seek(t); }
+  /** 跳转到指定时间并继续播放（点歌词用） */
+  seekPlay(t: number) {
+    this.seek(t);
+    const a = this.ensureAudio();
+    if (this.url && a.paused) a.play();
+  }
 }
 
 export const playerCore = new PlayerCore();

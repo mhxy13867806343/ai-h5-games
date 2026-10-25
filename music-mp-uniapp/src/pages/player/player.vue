@@ -16,6 +16,7 @@ const { state } = player
 /** 拖动中：slider 显示拖动值而不是播放位置 */
 const seeking = ref(false)
 const sliderValue = ref(0)
+const showQueue = ref(false)
 
 const sliderPercent = computed(() => {
   if (seeking.value) return sliderValue.value
@@ -109,6 +110,8 @@ function onSeekChange(e: any) {
         <text class="time">{{ formatDurationSec(state.duration) }}</text>
       </view>
 
+      <view class="queue-btn" @tap="showQueue = true">☰ 播放列表（{{ state.queue.length }}）</view>
+
       <!-- 控制区：上一首 / 播放暂停 / 下一首 -->
       <view class="controls">
         <view class="ctrl" @tap="player.prev()">
@@ -150,6 +153,7 @@ function onSeekChange(e: any) {
             :key="i"
             class="lyric-line"
             :class="{ active: i === state.lyricIndex }"
+            @click="player.seekPlay(line.time)"
           >
             {{ line.text }}
           </view>
@@ -167,6 +171,28 @@ function onSeekChange(e: any) {
       <view class="empty-sub">去首页或排行榜挑一首歌吧</view>
     </view>
   </view>
+
+    <view v-if="showQueue" class="queue-mask" @tap="showQueue = false">
+      <view class="queue-panel" @tap.stop>
+        <view class="queue-head">
+          <text class="queue-title">当前播放</text>
+          <text class="queue-count">{{ state.queue.length }} 首</text>
+          <text class="queue-close" @tap="showQueue = false">×</text>
+        </view>
+        <scroll-view scroll-y class="queue-body">
+          <view v-for="(q, i) in state.queue" :key="q.id + '-' + i"
+                class="queue-row" :class="{ on: state.current?.id === q.id }"
+                @tap="player.playAt(i); showQueue = false">
+            <text class="q-idx">{{ i + 1 }}</text>
+            <view class="q-info">
+              <text class="q-name" :class="{ hot: state.current?.id === q.id }">{{ q.name }}</text>
+              <text class="q-artist">{{ q.ar?.map(a => a.name).join('/') || '' }}</text>
+            </view>
+            <text v-if="state.current?.id === q.id" class="q-playing">♪</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
 </template>
 
 <style lang="scss" scoped>
@@ -425,4 +451,23 @@ function onSeekChange(e: any) {
   font-size: 24rpx;
   color: $uni-text-sub;
 }
+</style>
+
+<style scoped>
+.queue-btn { align-self: center; font-size: 24rpx; color: #8e8e93; border: 1rpx solid #3a3a3e; border-radius: 999rpx; padding: 10rpx 30rpx; margin-bottom: 16rpx; }
+.queue-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.6); z-index: 99; display: flex; align-items: flex-end; }
+.queue-panel { width: 100%; max-height: 62vh; background: #1a1a20; border-radius: 24rpx 24rpx 0 0; padding: 20rpx 0 40rpx; }
+.queue-head { display: flex; align-items: center; gap: 12rpx; padding: 10rpx 30rpx 20rpx; border-bottom: 1rpx solid rgba(255,255,255,.08); }
+.queue-title { font-size: 30rpx; font-weight: 700; color: #f5f5f7; flex: 1; }
+.queue-count { font-size: 22rpx; color: #8e8e93; }
+.queue-close { font-size: 40rpx; color: #8e8e93; padding: 0 10rpx; }
+.queue-body { max-height: 50vh; }
+.queue-row { display: flex; align-items: center; gap: 16rpx; padding: 20rpx 30rpx; }
+.queue-row.on { background: rgba(255,58,58,.1); }
+.q-idx { width: 44rpx; font-size: 24rpx; color: #8e8e93; font-family: Georgia, serif; }
+.q-info { flex: 1; min-width: 0; }
+.q-name { font-size: 26rpx; color: #f5f5f7; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.q-name.hot { color: #ff3a3a; font-weight: 700; }
+.q-artist { font-size: 20rpx; color: #8e8e93; display: block; margin-top: 4rpx; }
+.q-playing { color: #ff3a3a; font-size: 26rpx; }
 </style>

@@ -16,3 +16,20 @@
 .ctrl { font-size: 56rpx; }
 .ctrl.main { width: 120rpx; height: 120rpx; border-radius: 50%; background: #ff3a3a; display: flex; align-items: center; justify-content: center; }
 .empty { text-align: center; color: #8e8e93; padding: 200rpx 0; }
+
+/* 播放列表弹层 */
+.queue-mask { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 90; display: flex; align-items: flex-end; }
+.queue-panel { width: 100%; max-height: 62vh; background: #1a1a20; border-radius: 24rpx 24rpx 0 0; padding: 24rpx 0 40rpx; }
+.queue-head { display: flex; align-items: center; gap: 12rpx; padding: 10rpx 28rpx 20rpx; border-bottom: 1rpx solid rgba(255,255,255,.08); }
+.queue-title { font-size: 30rpx; font-weight: 700; color: #f5f5f7; flex: 1; }
+.queue-count { font-size: 22rpx; color: #8e8e93; }
+.queue-close { font-size: 40rpx; color: #8e8e93; padding: 0 10rpx; }
+.queue-body { max-height: 50vh; }
+.queue-row { display: flex; align-items: center; gap: 16rpx; padding: 20rpx 28rpx; }
+.queue-row.on { background: rgba(255,58,58,.1); }
+.q-idx { width: 44rpx; font-size: 24rpx; color: #8e8e93; font-family: Georgia, serif; }
+.q-info { flex: 1; min-width: 0; }
+.q-name { font-size: 26rpx; color: #f5f5f7; display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.q-name.hot { color: #ff3a3a; font-weight: 700; }
+.q-artist { font-size: 20rpx; color: #8e8e93; display: block; margin-top: 4rpx; }
+.q-playing { color: #ff3a3a; font-size: 26rpx; }
