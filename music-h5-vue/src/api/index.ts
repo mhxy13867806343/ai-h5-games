@@ -157,5 +157,5 @@ export const mvWebUrl = (id: number) => `https://music.163.com/mv?id=${id}`;
 
 /** 统一歌曲字段 */
 export const songArtists = (s: Song) => (s.ar || s.artists || s.album?.artists || []).map(a => a.name).join('/');
-export const songCover = (s: Song) => s.al?.picUrl || s.album?.picUrl || '';
+export const songCover = (s: Song) => (s.al?.picUrl || s.album?.picUrl || '').replace(/^http:\/\//, 'https://');
 export const songDuration = (s: Song) => s.dt || s.duration || 0;

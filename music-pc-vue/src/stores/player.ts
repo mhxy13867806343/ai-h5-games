@@ -16,6 +16,9 @@ function parseLrc(lrc: string): LyricLine[] {
 const restoredQueue = (() => {
   try { return JSON.parse(localStorage.getItem('pcvue_music_queue') || '{}'); } catch { return { list: [], current: null }; }
 })();
+const _httpsFix = (arr) => (arr || []).map(x => ({ ...x, cover: (x.cover || '').replace(/^http:\/\//, 'https://') }));
+restoredQueue.list = _httpsFix(restoredQueue.list);
+if (restoredQueue.current) restoredQueue.current = { ...restoredQueue.current, cover: (restoredQueue.current.cover || '').replace(/^http:\/\//, 'https://') };
 
 export const usePlayerStore = defineStore('player', {
   state: () => ({
@@ -139,9 +142,9 @@ export const usePlayerStore = defineStore('player', {
     addList(songs: { id: number; name: string; artist: string; cover: string; duration: number }[]) {
       const exist = new Set(this.list.map(s => s.id));
       const add = songs.filter(s => !exist.has(s.id));
-      if (!add.length) { showToast('这些歌都已经在播放列表里啦'); return; }
+      if (!add.length) { ElMessage.info('这些歌都已经在播放列表里啦'); return; }
       this.list = [...this.list, ...add];
-      showToast(`已添加 ${add.length} 首到播放列表`);
+      ElMessage.success(`已添加 ${add.length} 首到播放列表`);
     },
     /** 跳转到指定时间并继续播放（点歌词用） */
     seekPlay(t: number) {

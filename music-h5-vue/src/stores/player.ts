@@ -16,6 +16,9 @@ function parseLrc(lrc: string): LyricLine[] {
 const restoredQueue = (() => {
   try { return JSON.parse(localStorage.getItem('music_queue') || '{}'); } catch { return { list: [], current: null }; }
 })();
+const _httpsFix = (arr) => (arr || []).map(x => ({ ...x, cover: (x.cover || '').replace(/^http:\/\//, 'https://') }));
+restoredQueue.list = _httpsFix(restoredQueue.list);
+if (restoredQueue.current) restoredQueue.current = { ...restoredQueue.current, cover: (restoredQueue.current.cover || '').replace(/^http:\/\//, 'https://') };
 
 export const usePlayerStore = defineStore('player', {
   state: () => ({

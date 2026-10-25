@@ -17,9 +17,9 @@ export default function PlaylistPage() {
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const [d, t] = await Promise.all([api.playlistDetail(Number(id)), api.playlistTracks(Number(id), 50)]);
-      setPl(d?.playlist || null);
-      setTracks(t?.songs || []);
+      const [d, t] = await Promise.allSettled([api.playlistDetail(Number(id)), api.playlistTracks(Number(id), 50)]);
+      if (d.status === 'fulfilled') setPl(d.value?.playlist || null);
+      if (t.status === 'fulfilled') setTracks(t.value?.songs || []);
       setLoading(false);
     })();
   }, [id]);

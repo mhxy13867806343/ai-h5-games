@@ -8,6 +8,9 @@ type Listener = () => void;
 const restoredQueue = (() => {
   try { return JSON.parse(localStorage.getItem('pc_music_queue') || '{}'); } catch { return { list: [], current: null }; }
 })();
+const _httpsFix = (arr: any[]) => (arr || []).map(x => ({ ...x, cover: (x.cover || '').replace(/^http:\/\//, 'https://') }));
+restoredQueue.list = _httpsFix(restoredQueue.list);
+if (restoredQueue.current) restoredQueue.current = { ...restoredQueue.current, cover: (restoredQueue.current.cover || '').replace(/^http:\/\//, 'https://') };
 
 class PlayerCore {
   current: PlaySong | null = (restoredQueue.current || null);

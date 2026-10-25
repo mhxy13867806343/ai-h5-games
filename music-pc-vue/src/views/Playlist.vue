@@ -53,9 +53,9 @@ const loading = ref(true);
 
 onMounted(async () => {
   const id = Number(route.params.id);
-  const [d, t] = await Promise.all([api.playlistDetail(id), api.playlistTracks(id, 50)]);
-  pl.value = d?.playlist || null;
-  tracks.value = t?.songs || [];
+  const [d, t] = await Promise.allSettled([api.playlistDetail(id), api.playlistTracks(id, 50)]);
+  pl.value = d.status === 'fulfilled' ? d.value?.playlist || null : null;
+  tracks.value = t.status === 'fulfilled' ? t.value?.songs || [] : [];
   loading.value = false;
 });
 
